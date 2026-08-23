@@ -1,0 +1,19 @@
+User-agent: *
+Allow: /
+
+# Explicit rules for Meta / Facebook Verification Bots
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Facebot
+Allow: /
+
+# Explicit rules for Search Engine Bots
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Sitemap URL
+Sitemap: https://vex.biz.vn/sitemap.xml

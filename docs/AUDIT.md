@@ -10,7 +10,7 @@ API GitHub Pages của `leanhtuan-coder/vex-website` tại thời điểm audit 
 
 Giữ React/Vite/static hosting, chuyển TypeScript strict. Prerender 12 trang public và 404 từ component React cùng metadata dùng chung. Entry build nhập form trực tiếp để tránh loading shell và streaming payload; trình duyệt vẫn tải form riêng khi vào Contact. HTML đọc được khi tắt JS; menu/dialog và form cần JS để tương tác.
 
-Không thêm framework SSR, database hoặc CMS khi chưa cần. Content công ty/dịch vụ/dự án/SEO đặt trong `src/content/`. Bố cục riêng dùng component thật Kumo, token VEX. CI mới chỉ kiểm tra; mẫu deploy nằm ngoài thư mục workflow đang hoạt động.
+Không thêm framework SSR, database hoặc CMS khi chưa cần. Content công ty/dịch vụ/dự án/SEO đặt trong `src/content/`. Bố cục riêng dùng component thật Kumo, token VEX. CI kiểm tra mọi nhánh; workflow Pages build, kiểm tra và deploy từ `main`.
 
 ## Đối chiếu nguồn
 
@@ -26,4 +26,4 @@ Không thêm framework SSR, database hoặc CMS khi chưa cần. Content công t
 
 Không đưa PDF đăng ký, số giấy tờ, ngày sinh hay địa chỉ cá nhân lên website. Bỏ postcode và hồ sơ founder chưa xác minh khỏi JSON-LD. Không biến slogan/tầm nhìn/sứ mệnh bản nháp thành tuyên bố chính thức.
 
-Phase 1 đã triển khai: brand system, header/footer, Home/About/Solutions/Projects/Contact, 5 chi tiết giải pháp, privacy/terms/404, responsive, SEO, QA và tài liệu. Phase 2/3 xem CONTENT.md. Không có menu trỏ tới trang chưa tồn tại. Production chưa được triển khai trong đợt này.
+Phase 1 đã triển khai: brand system, header/footer, Home/About/Solutions/Projects/Contact, 5 chi tiết giải pháp, privacy/terms/404, responsive, SEO, QA và tài liệu. Phase 2/3 xem CONTENT.md. Không có menu trỏ tới trang chưa tồn tại. Production dùng workflow Pages trên `main`; trạng thái từng lần phát hành xem Actions/Deployments.

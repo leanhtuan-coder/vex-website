@@ -42,4 +42,4 @@ Lượt cuối TBT cả bốn lượt đo 0ms. Báo cáo JSON/HTML đầy đủ 
 
 Lighthouse vẫn gợi ý thu nhỏ PNG logo và giảm JS/CSS chưa dùng của thư viện; các điểm trên đã đạt mục tiêu tham khảo trong brief. Chưa có dữ liệu thực để xác nhận LCP p75 hoặc INP. Axe/Lighthouse không thay thế kiểm tra screen reader trên thiết bị thật hay xác nhận tuân thủ WCAG toàn bộ.
 
-Chưa phát hành production hoặc kiểm tra HTTPS/header/HTTP 404 trên domain thật. \_headers chỉ là mẫu, Pages không tự đọc. Form chưa có API theo xác nhận của chủ website. Không kiểm tra gửi/nhận email thật. Dự án và nội dung Phase 2/3 cần dữ liệu được duyệt theo CONTENT.md. Kiểm tra lại URL, security, Lighthouse và mailto sau khi phát hành bằng pipeline đã xác nhận.
+Các kết quả layout/axe/Lighthouse ở trên đo trên preview; mỗi lần phát hành cần kiểm tra lại URL, HTTPS, header, HTTP 404 và mailto trên domain thật. Workflow Pages trên `main` lưu QA và trạng thái deploy trong Actions. \_headers chỉ là mẫu, Pages không tự đọc. Form chưa có API theo xác nhận của chủ website. Không kiểm tra gửi/nhận email thật. Dự án và nội dung Phase 2/3 cần dữ liệu được duyệt theo CONTENT.md.

@@ -49,6 +49,7 @@ R&D chi tiết, tin tức, tuyển dụng, analytics và tiếng Anh thuộc Pha
 | `src/Prerender.tsx`, `scripts/prerender.mjs` | Form eager ở build tĩnh, lazy trên trình duyệt        |
 | `scripts/prepare-public.mjs`                 | Tạo lại public từ allowlist tài nguyên                |
 | `.github/workflows/ci.yml`                   | Kiểm tra source; không publish                        |
+| `.github/workflows/deploy-pages.yml`         | Kiểm tra và phát hành dist lên Pages từ main          |
 
 Import Kumo theo từng component: Button/LinkButton, Link, Text, LayerCard, Badge, Empty, Dialog, Input/InputArea, Select, Checkbox và Banner. Control giữ cơ chế focus/validation/popup của Kumo; HTML/CSS riêng phục vụ cấu trúc và nhận diện website.
 
@@ -64,4 +65,6 @@ Theo xác nhận của chủ website, chưa có backend; form chỉ tạo `mailt
 
 Chỉ upload **nội dung dist/** lên hosting. Build có HTML riêng, SEO/JSON-LD, sitemap/robots, CNAME, 404, `.nojekyll` và mẫu `_headers`; không có PDF nội bộ hay source map. Không phục vụ repo hoặc index.html nguồn.
 
-Xem [audit](docs/AUDIT.md), [nội dung và lộ trình](docs/CONTENT.md), [kết quả QA](docs/QA.md) và [hướng dẫn vận hành/deploy](docs/OPERATIONS.md). Mẫu GitHub Pages ở `docs/github-pages.workflow.example.yml` chưa kích hoạt. DNS, nameserver, SSL và production chưa được thay đổi ở đợt này.
+Workflow `Publish VEX website` tự chạy khi push lên `main`, hoặc chạy thủ công trên `main`. Chỉ deploy sau khi typecheck, lint, build, audit dependency và kiểm tra UI đạt. Các nhánh khác chỉ chạy CI. DNS và cấu hình chứng chỉ được giữ nguyên.
+
+Xem [audit](docs/AUDIT.md), [nội dung và lộ trình](docs/CONTENT.md), [kết quả QA](docs/QA.md) và [hướng dẫn vận hành/deploy](docs/OPERATIONS.md).

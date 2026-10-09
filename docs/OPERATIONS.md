@@ -10,11 +10,11 @@ Chỉ phát hành nội dung `dist/`, giữ assets, route directories và 404.ht
 
 ## GitHub Pages
 
-Audit read-only thấy Pages cấu hình workflow; chưa xác minh toàn bộ đường đi domain tới origin. Trước phát hành, xác nhận repo/origin và cơ chế deploy đang dùng. Mẫu `github-pages.workflow.example.yml` build/upload dist rồi deploy Pages, chỉ chạy thủ công. File ở docs, chưa kích hoạt.
+GitHub Pages dùng GitHub Actions tại repo `leanhtuan-coder/vex-website`, domain `vex.biz.vn`. Workflow `.github/workflows/deploy-pages.yml` tự chạy khi push lên `main`; cũng có thể chạy thủ công trên `main`. Environment `github-pages` chỉ cho phép deploy từ nhánh `main`.
 
-Khi chọn mẫu: lưu vào `.github/workflows/deploy-pages.yml`, kiểm tra Pages dùng GitHub Actions, rà soát CNAME/domain và quyền environment; chạy thủ công trên commit đã duyệt. Không sửa DNS/nameserver/SSL chỉ để kích hoạt mẫu. Xem [hướng dẫn GitHub chính thức](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages).
+Workflow build bằng Node 24, chạy typecheck/lint/build, audit dependency và 132 lượt layout cùng kiểm tra accessibility/menu/form trước khi upload `dist/` và deploy. Nếu kiểm tra lỗi, bản web đang hoạt động tiếp tục được giữ. Các nhánh khác không deploy. Xem [hướng dẫn GitHub chính thức](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages).
 
-CI kiểm tra source/UI và lưu artifact `vex-website-dist`, không deploy. Có thể tải artifact từ Actions run của commit đã duyệt, giải nén và phát hành nội dung dist theo pipeline hiện có. Repo gốc có import TypeScript nên không phải artifact phát hành.
+Workflow `Website checks` kiểm tra source/UI và lưu artifact `vex-website-dist`, không deploy. Workflow `Publish VEX website` phát hành artifact `github-pages`, lưu `deployment-qa` để kiểm tra. Repo gốc có import TypeScript nên không phải artifact phát hành. DNS, nameserver và cấu hình chứng chỉ không cần đổi để cập nhật nội dung.
 
 ## Hosting static khác và 404
 
@@ -34,7 +34,7 @@ Host có cấu hình cache có thể dùng `public, max-age=31536000, immutable`
 
 Sau deploy: kiểm tra 12 trang, menu mobile, mailto, canonical/OG/sitemap, URL lạ trả 404, SSL/redirect/header bằng devtools hoặc curl; đo Lighthouse trên domain. Chưa có RUM/analytics nên không tuyên bố LCP p75 hay INP người dùng đạt mục tiêu.
 
-Giữ commit/artifact cũ; nếu phát hành lỗi deploy lại bằng pipeline hiện có, kiểm tra URL và cache. Không thay DNS để rollback nội dung.
+Giữ commit/artifact cũ; nếu phát hành lỗi, revert commit nội dung trên `main` rồi push để workflow kiểm tra và deploy lại. Kiểm tra URL và cache sau rollback; không thay DNS để rollback nội dung.
 
 ## Nội dung và dữ liệu
 

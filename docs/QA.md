@@ -26,7 +26,7 @@ Lighthouse 13.5.0, Chromium của Playwright, production dist tại localhost:41
 | Contact mobile   |          97 |           100 |            100 | 100 | 2,3s | 0,001 |
 | Solutions mobile |          97 |           100 |            100 | 100 | 2,3s | 0,016 |
 
-Lượt cuối TBT Home mobile 10ms, các lượt còn lại 0ms. Báo cáo JSON/HTML đầy đủ và ảnh ở artifacts; không đưa chúng vào tài nguyên website. Điểm có thể dao động theo máy/mạng.
+Lượt cuối TBT cả bốn lượt đo 0ms. Báo cáo JSON/HTML đầy đủ và ảnh ở artifacts; không đưa chúng vào tài nguyên website. Điểm có thể dao động theo máy/mạng.
 
 Đã sửa CLS cao ở trang con bằng entry prerender đồng bộ; HTML không còn loading shell/payload ẩn cần script để hiển thị. Đã sửa thứ tự heading và độ tương phản R&D sau kiểm tra tự động lẫn xem ảnh.
 

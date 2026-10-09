@@ -14,7 +14,7 @@ Audit read-only thấy Pages cấu hình workflow; chưa xác minh toàn bộ đ
 
 Khi chọn mẫu: lưu vào `.github/workflows/deploy-pages.yml`, kiểm tra Pages dùng GitHub Actions, rà soát CNAME/domain và quyền environment; chạy thủ công trên commit đã duyệt. Không sửa DNS/nameserver/SSL chỉ để kích hoạt mẫu. Xem [hướng dẫn GitHub chính thức](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages).
 
-CI đang có chỉ kiểm tra source/UI, không deploy. Repo gốc có import TypeScript nên không phải artifact phát hành.
+CI kiểm tra source/UI và lưu artifact `vex-website-dist`, không deploy. Có thể tải artifact từ Actions run của commit đã duyệt, giải nén và phát hành nội dung dist theo pipeline hiện có. Repo gốc có import TypeScript nên không phải artifact phát hành.
 
 ## Hosting static khác và 404
 

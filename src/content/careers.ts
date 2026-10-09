@@ -1,11 +1,9 @@
 import { contentAsOfDate } from "./build-date";
 import publication from "./published.json";
+import type { ContentGovernance } from "./governance";
 
 export type EmploymentType =
-  | "FULL_TIME"
-  | "PART_TIME"
-  | "CONTRACTOR"
-  | "INTERN";
+  "FULL_TIME" | "PART_TIME" | "CONTRACTOR" | "INTERN";
 
 export const employmentLabels: Record<EmploymentType, string> = {
   FULL_TIME: "Toàn thời gian",
@@ -14,7 +12,7 @@ export const employmentLabels: Record<EmploymentType, string> = {
   INTERN: "Thực tập",
 };
 
-export interface Job {
+export interface Job extends ContentGovernance {
   slug: string;
   title: string;
   department: string;

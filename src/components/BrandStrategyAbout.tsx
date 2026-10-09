@@ -1,10 +1,8 @@
 import { Badge } from "@cloudflare/kumo/components/badge";
-import { LayerCard } from "@cloudflare/kumo/components/layer-card";
-import { Link } from "@cloudflare/kumo/components/link";
 import { Text } from "@cloudflare/kumo/components/text";
 import { brandStrategy } from "../content/brand-strategy";
-import { company } from "../content/company";
 import { Heading } from "./shared";
+import LeadershipProfiles from "./LeadershipProfiles";
 
 export default function BrandStrategyAbout() {
   return (
@@ -31,7 +29,7 @@ export default function BrandStrategyAbout() {
                 key={purpose.id}
                 aria-labelledby={`${purpose.id}-title`}
               >
-                <LayerCard className="brand-purpose-card">
+                <div className="brand-purpose-card">
                   <div className="brand-purpose-heading">
                     <span lang="en">{purpose.englishTitle}</span>
                     <div id={`${purpose.id}-title`}>
@@ -50,7 +48,7 @@ export default function BrandStrategyAbout() {
                       </Text>
                     ))}
                   </div>
-                </LayerCard>
+                </div>
               </article>
             ))}
           </div>
@@ -83,26 +81,7 @@ export default function BrandStrategyAbout() {
           ))}
         </ol>
       </section>
-      <section
-        className="section brand-leadership-section"
-        id="doi-ngu-lanh-dao"
-        aria-labelledby="brand-leadership-title"
-      >
-        <div className="container editorial-grid">
-          <div id="brand-leadership-title">
-            <Heading label="LEADERSHIP TEAM" title="Đội ngũ lãnh đạo" />
-          </div>
-          <LayerCard className="brand-leadership-card">
-            <Text as="h3" variant="heading">
-              {company.representative}
-            </Text>
-            <Text variant="secondary">{company.representativeRole}</Text>
-            <Link href="/contact/" variant="plain" className="text-link">
-              Liên hệ với VEX
-            </Link>
-          </LayerCard>
-        </div>
-      </section>
+      <LeadershipProfiles />
     </>
   );
 }

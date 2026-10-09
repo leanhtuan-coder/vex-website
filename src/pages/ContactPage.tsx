@@ -21,7 +21,8 @@ export default function ContactPage() {
       </PageIntro>
       <section className="section contact-section">
         <div className="container contact-grid">
-          <div>
+          <div className="contact-channels">
+            <div className="eyebrow">KẾT NỐI TRỰC TIẾP</div>
             <Text as="h2" variant="heading">
               Kênh liên hệ VEX
             </Text>

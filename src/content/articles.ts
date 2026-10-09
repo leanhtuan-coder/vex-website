@@ -1,5 +1,6 @@
 import { contentAsOfDate } from "./build-date";
 import publication from "./published.json";
+import type { ContentGovernance } from "./governance";
 
 export interface ContentImage {
   src: string;
@@ -15,7 +16,7 @@ export type ArticleBlock =
   | { type: "list"; ordered?: boolean; items: string[] }
   | ({ type: "image" } & ContentImage);
 
-export interface Article {
+export interface Article extends ContentGovernance {
   slug: string;
   title: string;
   summary: string;

@@ -13,6 +13,7 @@ import { primaryButtonStyle } from "./button-theme";
 import { contactTopics, topicFromSearch } from "../content/contact-topics";
 import { trackWebsiteEvent } from "../analytics";
 import { publicJobs } from "../content/careers";
+import { solutionChallenges } from "../content/challenges";
 const topics = Object.values(contactTopics);
 function subscribeToLocation(listener: () => void) {
   window.addEventListener("popstate", listener);
@@ -30,6 +31,14 @@ export default function ContactForm() {
     () => "",
   );
   const selectedJob = publicJobs.find((job) => job.slug === position);
+  const need = useSyncExternalStore(
+    subscribeToLocation,
+    () => new URLSearchParams(window.location.search).get("need") ?? "",
+    () => "",
+  );
+  const selectedChallenge = solutionChallenges.find(
+    (challenge) => challenge.id === need,
+  );
   const [state, setState] = useState<"idle" | "opening" | "prepared" | "error">(
     "idle",
   );
@@ -57,7 +66,7 @@ export default function ContactForm() {
       return;
     }
     if (Date.now() - lastSubmit.current < 3000) return;
-    const body = `Họ và tên: ${name}\nDoanh nghiệp / tổ chức: ${String(data.get("organization") ?? "").trim()}\nEmail: ${data.get("email")}\nĐiện thoại: ${data.get("phone")}\nChủ đề: ${data.get("topic")}\n${selectedJob ? `Vị trí: ${selectedJob.title}\n` : ""}\n${message}`;
+    const body = `Họ và tên: ${name}\nDoanh nghiệp / tổ chức: ${String(data.get("organization") ?? "").trim()}\nEmail: ${data.get("email")}\nĐiện thoại: ${data.get("phone")}\nChủ đề: ${data.get("topic")}\n${selectedJob ? `Vị trí: ${selectedJob.title}\n` : ""}${selectedChallenge ? `Nhu cầu: ${selectedChallenge.title}\n` : ""}\n${message}`;
     const href = `mailto:${company.email}?subject=${encodeURIComponent("Liên hệ VEX — " + data.get("topic") + (selectedJob ? " — " + selectedJob.title : ""))}&body=${encodeURIComponent(body)}`;
     if (href.length > 7500) {
       setError(
@@ -95,6 +104,11 @@ export default function ContactForm() {
         chỉ dùng để soạn email; bạn kiểm tra và nhấn gửi trong ứng dụng email.
       </Text>
       <form onSubmit={submit}>
+        {selectedChallenge && (
+          <Text variant="secondary" DANGEROUS_className="contact-selected-need">
+            Nhu cầu đang trao đổi: {selectedChallenge.title}.
+          </Text>
+        )}
         {selectedJob && (
           <Text variant="secondary" size="sm">
             Vị trí đang trao đổi: {selectedJob.title}. Biểu mẫu chỉ soạn email,

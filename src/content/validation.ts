@@ -1,14 +1,29 @@
 import type { Article, ArticleBlock, ContentImage } from "./articles";
 import type { Job } from "./careers";
 import type { Project, ProjectStatus } from "./projects";
+import type { ContentGovernance } from "./governance";
+import type { LeadershipProfile } from "./leadership";
+import type {
+  DocumentCategory,
+  DocumentRecord,
+  PublicDocument,
+} from "./documents";
 
 export interface PublicationRecords {
+  articles: (Article & ContentGovernance)[];
+  jobs: (Job & ContentGovernance)[];
+  projects: Project[];
+  leadership?: LeadershipProfile[];
+  documents?: DocumentRecord[];
+}
+
+export interface PublishedContent {
   articles: Article[];
   jobs: Job[];
   projects: Project[];
-}
-
-export interface PublishedContent extends PublicationRecords {
+  leadership: LeadershipProfile[];
+  /** File sizes are added by the filesystem publisher, never taken from editorial input. */
+  documents: Omit<PublicDocument, "bytes">[];
   asOfDate: string;
   /** Exact local asset paths referenced by published content. */
   images: string[];
@@ -43,6 +58,19 @@ const projectStatuses: ProjectStatus[] = [
   "Prototype",
   "Pilot",
   "Commercial Product",
+];
+const projectOwnerships = [
+  "vex",
+  "founder-before-vex",
+  "personal-research",
+  "collaboration",
+] as const;
+const documentCategories: DocumentCategory[] = [
+  "company-profile",
+  "brand-guidelines",
+  "media-kit",
+  "product-brochure",
+  "technology-document",
 ];
 
 function fail(path: string, reason: string): never {
@@ -398,12 +426,23 @@ function approvedProject(value: unknown, path: string): Project {
   const item = object(value, path);
   if (!projectStatuses.includes(item.status as ProjectStatus))
     fail(`${path}.status`, "unsupported project status");
+  const provenance = object(item.provenance, `${path}.provenance`);
+  if (
+    !projectOwnerships.includes(
+      provenance.ownership as Project["provenance"]["ownership"],
+    )
+  )
+    fail(
+      `${path}.provenance.ownership`,
+      "identify VEX, pre-incorporation, personal research, or collaboration separately",
+    );
   return {
     slug: slug(item.slug, `${path}.slug`),
     title: text(item.title, `${path}.title`),
     category: text(item.category, `${path}.category`),
     status: item.status as ProjectStatus,
     approvedForPublication: true,
+    contentState: "VERIFIED",
     summary: text(item.summary, `${path}.summary`),
     image: assetPath(item.image, `${path}.image`),
     imageAlt: text(item.imageAlt, `${path}.imageAlt`),
@@ -414,9 +453,118 @@ function approvedProject(value: unknown, path: string): Project {
     solution: text(item.solution, `${path}.solution`),
     technologies: texts(item.technologies, `${path}.technologies`),
     role: text(item.role, `${path}.role`),
-    evidence: text(item.evidence, `${path}.evidence`),
-    challenges: text(item.challenges, `${path}.challenges`),
-    nextSteps: text(item.nextSteps, `${path}.nextSteps`),
+    provenance: {
+      ownership: provenance.ownership as Project["provenance"]["ownership"],
+      statement: text(provenance.statement, `${path}.provenance.statement`),
+    },
+    ...(item.publicArchitecture === undefined
+      ? {}
+      : {
+          publicArchitecture: text(
+            item.publicArchitecture,
+            `${path}.publicArchitecture`,
+          ),
+        }),
+    ...(item.evidence === undefined
+      ? {}
+      : { evidence: text(item.evidence, `${path}.evidence`) }),
+    ...(item.challenges === undefined
+      ? {}
+      : { challenges: text(item.challenges, `${path}.challenges`) }),
+    ...(item.nextSteps === undefined
+      ? {}
+      : { nextSteps: text(item.nextSteps, `${path}.nextSteps`) }),
+  };
+}
+
+/** Verify the approved file's PDF container markers; this is not a malware scanner. */
+export function validatePdfSignature(header: string, trailer: string) {
+  if (
+    !/^%PDF-(?:1\.[0-7]|2\.0)[\r\n]/.test(header) ||
+    !/%%EOF[\t\r\n ]*$/.test(trailer)
+  )
+    throw new Error(
+      "Approved documents must be complete PDF files with a valid header and EOF marker",
+    );
+}
+
+function approvedLeader(value: unknown, path: string): LeadershipProfile {
+  const item = object(value, path);
+  let links: LeadershipProfile["links"];
+  if (item.links !== undefined) {
+    if (!Array.isArray(item.links))
+      fail(`${path}.links`, "expected public profile links");
+    links = item.links.map((value, index) => {
+      const linkPath = `${path}.links[${index}]`;
+      const source = object(value, linkPath);
+      const href = link(source.href, `${linkPath}.href`);
+      if (!href.startsWith("https://"))
+        fail(
+          `${linkPath}.href`,
+          "leadership links must be verified public HTTPS profiles",
+        );
+      return { label: text(source.label, `${linkPath}.label`), href };
+    });
+  }
+  return {
+    slug: slug(item.slug, `${path}.slug`),
+    name: text(item.name, `${path}.name`),
+    role: text(item.role, `${path}.role`),
+    contentState: "VERIFIED",
+    approvedForPublication: true,
+    ...(item.photo === undefined
+      ? {}
+      : { photo: image(item.photo, `${path}.photo`) }),
+    ...(item.biography === undefined
+      ? {}
+      : { biography: texts(item.biography, `${path}.biography`, false) }),
+    ...(item.responsibilities === undefined
+      ? {}
+      : {
+          responsibilities: texts(
+            item.responsibilities,
+            `${path}.responsibilities`,
+            false,
+          ),
+        }),
+    ...(item.expertise === undefined
+      ? {}
+      : { expertise: texts(item.expertise, `${path}.expertise`, false) }),
+    ...(links === undefined ? {} : { links }),
+  };
+}
+
+function approvedDocument(
+  value: unknown,
+  path: string,
+): Omit<PublicDocument, "bytes"> {
+  const item = object(value, path);
+  if (!documentCategories.includes(item.category as DocumentCategory))
+    fail(`${path}.category`, "unsupported public document category");
+  if (
+    typeof item.href !== "string" ||
+    !/^\/assets\/documents\/public-[A-Za-z0-9_-]+\.pdf$/.test(item.href)
+  )
+    fail(
+      `${path}.href`,
+      "use an explicitly approved /assets/documents/public-*.pdf copy; internal documents are excluded",
+    );
+  return {
+    slug: slug(item.slug, `${path}.slug`),
+    title: text(item.title, `${path}.title`),
+    summary: text(item.summary, `${path}.summary`),
+    category: item.category as DocumentCategory,
+    href: item.href,
+    filename: item.href.slice(item.href.lastIndexOf("/") + 1),
+    format: "PDF",
+    contentState: "VERIFIED",
+    approvedForPublication: true,
+    ...(item.version === undefined
+      ? {}
+      : { version: text(item.version, `${path}.version`) }),
+    ...(item.publishedAt === undefined
+      ? {}
+      : { publishedAt: date(item.publishedAt, `${path}.publishedAt`) }),
   };
 }
 
@@ -431,10 +579,17 @@ export function validatePublication(
     if (!Array.isArray(source[key]))
       fail(`content.${key}`, "expected a content list");
   }
-  const eligible = (item: unknown) =>
+  for (const key of ["leadership", "documents"]) {
+    if (source[key] !== undefined && !Array.isArray(source[key]))
+      fail(`content.${key}`, "expected a content list");
+  }
+  const eligible = (item: unknown, requireVerification = false) =>
     item !== null &&
     typeof item === "object" &&
-    (item as Record<string, unknown>).approvedForPublication === true;
+    (item as Record<string, unknown>).approvedForPublication === true &&
+    ((item as Record<string, unknown>).contentState === "VERIFIED" ||
+      (!requireVerification &&
+        (item as Record<string, unknown>).contentState === undefined));
   const articleCandidates = records.articles
     .filter((item) => eligible(item) && item.status === "published")
     .map((item, index) => approvedArticle(item, `articles[${index}]`));
@@ -442,11 +597,22 @@ export function validatePublication(
     .filter((item) => eligible(item) && item.status === "open")
     .map((item, index) => approvedJob(item, `jobs[${index}]`));
   const projects = records.projects
-    .filter(eligible)
+    .filter((item) => eligible(item, true))
     .map((item, index) => approvedProject(item, `projects[${index}]`));
+  const leadership = (records.leadership || [])
+    .filter((item) => eligible(item, true))
+    .map((item, index) => approvedLeader(item, `leadership[${index}]`));
+  const documentCandidates = (records.documents || [])
+    .filter((item) => eligible(item, true))
+    .map((item, index) => approvedDocument(item, `documents[${index}]`));
   unique(articleCandidates, "articles.slug");
   unique(jobCandidates, "jobs.slug");
   unique(projects, "projects.slug");
+  unique(leadership, "leadership.slug");
+  unique(documentCandidates, "documents.slug");
+  const documents = documentCandidates.filter(
+    (item) => !item.publishedAt || item.publishedAt <= acceptedDate,
+  );
   const articles = articleCandidates
     .filter((item) => item.publishedAt <= acceptedDate)
     .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
@@ -477,11 +643,15 @@ export function validatePublication(
       if (block.type === "image") images.add(block.src);
   }
   for (const project of projects) images.add(project.image);
+  for (const leader of leadership)
+    if (leader.photo) images.add(leader.photo.src);
   return {
     asOfDate: acceptedDate,
     articles,
     jobs,
     projects,
+    leadership,
+    documents,
     images: [...images].sort(),
   };
 }

@@ -11,6 +11,12 @@ import "./styles-growth.css";
 import "./styles-media.css";
 import "./styles-strategy-about.css";
 import "./styles-strategy-home.css";
+import "./styles-home-redesign.css";
+import "./styles-corporate-redesign.css";
+import "./styles-corporate-identity.css";
+import "./styles-faq.css";
+import "./styles-leadership.css";
+import "./visual-system.css";
 const root = document.getElementById("root")!;
 const meta = getPage(window.location.pathname);
 // Keep development and unknown-path fallback metadata accurate as well.

@@ -1,0 +1,132 @@
+.leadership-section {
+  background: var(--vex-white);
+  border-top: 1px solid var(--vex-gray);
+}
+.leadership-layout {
+  align-items: start;
+}
+.leadership-profile-list {
+  display: grid;
+  gap: 40px;
+  min-width: 0;
+}
+.leadership-profile {
+  min-width: 0;
+  padding: 32px;
+  border: 1px solid var(--vex-gray);
+  border-top: 3px solid var(--vex-cyan);
+}
+.leadership-profile:not(.leadership-profile-with-photo) {
+  padding: 0 0 0 32px;
+  border: 0;
+  border-left: 3px solid var(--vex-cyan);
+}
+.leadership-profile-with-photo {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 6fr);
+  gap: 28px;
+  align-items: start;
+}
+.leadership-photo {
+  margin: 0;
+  min-width: 0;
+}
+.leadership-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  background: var(--vex-cyan-soft);
+}
+.leadership-photo figcaption {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--vex-muted);
+  margin-top: 12px;
+}
+.leadership-profile-text {
+  min-width: 0;
+}
+.leadership-profile-text > h3 {
+  font-size: 29px;
+  line-height: 1.35;
+}
+.leadership-profile-text > p {
+  font-size: 16px;
+  line-height: 1.8;
+  margin-top: 12px;
+}
+.leadership-biography {
+  display: grid;
+  gap: 16px;
+  margin-top: 24px;
+}
+.leadership-biography p {
+  font-size: 16px;
+  line-height: 1.85;
+}
+.leadership-profile-detail {
+  margin-top: 24px;
+}
+.leadership-profile-detail h4 {
+  font-size: 17px;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+.leadership-profile-detail ul {
+  list-style: disc;
+  margin: 0;
+  padding-left: 20px;
+  display: grid;
+  gap: 10px;
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--vex-muted);
+}
+.leadership-expertise {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.leadership-profile-links {
+  display: flex;
+  gap: 12px 24px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+.leadership-profile-links a,
+.leadership-contact-link {
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  color: var(--vex-cyan);
+  font-size: 14px;
+  min-height: 44px;
+}
+.leadership-contact-link {
+  margin-top: 20px;
+  font-weight: 900;
+}
+@media (max-width: 1000px) {
+  .leadership-profile-with-photo {
+    grid-template-columns: 1fr;
+  }
+  .leadership-photo {
+    max-width: 280px;
+  }
+}
+@media (max-width: 760px) {
+  .leadership-profile {
+    padding: 24px;
+  }
+  .leadership-profile:not(.leadership-profile-with-photo) {
+    padding: 0 0 0 24px;
+  }
+  .leadership-profile-text > h3 {
+    font-size: 25px;
+  }
+  .leadership-profile-with-photo {
+    gap: 24px;
+  }
+}

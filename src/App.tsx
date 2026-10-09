@@ -116,7 +116,10 @@ export default function App({
         Chuyển đến nội dung
       </Link>
       <SiteHeader path={meta.path} />
-      <main id="main">
+      <main
+        id="main"
+        data-page={meta.path.split("/").filter(Boolean)[0] ?? "home"}
+      >
         <Suspense
           fallback={
             <div className="container section" role="status">

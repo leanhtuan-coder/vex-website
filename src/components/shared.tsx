@@ -15,6 +15,7 @@ import {
   TreeStructureIcon,
 } from "@phosphor-icons/react";
 import { primaryButtonStyle } from "./button-theme";
+import BrandGeometry from "./BrandGeometry";
 export function CTA({
   children,
   href = "/contact/",
@@ -51,13 +52,9 @@ export function Logo({ inverted = false }: { inverted?: boolean }) {
       aria-label="VEX — Trang chủ"
     >
       <img
-        src={
-          inverted
-            ? "/assets/logo-white-tight.png"
-            : "/assets/logo-color-tight.png"
-        }
-        width={82}
-        height={43}
+        src={inverted ? "/assets/vex-logo-white.svg" : "/assets/vex-logo.svg"}
+        width={112}
+        height={34}
         alt="VEX"
       />
     </Link>
@@ -104,11 +101,16 @@ export function PageIntro({
           <span aria-hidden="true">/</span>
           <span aria-current="page">{label}</span>
         </nav>
-        <div className="eyebrow">VEX TECHNOLOGY SOLUTIONS</div>
-        <Text as="h1" variant="heading">
-          {title}
-        </Text>
-        <Text variant="secondary">{children}</Text>
+        <div className="page-intro-layout">
+          <div className="page-intro-copy">
+            <div className="eyebrow">VEX TECHNOLOGY SOLUTIONS</div>
+            <Text as="h1" variant="heading">
+              {title}
+            </Text>
+            <Text variant="secondary">{children}</Text>
+          </div>
+          <BrandGeometry />
+        </div>
       </div>
     </section>
   );
@@ -118,6 +120,7 @@ export function CTASection() {
     <section className="closing-cta">
       <div className="container">
         <div>
+          <div className="eyebrow">KẾT NỐI CÙNG VEX</div>
           <Text as="h2" variant="heading">
             Cùng bắt đầu từ bài toán của bạn.
           </Text>
@@ -125,7 +128,7 @@ export function CTASection() {
             Chia sẻ nhu cầu để tìm hướng giải quyết phù hợp.
           </Text>
         </div>
-        <CTA size="lg">Liên hệ hợp tác</CTA>
+        <CTA onDark>Liên hệ hợp tác</CTA>
       </div>
     </section>
   );

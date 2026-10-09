@@ -14,6 +14,8 @@ try {
     ["home-desktop", "/", true],
     ["contact-mobile", "/contact/", false],
     ["solutions-mobile", "/solutions/", false],
+    ["media-mobile", "/media/", false],
+    ["media-desktop", "/media/", true],
   ]) {
     const result = await lighthouse(
       "http://127.0.0.1:4173" + path,

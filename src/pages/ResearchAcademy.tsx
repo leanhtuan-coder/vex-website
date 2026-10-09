@@ -120,13 +120,21 @@ export function Research() {
             công nghệ hoặc xây dựng một thử nghiệm.
           </Heading>
           <div className="research-directions">
-            {researchDirections.map((direction) => {
+            {researchDirections.map((direction, index) => {
               const Icon = researchIcons[direction.id];
               return (
                 <article className="research-direction" key={direction.id}>
                   <div className="research-direction-label">
-                    <Icon size={25} aria-hidden="true" />
-                    <span>{direction.label}</span>
+                    <span
+                      className="research-direction-number"
+                      aria-hidden="true"
+                    >
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <div className="research-direction-identity">
+                      <Icon size={25} aria-hidden="true" />
+                      <span>{direction.label.split(" / ")[1]}</span>
+                    </div>
                   </div>
                   <div className="research-direction-content">
                     <Text as="h3" variant="heading">
@@ -268,21 +276,26 @@ export function Academy() {
             trình và hình thức cụ thể sẽ được công bố khi được xác nhận.
           </Heading>
           <div className="academy-directions">
-            {academyDirections.map((direction) => {
+            {academyDirections.map((direction, index) => {
               const Icon = academyIcons[direction.id];
               return (
-                <LayerCard className="academy-direction" key={direction.id}>
-                  <div className="icon-box">
-                    <Icon size={25} aria-hidden="true" />
-                  </div>
-                  <Text as="h3" variant="heading">
-                    {direction.title}
-                  </Text>
-                  <Text variant="secondary">{direction.description}</Text>
-                  <Text DANGEROUS_className="academy-direction-focus">
-                    {direction.focus}
-                  </Text>
-                </LayerCard>
+                <article className="academy-direction-entry" key={direction.id}>
+                  <LayerCard className="academy-direction">
+                    <div className="academy-direction-marker">
+                      <span aria-hidden="true">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <Icon size={28} aria-hidden="true" />
+                    </div>
+                    <Text as="h3" variant="heading">
+                      {direction.title}
+                    </Text>
+                    <Text variant="secondary">{direction.description}</Text>
+                    <Text DANGEROUS_className="academy-direction-focus">
+                      {direction.focus}
+                    </Text>
+                  </LayerCard>
+                </article>
               );
             })}
           </div>

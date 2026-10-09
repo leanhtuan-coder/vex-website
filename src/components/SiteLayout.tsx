@@ -112,27 +112,64 @@ export function SiteHeader({ path }: { path: string }) {
   );
 }
 export function Footer() {
+  const corporateLinks = [
+    ...navigation.filter((item) =>
+      ["/about/", "/projects/"].includes(item.href),
+    ),
+    ...exploreNavigation.filter((item) =>
+      ["/insights/", "/careers/", "/media/"].includes(item.href),
+    ),
+  ];
+  const technologyLinks = [
+    ...navigation.filter((item) => item.href === "/solutions/"),
+    ...exploreNavigation.filter((item) =>
+      ["/research/", "/academy/"].includes(item.href),
+    ),
+  ];
   return (
     <footer>
       <div className="container">
         <div className="footer-top">
-          <div>
-            <Logo />
+          <div className="footer-brand">
+            <Logo inverted />
             <Text variant="secondary">
               Kết nối phần mềm, AI và hệ thống vật lý từ những bài toán thực
               tiễn.
             </Text>
+            <div className="footer-contact">
+              <Link variant="plain" href={`mailto:${company.email}`}>
+                {company.email}
+                <ArrowUpRightIcon size={16} />
+              </Link>
+              <Link variant="plain" href={company.phoneHref}>
+                {company.phone}
+              </Link>
+              <Link variant="plain" href="/contact/">
+                Liên hệ VEX
+                <ArrowUpRightIcon size={16} />
+              </Link>
+            </div>
           </div>
-          <div>
+          <nav className="footer-navigation" aria-label="Khám phá VEX">
             <Text as="h2" variant="heading">
               Khám phá
             </Text>
-            {[...navigation.slice(1), ...exploreNavigation].map((item) => (
+            {corporateLinks.map((item) => (
               <Link variant="plain" key={item.href} href={item.href}>
                 {item.label}
               </Link>
             ))}
-          </div>
+          </nav>
+          <nav className="footer-navigation" aria-label="Công nghệ VEX">
+            <Text as="h2" variant="heading">
+              Công nghệ
+            </Text>
+            {technologyLinks.map((item) => (
+              <Link variant="plain" key={item.href} href={item.href}>
+                {item.label}
+              </Link>
+            ))}
+          </nav>
           <div className="legal">
             <Text as="h2" variant="heading">
               Thông tin doanh nghiệp
@@ -151,12 +188,6 @@ export function Footer() {
               Người đại diện theo pháp luật: {company.representative} (Giám đốc)
             </Text>
             <Text variant="secondary">{company.address}</Text>
-            <Link variant="plain" href={company.phoneHref}>
-              {company.phone}
-            </Link>
-            <Link variant="plain" href={`mailto:${company.email}`}>
-              {company.email}
-            </Link>
             <Link variant="plain" href={`mailto:${company.registrationEmail}`}>
               {company.registrationEmail}
             </Link>

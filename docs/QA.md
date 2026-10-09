@@ -1,5 +1,34 @@
 # Báo cáo QA — 09/10/2026
 
+## Visual redesign và corporate enhancement
+
+Đã triển khai bố cục editorial và visual SVG pixel/grid/mũi tên trên Home/Media, typography và container chung, các trang corporate/R&D/Careers/Insights/Contact, footer nhóm liên kết và CTA tương phản rõ. Logo nguyên bản và bốn download không thay đổi; header/footer dùng SVG đầy đủ thay PNG. Navigation/footer 14px, body 16–17px; input và Select mobile 44px.
+
+About có Why VEX đã được chủ website duyệt dưới dạng định hướng và Journey chỉ có mốc đăng ký 10/03/2026. Solutions có sáu nhóm nhu cầu từ service hiện có; disclosure hoạt động cả khi tắt JS, CTA chuyển ID nhu cầu hợp lệ sang Contact. FAQ dùng Kumo Accordion với tám câu mở sẵn để HTML không JS đọc đầy đủ, cho phép đóng/mở bằng bàn phím. Không hứa SLA/giá/bảo hành hoặc tiếp nhận form tự động.
+
+`npm run check` trên bản ghép đạt: publisher, TypeScript, ESLint, 106 kiểm tra cổng công bố trong bộ nhớ và build 17 trang/404. `npm run verify:ui` đạt 187 lượt layout, axe/metadata/no-JS/link/404/menu/form/tracking cũ cùng kiểm tra Why VEX/Journey, 12 lượt mở nhóm nhu cầu ở 390/1440, ID nhu cầu không hợp lệ, FAQ bàn phím/no-JS, clipboard thật/thất bại và bốn lượt tải đúng bytes. Không ghi nhận lỗi JavaScript/console/hydration hoặc violation trong lượt quét.
+
+Đã xem ảnh Home/About/Media và các trang mới tại các viewport trong brief, gồm 360/390/430/768/1024/1280/1440/1920. Đối chiếu nội dung Tầm nhìn/Sứ mệnh/năm giá trị, draft note, anchors và không JS 390/1440 đạt. Sau khi sửa khoảng cách giữa focus outline và nội dung disclosure, build lại và kiểm tra cả sáu nhóm mở cùng lúc tại 390/1440: không overflow, focus không chạm heading, axe không có violation. Full UI của workflow kiểm tra lại artifact cuối trước deploy.
+
+Publisher hiện xuất 1 hồ sơ Lê Anh Tuấn chỉ tên/chức danh pháp lý, 0 bài viết, việc làm, case study hoặc PDF. Project có provenance bắt buộc, phân biệt nguồn gốc với trạng thái phát triển; kết quả và kiến trúc không có dữ liệu được ẩn. Leadership/document/project cần VERIFIED và quyền công bố; field ngoài whitelist, draft/chờ duyệt, file tương lai và đường dẫn không an toàn bị loại/chặn trong 106 kiểm tra. Fixture không lưu hoặc vào dist. File PDF nội bộ, TypeScript, source map và OTF không có trong build hiện tại. `npm audit --audit-level=high` báo 0 vulnerability; không thêm dependency.
+
+Ảnh và dữ liệu ở `artifacts/enhancement-visual/`, `redesign-governance-final/`, `redesign-media-corporate/`, `redesign-growth-qa/` và `qa-results.json`. Portrait/PDF/case thật chưa được cung cấp; chỉ kiểm tra model/gates và template có điều kiện, chưa gọi đó là đã kiểm tra tải tài liệu thật hoặc hồ sơ đầy đủ. Danh sách còn cần ở [CONTENT_REQUIREMENTS.md](../CONTENT_REQUIREMENTS.md), trạng thái ở [audit](ENHANCEMENT-AUDIT.md), bước phát hành ở [LAUNCH_CHECKLIST.md](../LAUNCH_CHECKLIST.md).
+
+Browser JS cuối khoảng 576KB (gzip 180KB), CSS 218KB (gzip 36KB). Vite tiếp tục cảnh báo chunk >500KB; không tăng ngưỡng để che cảnh báo. Các chunk trang bổ sung vẫn tách riêng; thông báo eager/lazy trong entry SSR phục vụ prerender đầy đủ.
+
+Lighthouse 13.5.0 đo trên production dist cuối tại localhost:4173, Node 24/Chromium Playwright, không chạy browser QA khác đồng thời. Mobile dùng mô phỏng mặc định; desktop 1440×900, CPU 1×, RTT 40ms, throughput 10240Kbps. Accessibility/Best Practices/SEO đều 100 ở cả sáu lượt. Đây là dữ liệu lab, không phải Core Web Vitals p75 của người dùng thật.
+
+| Lượt đo cuối     | Performance |  LCP |  TBT |   CLS |
+| ---------------- | ----------: | ---: | ---: | ----: |
+| Home mobile      |          95 | 2,4s | 10ms |     0 |
+| Home desktop     |         100 | 0,5s |  0ms | 0,003 |
+| Contact mobile   |          94 | 2,5s | 20ms | 0,007 |
+| Solutions mobile |          94 | 2,5s |  0ms | 0,031 |
+| Media mobile     |          94 | 2,5s |  0ms | 0,014 |
+| Media desktop    |         100 | 0,5s |  0ms | 0,001 |
+
+Ảnh SVG thay PNG giảm tải logo, nhưng phần nội dung và Accordion mới làm bundle lớn hơn baseline. Lighthouse vẫn gợi ý giảm JS không dùng và chuỗi request chặn render. Không tuyên bố điểm lab hoặc mọi chỉ số đều tăng so với baseline; kết quả đủ để đánh giá chi phí của lần bổ sung này và ưu tiên tối ưu bundle tiếp theo.
+
 ## Bổ sung nội dung chiến lược thương hiệu
 
 Home dùng hai khối rút gọn, liên kết vào Tầm nhìn và Sứ mệnh trên About. About có nguyên văn nội dung đầy đủ, thông điệp hỗ trợ, năm giá trị Việt/Anh và phần lãnh đạo kế tiếp. Nguồn nội dung chung giữ trạng thái draft và nhãn chờ phê duyệt; không thêm chức danh, hồ sơ hay chân dung chưa xác nhận.

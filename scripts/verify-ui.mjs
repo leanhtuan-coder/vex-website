@@ -234,7 +234,272 @@ await expect(
 await page.keyboard.press("Escape");
 await expect(page.getByRole("menu")).toHaveCount(0);
 await expect(explore).toBeFocused();
+
+// Customer routes expose real solution scopes and preserve only approved need IDs.
+const challengeTitles = [
+  "Số hóa quy trình và dữ liệu",
+  "Phát triển phần mềm quản lý",
+  "Tự động hóa các tác vụ",
+  "Phân tích và nhận diện hình ảnh",
+  "Kết nối thiết bị và hệ thống",
+  "Nghiên cứu/phát triển nguyên mẫu",
+];
+for (const width of [390, 1440]) {
+  await page.setViewportSize({ width, height: 950 });
+  await page.goto(origin + "/solutions/");
+  const challenges = page.locator(".challenge-entry");
+  await expect(challenges).toHaveCount(6);
+  await expect(challenges.locator("summary h3")).toHaveText(challengeTitles);
+  for (let index = 0; index < challengeTitles.length; index++) {
+    const challenge = challenges.nth(index);
+    const summary = challenge.locator("summary");
+    await expect(challenge).toHaveJSProperty("open", false);
+    await summary.focus();
+    await expect(summary).toBeFocused();
+    await page.keyboard.press("Enter");
+    await expect(challenge).toHaveJSProperty("open", true);
+    for (const name of [
+      "Bài toán thực tế",
+      "Đối tượng phù hợp",
+      "Hướng giải pháp",
+      "Phạm vi có thể triển khai",
+    ]) {
+      const heading = challenge.getByRole("heading", { name, exact: true });
+      await expect(heading).toBeVisible();
+      assert.ok(
+        (await heading.locator("..").innerText()).replace(name, "").trim(),
+        `${challengeTitles[index]}: missing ${name}`,
+      );
+    }
+    const technologies = challenge.locator(
+      '[aria-label="Công nghệ có thể sử dụng"]',
+    );
+    await expect(technologies).toBeVisible();
+    assert.ok(
+      (await technologies.innerText()).trim(),
+      `${challengeTitles[index]}: missing technologies`,
+    );
+    const needCTA = challenge.getByRole("link", {
+      name: "Trao đổi nhu cầu",
+      exact: true,
+    });
+    await expect(needCTA).toBeVisible();
+    await expect(needCTA).toHaveAttribute(
+      "href",
+      /^\/contact\/\?topic=solution&need=[a-z-]+$/,
+    );
+    assert.equal(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth > innerWidth,
+      ),
+      false,
+      `${challengeTitles[index]}: expanded disclosure overflow at ${width}`,
+    );
+    await summary.focus();
+    await page.keyboard.press("Enter");
+    await expect(challenge).toHaveJSProperty("open", false);
+    await expect(summary).toBeFocused();
+  }
+}
+const firstChallenge = page.locator(".challenge-entry").first();
+await firstChallenge.locator("summary").focus();
+await page.keyboard.press("Enter");
+await firstChallenge
+  .getByRole("link", { name: "Trao đổi nhu cầu", exact: true })
+  .click();
+await page.waitForURL(origin + "/contact/?topic=solution&need=so-hoa");
+await expect(page.locator(".contact-selected-need")).toHaveText(
+  "Nhu cầu đang trao đổi: Số hóa quy trình và dữ liệu.",
+);
+await expect(
+  page.getByRole("combobox", { name: "Chủ đề liên hệ" }),
+).toContainText("Tư vấn giải pháp");
+for (const invalidNeed of ["not-published", "__proto__"]) {
+  await page.goto(`${origin}/contact/?topic=solution&need=${invalidNeed}`);
+  await expect(page.locator(".contact-selected-need")).toHaveCount(0);
+}
+
+await page.goto(origin + "/solutions/");
+const faq = page.locator(".corporate-faq-section");
+const faqItems = faq.locator(".corporate-faq-item");
+await expect(faqItems).toHaveCount(8);
+await expect(faq.locator(".corporate-faq-heading")).toHaveCount(8);
+for (const item of await faqItems.all()) {
+  await expect(item.getByRole("button")).toHaveAttribute(
+    "aria-expanded",
+    "true",
+  );
+  await expect(item.locator(".corporate-faq-panel p")).toBeVisible();
+  assert.ok((await item.locator(".corporate-faq-panel p").innerText()).trim());
+}
+const firstFAQ = faqItems.first();
+const firstQuestion = firstFAQ.getByRole("button", {
+  name: "VEX cung cấp những dịch vụ công nghệ nào?",
+  exact: true,
+});
+await firstQuestion.focus();
+await page.keyboard.press("Enter");
+await expect(firstQuestion).toHaveAttribute("aria-expanded", "false");
+await expect(firstFAQ.locator(".corporate-faq-panel")).not.toBeVisible();
+await expect(firstQuestion).toBeFocused();
+await page.keyboard.press("Space");
+await expect(firstQuestion).toHaveAttribute("aria-expanded", "true");
+await expect(firstFAQ.locator(".corporate-faq-panel")).toBeVisible();
+// Base UI 1.8 follows the updated APG: arrow keys preserve trigger focus;
+// Tab continues through the ordinary document order, including answer links.
+await page.keyboard.press("ArrowDown");
+await expect(firstQuestion).toBeFocused();
+await expect(firstFAQ.locator("h3").getByRole("button")).toBeFocused();
+await page.keyboard.press("Tab");
+await expect(firstFAQ.getByRole("link").first()).toBeFocused();
+
+await page.goto(origin + "/about/");
+await expect(page.locator("#why-vex h2")).toHaveText(
+  "Công nghệ phù hợp bắt đầu từ việc hiểu đúng vấn đề.",
+);
+await expect(page.locator(".corporate-why-pillars h3")).toHaveText([
+  "Lấy bài toán thực tế làm trọng tâm.",
+  "Kết hợp phần mềm, AI, Robotics và hệ thống vật lý.",
+  "Nghiên cứu, thử nghiệm và đánh giá tính khả thi.",
+  "Hướng tới khả năng mở rộng và cải tiến lâu dài.",
+]);
+await expect(
+  page.locator("#why-vex").getByText("Định hướng tiếp cận", { exact: true }),
+).toBeVisible();
+const journey = page.locator(".corporate-journey");
+await expect(journey.locator("li")).toHaveCount(1);
+await expect(journey.locator("time")).toHaveAttribute("datetime", "2026-03-10");
+await expect(journey.locator("time")).toHaveText("10/03/2026");
+await expect(journey.locator("h3")).toHaveText(
+  "Đăng ký thành lập doanh nghiệp",
+);
+
+// Verify actual browser clipboard access and the readable fallback when access fails.
+await context.grantPermissions(["clipboard-read", "clipboard-write"], {
+  origin,
+});
+await page.goto(origin + "/media/");
+for (const hex of ["#00707E", "#67C08B"]) {
+  const copy = page.getByRole("button", {
+    name: `Sao chép mã HEX ${hex}`,
+    exact: true,
+  });
+  await copy.focus();
+  await page.keyboard.press("Enter");
+  await expect(page.getByRole("status")).toHaveText(`Đã sao chép ${hex}.`);
+  await expect(copy).toHaveText("Đã sao chép");
+  assert.equal(
+    await page.evaluate(() => window.navigator.clipboard.readText()),
+    hex,
+    `Clipboard must contain the requested color ${hex}`,
+  );
+}
+await page.evaluate(() => {
+  Object.defineProperty(window.navigator.clipboard, "writeText", {
+    configurable: true,
+    value: () =>
+      Promise.reject(
+        new window.DOMException("Test access denial", "NotAllowedError"),
+      ),
+  });
+});
+const deniedCopy = page.getByRole("button", {
+  name: "Sao chép mã HEX #00707E",
+  exact: true,
+});
+await deniedCopy.click();
+await expect(page.getByRole("status")).toContainText(
+  "Không thể sao chép tự động",
+);
+await expect(page.getByRole("status")).not.toContainText("Đã sao chép");
+await expect(deniedCopy).toHaveText("Sao chép HEX");
+assert.equal(
+  await page.evaluate(() => window.navigator.clipboard.readText()),
+  "#67C08B",
+  "A failed copy must leave the real clipboard unchanged",
+);
+await page.reload();
+const mediaDownloads = [];
+for (const asset of [
+  {
+    label: "Tải Logo VEX màu — vector",
+    href: "/assets/vex-logo.svg",
+    filename: "vex-logo.svg",
+    source: "assets/vex-logo.svg",
+  },
+  {
+    label: "Tải Logo VEX màu — PNG",
+    href: "/assets/logo-color-tight.png",
+    filename: "vex-logo-color.png",
+    source: "assets/logo-color-tight.png",
+  },
+  {
+    label: "Tải Logo VEX trắng — vector",
+    href: "/assets/vex-logo-white.svg",
+    filename: "vex-logo-white.svg",
+    source: "assets/vex-logo-white.svg",
+  },
+  {
+    label: "Tải Logo VEX trắng — PNG",
+    href: "/assets/logo-white-tight.png",
+    filename: "vex-logo-white.png",
+    source: "assets/logo-white-tight.png",
+  },
+]) {
+  const link = page.getByRole("link", { name: asset.label, exact: true });
+  await expect(link).toHaveAttribute("href", asset.href);
+  const [download] = await Promise.all([
+    page.waitForEvent("download"),
+    link.click(),
+  ]);
+  assert.equal(await download.failure(), null, `${asset.filename}: download`);
+  assert.equal(download.suggestedFilename(), asset.filename);
+  const downloadedPath = await download.path();
+  assert.ok(downloadedPath, `${asset.filename}: missing downloaded file`);
+  const [downloadedBytes, sourceBytes] = await Promise.all([
+    readFile(downloadedPath),
+    readFile(asset.source),
+  ]);
+  assert.deepEqual(
+    downloadedBytes,
+    sourceBytes,
+    `${asset.filename}: downloaded bytes must match the original logo`,
+  );
+  mediaDownloads.push({
+    filename: asset.filename,
+    bytes: downloadedBytes.length,
+  });
+}
+
 await page.setViewportSize({ width: 390, height: 950 });
+await page.emulateMedia({ reducedMotion: "reduce" });
+await page.goto(origin + "/");
+await page.evaluate(() => document.fonts.ready);
+await expect(page.locator("h1")).toBeVisible();
+assert.equal(
+  await page
+    .locator("h1")
+    .evaluate((heading) => getComputedStyle(heading).opacity),
+  "1",
+  "Reduced motion must display the hero immediately",
+);
+assert.equal(
+  await page
+    .locator("main")
+    .evaluate(
+      (main) =>
+        main
+          .getAnimations({ subtree: true })
+          .filter((animation) => animation.playState === "running").length,
+    ),
+  0,
+  "Reduced motion must stop content and decorative animations",
+);
+await page.screenshot({
+  path: "artifacts/reduced-motion-home-390.png",
+  fullPage: false,
+});
+await page.emulateMedia({ reducedMotion: "no-preference" });
 for (const [topic, label] of [
   ["research", "Hợp tác nghiên cứu"],
   ["academy", "Hợp tác giáo dục"],
@@ -365,6 +630,23 @@ for (const path of routes) {
     "href",
     "https://vex.biz.vn" + path,
   );
+  if (path === "/solutions/") {
+    const staticFAQ = staticPage.locator(".corporate-faq-item");
+    await expect(staticFAQ).toHaveCount(8);
+    for (const item of await staticFAQ.all())
+      await expect(item.locator(".corporate-faq-panel p")).toBeVisible();
+    const nativeChallenge = staticPage.locator(".challenge-entry").first();
+    await expect(nativeChallenge).toHaveJSProperty("open", false);
+    await nativeChallenge.locator("summary").focus();
+    await staticPage.keyboard.press("Enter");
+    await expect(nativeChallenge).toHaveJSProperty("open", true);
+    await expect(
+      nativeChallenge.getByRole("heading", {
+        name: "Bài toán thực tế",
+        exact: true,
+      }),
+    ).toBeVisible();
+  }
 }
 const build404 = await readFile("dist/404.html", "utf8");
 assert.ok(build404.includes("noindex, follow"));
@@ -375,6 +657,18 @@ await writeFile(
       routes,
       widths,
       layoutChecks: routes.length * widths.length,
+      mediaDownloads,
+      clipboard: { copied: ["#00707E", "#67C08B"], deniedCopyFallback: true },
+      reducedMotion: true,
+      customerExperience: {
+        challenges: 6,
+        expandedWidths: [390, 1440],
+        selectedNeed: "so-hoa",
+        invalidNeedIgnored: true,
+        faq: { questions: 8, initiallyOpen: true, keyboard: true, noJS: true },
+        approvedWhyVexPillars: 4,
+        verifiedJourneyDates: ["2026-03-10"],
+      },
       errors,
       accessibility: inaccessible,
     },
@@ -386,5 +680,5 @@ await browser.close();
 assert.deepEqual(errors, []);
 assert.deepEqual(inaccessible, []);
 console.log(
-  `PASS: ${routes.length} routes x ${widths.length} widths, prerender/no-JS, links, 404, accessibility, menus, topic presets, consent, validation, email preparation and tracking disabled.`,
+  `PASS: ${routes.length} routes x ${widths.length} widths, prerender/no-JS, links, 404, accessibility, menus, solution challenges/need context, FAQ keyboard/no-JS, approved Why VEX/journey, clipboard/fallback, original logo downloads, reduced motion, topic presets, consent, validation, email preparation and tracking disabled.`,
 );

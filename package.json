@@ -15,10 +15,11 @@
     "predev": "npm run prepare:content && node scripts/prepare-public.mjs",
     "prebuild": "npm run prepare:content && node scripts/prepare-public.mjs",
     "verify:ui": "node scripts/verify-ui.mjs",
+    "verify:content": "node scripts/verify-content.mjs",
     "measure:performance": "node scripts/measure-performance.mjs",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src scripts vite.config.js eslint.config.mjs",
-    "check": "npm run typecheck && npm run lint && npm run build"
+    "check": "npm run typecheck && npm run lint && npm run verify:content && npm run build"
   },
   "dependencies": {
     "@cloudflare/kumo": "2.14.0",

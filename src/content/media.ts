@@ -10,6 +10,8 @@ export interface MediaAsset {
   approvedForPublication: boolean;
 }
 
+export { publicDocuments, documentCategoryLabels } from "./documents";
+
 // Public logo files only. File sizes reflect the downloadable assets in /assets.
 // Project photography and videos require publication approval before being added.
 export const mediaAssets: MediaAsset[] = [

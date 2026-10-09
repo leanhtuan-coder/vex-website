@@ -1,9 +1,22 @@
-import { cp, mkdir, rm, readFile, realpath } from "node:fs/promises";
+import { cp, mkdir, rm, readFile, realpath, lstat } from "node:fs/promises";
 import { resolve, dirname, relative, isAbsolute } from "node:path";
-const workspace = resolve(import.meta.dirname, "..");
+const workspace = await realpath(resolve(import.meta.dirname, ".."));
 const publicDirectory = resolve(workspace, "public");
 if (dirname(publicDirectory) !== workspace)
   throw new Error("Invalid generated public directory");
+try {
+  const stats = await lstat(publicDirectory);
+  if (
+    stats.isSymbolicLink() ||
+    !stats.isDirectory() ||
+    (await realpath(publicDirectory)) !== publicDirectory
+  )
+    throw new Error(
+      "Generated public resources require a regular workspace directory",
+    );
+} catch (error) {
+  if (error.code !== "ENOENT") throw error;
+}
 await rm(publicDirectory, { recursive: true, force: true });
 await mkdir(resolve(publicDirectory, "assets"), { recursive: true });
 // Copy only public website resources; internal PDFs never enter the build.
@@ -48,6 +61,38 @@ for (const image of publication.images) {
   )
     throw new Error("Approved image must remain inside assets");
   const destination = resolve(publicDirectory, image.slice(1));
+  await mkdir(dirname(destination), { recursive: true });
+  await cp(source, destination);
+}
+for (const document of publication.documents || []) {
+  if (
+    document.approvedForPublication !== true ||
+    document.contentState !== "VERIFIED" ||
+    !/^\/assets\/documents\/public-[A-Za-z0-9_-]+\.pdf$/.test(document.href)
+  )
+    throw new Error("Invalid approved public document");
+  const documentsDirectory = resolve(assetsDirectory, "documents");
+  if ((await realpath(documentsDirectory)) !== documentsDirectory)
+    throw new Error(
+      "Public documents directory cannot be a symbolic link or junction",
+    );
+  const expectedSource = resolve(workspace, document.href.slice(1));
+  const source = await realpath(expectedSource);
+  const stats = await lstat(expectedSource);
+  const withinDocuments = relative(documentsDirectory, source);
+  if (
+    !withinDocuments ||
+    withinDocuments.startsWith("..") ||
+    isAbsolute(withinDocuments) ||
+    source !== expectedSource ||
+    !stats.isFile() ||
+    stats.isSymbolicLink() ||
+    stats.size !== document.bytes
+  )
+    throw new Error(
+      "Approved public document must match the measured regular asset file",
+    );
+  const destination = resolve(publicDirectory, document.href.slice(1));
   await mkdir(dirname(destination), { recursive: true });
   await cp(source, destination);
 }

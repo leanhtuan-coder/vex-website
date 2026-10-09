@@ -1,18 +1,27 @@
 import { Text } from "@cloudflare/kumo/components/text";
 import { Link } from "@cloudflare/kumo/components/link";
 import { Badge } from "@cloudflare/kumo/components/badge";
+import { LayerCard } from "@cloudflare/kumo/components/layer-card";
+import { ArrowUpRightIcon } from "@phosphor-icons/react";
 import {
   PageIntro,
   CTASection,
   Heading,
-  ContentCard,
   ProjectEmpty,
 } from "../components/shared";
 import { company } from "../content/company";
 import { services } from "../content/services";
-import { publicProjects } from "../content/projects";
+import { publicProjects, projectOwnershipLabels } from "../content/projects";
 import { analyticsEnabled } from "../analytics";
 import BrandStrategyAbout from "../components/BrandStrategyAbout";
+import {
+  WhyVex,
+  CompanyJourney,
+  CompanyProfileNote,
+} from "../components/CorporateIdentity";
+import SolutionsByChallenge from "../components/SolutionsByChallenge";
+import CorporateFAQ from "../components/CorporateFAQ";
+import "../styles-corporate-redesign.css";
 export function About() {
   return (
     <>
@@ -24,11 +33,62 @@ export function About() {
         vào nghiên cứu, phát triển và tích hợp giải pháp cho doanh nghiệp và tổ
         chức.
       </PageIntro>
-      <section className="section container editorial-grid">
-        <Heading
-          label="CÂU CHUYỆN THƯƠNG HIỆU"
-          title="VEX. Từ ý tưởng Vertex."
-        />
+      <nav
+        className="container corporate-about-index"
+        aria-label="Nội dung về VEX"
+      >
+        {[
+          ["cau-chuyen-thuong-hieu", "Câu chuyện"],
+          ["why-vex", "Why VEX"],
+          ["hanh-trinh", "Hành trình"],
+          ["tam-nhin-su-menh", "Tầm nhìn & Sứ mệnh"],
+          ["gia-tri-cot-loi", "Giá trị cốt lõi"],
+          ["doi-ngu-lanh-dao", "Lãnh đạo"],
+          ["thong-tin-doanh-nghiep", "Thông tin doanh nghiệp"],
+        ].map(([id, label]) => (
+          <Link variant="plain" key={id} href={`#${id}`}>
+            {label}
+          </Link>
+        ))}
+      </nav>
+      <section
+        className="section container editorial-grid corporate-story-section"
+        id="cau-chuyen-thuong-hieu"
+      >
+        <div className="corporate-story-heading">
+          <Heading
+            label="CÂU CHUYỆN THƯƠNG HIỆU"
+            title="VEX. Từ ý tưởng Vertex."
+          />
+          <figure className="corporate-brand-figure">
+            <div className="corporate-brand-preview">
+              <img
+                src="/assets/vex-logo.svg"
+                width={3067}
+                height={935}
+                alt="Logo VEX đầy đủ, phiên bản màu"
+                loading="lazy"
+              />
+              <span
+                className="corporate-brand-corner corporate-brand-corner-tl"
+                aria-hidden="true"
+              />
+              <span
+                className="corporate-brand-corner corporate-brand-corner-tr"
+                aria-hidden="true"
+              />
+              <span
+                className="corporate-brand-corner corporate-brand-corner-bl"
+                aria-hidden="true"
+              />
+              <span
+                className="corporate-brand-corner corporate-brand-corner-br"
+                aria-hidden="true"
+              />
+            </div>
+            <figcaption>Logo VEX — phiên bản màu.</figcaption>
+          </figure>
+        </div>
         <div className="prose">
           <Text>
             VEX được phát triển từ ý tưởng “Vertex” — đỉnh và điểm kết nối trong
@@ -47,9 +107,11 @@ export function About() {
           </Text>
         </div>
       </section>
+      <WhyVex />
+      <CompanyJourney />
       <BrandStrategyAbout />
-      <section className="section solution-section">
-        <div className="container">
+      <section className="section corporate-direction-section">
+        <div className="container corporate-direction-grid">
           <Heading
             label="ĐỊNH HƯỚNG PHÁT TRIỂN"
             title="Phần mềm, AI và hệ thống vật lý."
@@ -57,19 +119,33 @@ export function About() {
             VEX hướng tới sự kết hợp giữa Software, AI, Robotics, Embedded
             Systems và Automation để xây dựng các giải pháp có tính ứng dụng.
           </Heading>
-          <div className="technology-grid">
-            {services.slice(0, 4).map((s) => (
-              <ContentCard
+          <div className="corporate-direction-list">
+            {services.slice(0, 4).map((s, index) => (
+              <Link
                 key={s.slug}
-                title={s.title}
-                description={s.summary}
+                variant="plain"
+                className="corporate-direction-row"
                 href={`/solutions/${s.slug}/`}
-              />
+              >
+                <span className="corporate-row-number" aria-hidden="true">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <div>
+                  <Text as="h3" variant="heading">
+                    {s.title}
+                  </Text>
+                  <Text variant="secondary">{s.summary}</Text>
+                </div>
+                <ArrowUpRightIcon size={22} aria-hidden="true" />
+              </Link>
             ))}
           </div>
         </div>
       </section>
-      <section className="section container editorial-grid">
+      <section
+        className="section container editorial-grid corporate-facts-section"
+        id="thong-tin-doanh-nghiep"
+      >
         <Heading label="THÔNG TIN CÔNG TY" title="VEX Technology Solutions" />
         <div className="prose company-facts">
           <Text>{company.legalName}</Text>
@@ -87,6 +163,7 @@ export function About() {
             Doanh nghiệp đang xây dựng nền tảng hoạt động và mở rộng các cơ hội
             hợp tác công nghệ.
           </Text>
+          <CompanyProfileNote />
         </div>
       </section>
       <CTASection />
@@ -104,19 +181,60 @@ export function Solutions() {
         được xác định sau khi trao đổi bài toán, dữ liệu và nguồn lực của từng
         đơn vị.
       </PageIntro>
-      <section className="section container">
-        <div className="technology-grid">
-          {services.map((s) => (
-            <ContentCard
+      <SolutionsByChallenge />
+      <section className="section container corporate-solutions-layout">
+        <aside className="corporate-solutions-index">
+          <Text as="h2" variant="heading">
+            Hướng giải pháp
+          </Text>
+          <nav aria-label="Chọn hướng giải pháp">
+            {services.map((s, index) => (
+              <Link key={s.slug} href={`#service-${s.slug}`} variant="plain">
+                <span aria-hidden="true">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                {s.category}
+              </Link>
+            ))}
+          </nav>
+        </aside>
+        <div className="corporate-service-list">
+          {services.map((s, index) => (
+            <article
               key={s.slug}
-              headingLevel="h2"
-              title={s.title}
-              description={s.summary}
-              href={`/solutions/${s.slug}/`}
-            />
+              id={`service-${s.slug}`}
+              className={`corporate-service-row${index === 0 ? " corporate-service-featured" : ""}`}
+            >
+              <div className="corporate-service-meta">
+                <span aria-hidden="true">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <Badge variant="outline">{s.category}</Badge>
+              </div>
+              <Text as="h2" variant="heading">
+                {s.title}
+              </Text>
+              <Text variant="secondary">{s.summary}</Text>
+              <div className="tags" aria-label={`Công nghệ cho ${s.title}`}>
+                {s.technologies.map((technology) => (
+                  <Badge variant="outline" key={technology}>
+                    {technology}
+                  </Badge>
+                ))}
+              </div>
+              <Link
+                href={`/solutions/${s.slug}/`}
+                variant="plain"
+                className="corporate-service-link"
+              >
+                Tìm hiểu giải pháp
+                <ArrowUpRightIcon size={20} aria-hidden="true" />
+              </Link>
+            </article>
           ))}
         </div>
       </section>
+      <CorporateFAQ />
       <CTASection />
     </>
   );
@@ -129,8 +247,8 @@ export function ServiceDetail({ slug }: { slug: string }) {
       <PageIntro label={s.title} title={s.title}>
         {s.summary}
       </PageIntro>
-      <section className="section container editorial-grid">
-        <aside className="detail-sidebar">
+      <section className="section container editorial-grid corporate-service-detail">
+        <aside className="detail-sidebar corporate-detail-sidebar">
           <Badge variant="outline">{s.category}</Badge>
           <nav aria-label="Nội dung giải pháp">
             <Link href="#problem">Bài toán</Link>
@@ -140,8 +258,11 @@ export function ServiceDetail({ slug }: { slug: string }) {
           </nav>
           <Link href="/solutions/">Tất cả giải pháp</Link>
         </aside>
-        <div className="prose">
+        <div className="prose corporate-detail-prose">
           <section id="problem">
+            <span className="corporate-detail-number" aria-hidden="true">
+              01 / BÀI TOÁN
+            </span>
             <Text as="h2" variant="heading">
               Bài toán cần giải quyết
             </Text>
@@ -152,6 +273,9 @@ export function ServiceDetail({ slug }: { slug: string }) {
             <Text>{s.audience}</Text>
           </section>
           <section id="approach">
+            <span className="corporate-detail-number" aria-hidden="true">
+              02 / HƯỚNG GIẢI QUYẾT
+            </span>
             <Text as="h2" variant="heading">
               Hướng giải quyết
             </Text>
@@ -169,6 +293,9 @@ export function ServiceDetail({ slug }: { slug: string }) {
             </div>
           </section>
           <section id="scope">
+            <span className="corporate-detail-number" aria-hidden="true">
+              03 / PHẠM VI
+            </span>
             <Text as="h2" variant="heading">
               Phạm vi có thể trao đổi
             </Text>
@@ -184,6 +311,9 @@ export function ServiceDetail({ slug }: { slug: string }) {
             </Text>
           </section>
           <section id="value">
+            <span className="corporate-detail-number" aria-hidden="true">
+              04 / GIÁ TRỊ KỲ VỌNG
+            </span>
             <Text as="h2" variant="heading">
               Giá trị kỳ vọng
             </Text>
@@ -205,20 +335,48 @@ export function Projects() {
         Các dự án, nguyên mẫu và sản phẩm được giới thiệu khi thông tin, hình
         ảnh và quyền công bố đã được xác nhận.
       </PageIntro>
-      <section className="section container">
+      <section className="section container corporate-projects-section">
         {publicProjects.length === 0 ? (
           <ProjectEmpty />
         ) : (
-          <div className="technology-grid">
-            {publicProjects.map((p) => (
-              <ContentCard
+          <div className="corporate-project-grid">
+            {publicProjects.map((p, index) => (
+              <LayerCard
                 key={p.slug}
-                headingLevel="h2"
-                linkLabel="Xem dự án"
-                title={p.title}
-                description={p.summary}
-                href={`/projects/${p.slug}/`}
-              />
+                className={`corporate-project-card${index === 0 ? " corporate-project-featured" : ""}`}
+              >
+                <Link
+                  variant="plain"
+                  href={`/projects/${p.slug}/`}
+                  className="corporate-project-image-link"
+                  aria-label={`Xem dự án ${p.title}`}
+                >
+                  <img
+                    src={p.image}
+                    alt={p.imageAlt}
+                    width={p.imageWidth}
+                    height={p.imageHeight}
+                    loading="lazy"
+                  />
+                </Link>
+                <div className="corporate-project-card-details">
+                  <div className="tags">
+                    <Badge variant="outline">{p.category}</Badge>
+                    <Badge variant="outline">{p.status}</Badge>
+                    <Badge variant="outline">
+                      {projectOwnershipLabels[p.provenance.ownership]}
+                    </Badge>
+                  </div>
+                  <Text as="h2" variant="heading">
+                    {p.title}
+                  </Text>
+                  <Text variant="secondary">{p.summary}</Text>
+                  <Link variant="plain" href={`/projects/${p.slug}/`}>
+                    Xem dự án
+                    <ArrowUpRightIcon size={20} aria-hidden="true" />
+                  </Link>
+                </div>
+              </LayerCard>
             ))}
           </div>
         )}
@@ -235,11 +393,15 @@ export function ProjectDetail({ slug }: { slug: string }) {
       <PageIntro label="Dự án" title={p.title}>
         {p.summary}
       </PageIntro>
-      <section className="section container prose">
+      <section className="section container prose corporate-project-detail">
         <div className="tags">
           <Badge variant="outline">{p.status}</Badge>
           <Badge variant="outline">{p.category}</Badge>
+          <Badge variant="outline">
+            {projectOwnershipLabels[p.provenance.ownership]}
+          </Badge>
         </div>
+        <Text>{p.provenance.statement}</Text>
         <img
           className="project-image"
           src={p.image}
@@ -260,17 +422,20 @@ export function ProjectDetail({ slug }: { slug: string }) {
           ["Bài toán", p.problem],
           ["Giải pháp kỹ thuật", p.solution],
           ["Vai trò của VEX", p.role],
+          ["Kiến trúc có thể công khai", p.publicArchitecture],
           ["Kết quả kiểm chứng", p.evidence],
           ["Thách thức", p.challenges],
           ["Hướng phát triển", p.nextSteps],
-        ].map(([title, text]) => (
-          <section key={title}>
-            <Text as="h2" variant="heading">
-              {title}
-            </Text>
-            <Text>{text}</Text>
-          </section>
-        ))}
+        ]
+          .filter(([, text]) => Boolean(text))
+          .map(([title, text]) => (
+            <section key={title}>
+              <Text as="h2" variant="heading">
+                {title}
+              </Text>
+              <Text>{text}</Text>
+            </section>
+          ))}
       </section>
       <CTASection />
     </>

@@ -1,7 +1,9 @@
 import { build } from "vite";
+import { Buffer } from "node:buffer";
 import {
   lstat,
   mkdir,
+  open,
   readFile,
   realpath,
   rm,
@@ -72,10 +74,14 @@ try {
       rollupOptions: { output: { entryFileNames: "website.mjs" } },
     },
   });
-  const { websiteContent, validatePublication, validateSvgMarkup } =
-    await import(
-      pathToFileURL(resolve(temporaryDirectory, "website.mjs")).href
-    );
+  const {
+    websiteContent,
+    validatePublication,
+    validateSvgMarkup,
+    validatePdfSignature,
+  } = await import(
+    pathToFileURL(resolve(temporaryDirectory, "website.mjs")).href
+  );
   const publication = validatePublication(websiteContent, asOfDate);
   const assetsDirectory = await realpath(resolve(workspace, "assets"));
   for (const image of publication.images) {
@@ -93,6 +99,53 @@ try {
       validateSvgMarkup(source);
     }
   }
+  if (publication.documents.length > 0) {
+    const expectedDocumentsDirectory = resolve(assetsDirectory, "documents");
+    const documentsDirectory = await realpath(expectedDocumentsDirectory);
+    const directoryStats = await lstat(expectedDocumentsDirectory);
+    if (
+      !directoryStats.isDirectory() ||
+      directoryStats.isSymbolicLink() ||
+      documentsDirectory !== expectedDocumentsDirectory
+    )
+      throw new Error(
+        "Approved public documents require a regular assets/documents directory",
+      );
+    for (const document of publication.documents) {
+      const expectedPath = resolve(workspace, document.href.slice(1));
+      const resolvedPath = await realpath(expectedPath);
+      const stats = await lstat(expectedPath);
+      if (
+        !staysInside(documentsDirectory, resolvedPath) ||
+        resolvedPath !== expectedPath ||
+        !stats.isFile() ||
+        stats.isSymbolicLink() ||
+        stats.size === 0
+      )
+        throw new Error(
+          "Approved public documents must be nonempty regular files inside assets/documents",
+        );
+      const handle = await open(resolvedPath, "r");
+      try {
+        const header = Buffer.alloc(Math.min(16, stats.size));
+        const trailer = Buffer.alloc(Math.min(1024, stats.size));
+        await handle.read(header, 0, header.length, 0);
+        await handle.read(
+          trailer,
+          0,
+          trailer.length,
+          stats.size - trailer.length,
+        );
+        validatePdfSignature(
+          header.toString("latin1"),
+          trailer.toString("latin1"),
+        );
+      } finally {
+        await handle.close();
+      }
+      document.bytes = stats.size;
+    }
+  }
   const generatedDirectory = await realpath(dirname(generatedFile));
   if (!staysInside(workspace, generatedDirectory))
     throw new Error("Generated publication must remain inside the workspace");
@@ -101,7 +154,7 @@ try {
     throw new Error("Generated publication must be a regular workspace file");
   await writeFile(generatedFile, `${JSON.stringify(publication, null, 2)}\n`);
   console.log(
-    `Published content for ${publication.asOfDate}: ${publication.articles.length} articles, ${publication.jobs.length} jobs, ${publication.projects.length} projects, ${publication.images.length} approved images.`,
+    `Published content for ${publication.asOfDate}: ${publication.articles.length} articles, ${publication.jobs.length} jobs, ${publication.projects.length} projects, ${publication.leadership.length} verified leaders, ${publication.documents.length} public documents, ${publication.images.length} approved images.`,
   );
 } finally {
   await verifyTemporaryDirectory();

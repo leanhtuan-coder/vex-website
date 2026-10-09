@@ -8,7 +8,7 @@ import { Link } from "@cloudflare/kumo/components/link";
 import { Select } from "@cloudflare/kumo/components/select";
 import { Text } from "@cloudflare/kumo/components/text";
 import { ArrowUpRightIcon } from "@phosphor-icons/react";
-import { CTA, ContentCard, Heading, PageIntro } from "../components/shared";
+import { CTA, Heading, PageIntro } from "../components/shared";
 import {
   publicArticles,
   type Article,
@@ -62,7 +62,7 @@ function GrowthContact({
           </Text>
           <Text variant="secondary">{description}</Text>
         </div>
-        <CTA href={href} size="lg">
+        <CTA href={href} size="lg" onDark>
           {label}
         </CTA>
       </div>
@@ -186,7 +186,7 @@ export function Insights() {
         Nơi VEX chia sẻ thông tin công ty, hoạt động và các góc nhìn về công
         nghệ khi nội dung được xác nhận để công bố.
       </PageIntro>
-      <section className="section container">
+      <section className="section container growth-publication-section">
         {publicArticles.length > 0 ? (
           <ArticleList />
         ) : (
@@ -466,7 +466,10 @@ export function Careers() {
         Tìm hiểu các nhóm chuyên môn trong định hướng phát triển của VEX và theo
         dõi thông tin về cơ hội làm việc được công bố tại đây.
       </PageIntro>
-      <section className="section container" aria-labelledby="open-jobs-title">
+      <section
+        className="section container growth-publication-section"
+        aria-labelledby="open-jobs-title"
+      >
         <div className="growth-section-title">
           <Text as="h2" variant="heading" id="open-jobs-title">
             Vị trí đang tuyển
@@ -485,8 +488,8 @@ export function Careers() {
           />
         )}
       </section>
-      <section className="section solution-section">
-        <div className="container">
+      <section className="section growth-directions-section">
+        <div className="container growth-directions-layout">
           <Heading
             label="ĐỊNH HƯỚNG CHUYÊN MÔN"
             title="Những lĩnh vực VEX quan tâm."
@@ -494,17 +497,28 @@ export function Careers() {
             Các nhóm dưới đây mô tả định hướng công nghệ, chưa phải danh sách vị
             trí đang tuyển.
           </Heading>
-          <div className="technology-grid">
-            {careerDirections.map((direction) => (
-              <ContentCard
-                key={direction.title}
-                title={direction.title}
-                description={direction.description}
-                href={direction.href}
-                linkLabel="Tìm hiểu định hướng"
-              />
+          <ol className="growth-career-directions">
+            {careerDirections.map((direction, index) => (
+              <li key={direction.title}>
+                <span className="growth-direction-number" aria-hidden="true">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <div>
+                  <Text as="h3" variant="heading">
+                    {direction.title}
+                  </Text>
+                  <Text variant="secondary">{direction.description}</Text>
+                  <Link
+                    href={direction.href}
+                    variant="plain"
+                    className="growth-direction-link"
+                  >
+                    Tìm hiểu định hướng <ArrowUpRightIcon size={18} />
+                  </Link>
+                </div>
+              </li>
             ))}
-          </div>
+          </ol>
         </div>
       </section>
     </>

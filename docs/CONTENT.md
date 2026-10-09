@@ -2,7 +2,11 @@
 
 ## Cập nhật
 
-`company.ts` là nguồn footer/contact/schema; `services.ts` quản lý giải pháp; `research.ts` và `academy.ts` quản lý định hướng; `pages.ts` quản lý SEO/sitemap. Bài viết, việc làm và case study nằm trong ba mảng của `content/website.ts`; kiểu dữ liệu ở `src/content/articles.ts`, `careers.ts` và `projects.ts`.
+`company.ts` là nguồn footer/contact/schema; `services.ts` quản lý giải pháp; `research.ts` và `academy.ts` quản lý định hướng; `pages.ts` quản lý SEO/sitemap. Bài viết, việc làm, case study, lãnh đạo và tài liệu công khai nằm trong `content/website.ts`; kiểu dữ liệu ở `src/content/`.
+
+Các trạng thái nội bộ `VERIFIED`, `DRAFT`, `PENDING_APPROVAL`, `NOT_AVAILABLE` tách khỏi cờ cho phép công bố. Case study, hồ sơ lãnh đạo và tài liệu cần `contentState: VERIFIED` và `approvedForPublication: true`; thiếu một trong hai sẽ không xuất bản. Bài viết/việc làm giữ điều kiện duyệt và ngày, đồng thời loại mọi trạng thái draft/chờ duyệt/chưa có. Lịch sử cấu hình không có contentState tiếp tục được nhận với cờ duyệt/trạng thái đăng hợp lệ; nội dung mới nên điền trạng thái rõ ràng. Xem [dữ liệu cần bổ sung](../CONTENT_REQUIREMENTS.md) và [checklist phát hành](../LAUNCH_CHECKLIST.md).
+
+`corporate-identity.ts` chứa Why VEX đã được chủ website duyệt công khai dưới dạng định hướng, cùng một mốc đăng ký thành lập đã xác nhận. `challenges.ts` chỉ ánh xạ sáu nhóm nhu cầu tới dữ liệu giải pháp hiện có; `faq.ts` giải đáp từ nội dung dịch vụ/quy trình/kênh liên hệ đã công khai. Không tạo sản phẩm thương mại, thành tích hoặc SLA từ các định hướng này.
 
 `src/content/brand-strategy.ts` là nguồn chung cho Tầm nhìn, Sứ mệnh và năm Giá trị cốt lõi do chủ website cung cấp ngày 09/10/2026. Home dùng message/summary ngắn; About dùng statement đầy đủ và supportingMessages. Các giá trị giữ số thứ tự, tên Việt/Anh và mô tả nguyên văn. Trạng thái hiện tại `draft`, với nhãn bản thảo trên website; chỉ đổi sang `approved` sau xác nhận phê duyệt chính thức. Brand Guidelines không có bộ Vision/Mission/Core Values khác để thay thế. Leadership hiện chỉ hiển thị tên và chức danh pháp lý đã đối chiếu từ company.ts; chưa có ảnh/hồ sơ bổ sung nên không tạo thay thế.
 
@@ -24,9 +28,15 @@ Việc làm cần title/department/summary, hình thức và địa điểm th�
 
 Mảng projects trong `content/website.ts` hiện rỗng theo xác nhận của chủ website. “Chưa có dự án được công bố” là trạng thái nội dung thật. Không có case study mẫu trên trang public.
 
-Dự án cần: slug/tên, danh mục, trạng thái Concept/Research/Prototype/Pilot/Commercial Product, mô tả, ảnh/alt, bối cảnh, bài toán, giải pháp, công nghệ, vai trò VEX, kết quả có bằng chứng, thách thức và hướng phát triển. Xác nhận quyền dùng ảnh và quyền công bố, kể cả sự đồng ý của khách hàng nếu cần. Chỉ đặt `approvedForPublication: true` sau kiểm tra. Build sẽ tạo danh sách, chi tiết và sitemap; mục chưa duyệt không có URL public.
+Dự án cần: slug/tên, danh mục, trạng thái Concept/Research/Prototype/Pilot/Commercial Product, mô tả, ảnh/alt, bối cảnh, bài toán, giải pháp, công nghệ, vai trò VEX. `provenance.ownership` phân biệt `vex`, `founder-before-vex`, `personal-research`, `collaboration`; `provenance.statement` giải thích nguồn gốc và quyền sở hữu. Trạng thái phát triển tách khỏi nguồn gốc. Kiến trúc công khai, kết quả có bằng chứng, thách thức và hướng phát triển chỉ thêm khi có dữ liệu; các mục thiếu được ẩn. Xác nhận quyền dùng ảnh và quyền công bố, kể cả sự đồng ý của khách hàng nếu cần. Chỉ đặt VERIFIED và cờ duyệt sau kiểm tra. Build tạo danh sách, chi tiết và sitemap; mục chưa duyệt không có URL public.
 
-Ảnh cần `imageWidth`/`imageHeight`. Publisher chỉ đưa ảnh của nội dung đã công bố vào allowlist build tự động; ảnh bản nháp không được copy. Chỉ chấp nhận định dạng ảnh, chặn traversal/PDF/symlink ngoài assets và SVG chứa nội dung chủ động/tham chiếu ngoài. Thư viện hiện có bốn tệp logo SVG/PNG màu-trắng tải thật; ảnh/video dự án chưa có. Không public PDF/AI/font nguồn hoặc tài nguyên nhạy cảm.
+Ảnh cần `imageWidth`/`imageHeight`. Publisher chỉ đưa ảnh của nội dung đã công bố vào allowlist build tự động; ảnh bản nháp không được copy. Chỉ chấp nhận định dạng ảnh, chặn traversal/PDF/symlink ngoài assets và SVG chứa nội dung chủ động/tham chiếu ngoài. Thư viện hiện có bốn tệp logo SVG/PNG màu-trắng tải thật; ảnh/video dự án chưa có. Không public PDF nội bộ, AI/font nguồn hoặc tài nguyên nhạy cảm.
+
+## Hồ sơ lãnh đạo và tài liệu công khai
+
+Mảng leadership hiện chỉ có tên/chức danh pháp lý của Lê Anh Tuấn. Ảnh, biography, responsibilities, expertise và links là tùy chọn có xác minh/quyền công bố. Ảnh hiển thị tỷ lệ 4:5, không tạo placeholder khi chưa có; liên kết hồ sơ chỉ nhận HTTPS đã duyệt. Không tự nâng chức danh thành Founder/CEO hoặc thêm bằng cấp.
+
+Mảng documents hiện trống. Khi có file được duyệt, lưu **bản dành riêng cho công khai** dưới `assets/documents/public-*.pdf`, thêm metadata và cờ VERIFIED/duyệt. Publisher kiểm tra đường dẫn, file thường, chữ ký PDF và dung lượng thật; allowlist chỉ copy file đã công bố. Chữ ký PDF không thay thế việc kiểm tra nội dung/quyền sử dụng hoặc quét malware. PDF Brand Guidelines nguồn ở root không được tự đưa lên web. Download Center tự xuất hiện khi có file thật; About nhận Company Profile đúng danh mục. Không cần tạo link chờ hoặc file PDF giả.
 
 ## Thông tin còn cần
 

@@ -11,7 +11,7 @@ import {
 } from "@phosphor-icons/react";
 import { services, technologies } from "../content/services";
 import { process } from "../content/company";
-import { publicProjects } from "../content/projects";
+import { publicProjects, projectOwnershipLabels } from "../content/projects";
 import { publicArticles } from "../content/articles";
 import { brandStrategy } from "../content/brand-strategy";
 import {
@@ -19,18 +19,18 @@ import {
   Heading,
   CTASection,
   ContentCard,
-  ProjectEmpty,
   technologyIcons,
 } from "../components/shared";
 import TechnologyVisual from "../components/TechnologyVisual";
 import "../styles-strategy-home.css";
+import "../styles-home-redesign.css";
 export default function Home() {
   return (
-    <>
-      <section className="hero">
-        <div className="container hero-grid">
-          <div className="hero-copy">
-            <Badge variant="outline">VEX TECHNOLOGY SOLUTIONS</Badge>
+    <div className="home-page">
+      <section className="home-hero">
+        <div className="container home-hero-grid">
+          <div className="home-hero-copy">
+            <div className="home-hero-kicker">VEX TECHNOLOGY SOLUTIONS</div>
             <Text as="h1" variant="heading">
               Kiến tạo giải pháp công nghệ từ{" "}
               <span>những bài toán thực tiễn.</span>
@@ -40,23 +40,19 @@ export default function Home() {
               robotics và hệ thống tự động hóa, hướng tới những giải pháp có
               tính ứng dụng cho doanh nghiệp và tổ chức.
             </Text>
-            <div className="hero-actions">
-              <CTA size="lg" href="/solutions/">
-                Khám phá giải pháp
-              </CTA>
-              <CTA size="lg" secondary>
-                Kết nối với VEX
-              </CTA>
+            <div className="home-hero-actions">
+              <CTA href="/solutions/">Khám phá giải pháp</CTA>
+              <CTA secondary>Kết nối với VEX</CTA>
             </div>
-            <div className="hero-foot">
-              <span className="status-dot" />
+            <div className="home-hero-foot">
+              <span className="home-brand-pixel" aria-hidden="true" />
               SOFTWARE · AI · ROBOTICS · AUTOMATION
             </div>
           </div>
           <TechnologyVisual />
         </div>
       </section>
-      <div className="capability-strip">
+      <div className="home-capability-strip">
         <div className="container">
           <span>KẾT NỐI CÔNG NGHỆ</span>
           {[
@@ -75,8 +71,8 @@ export default function Home() {
           )}
         </div>
       </div>
-      <section className="section container">
-        <div className="about-layout">
+      <section className="section container home-about-section">
+        <div className="home-about-layout">
           <Heading
             number="01"
             label="VEX LÀ AI?"
@@ -86,7 +82,7 @@ export default function Home() {
             cận công nghệ từ nhu cầu thực tế, hướng tới các hệ thống có khả năng
             ứng dụng, cải tiến và phát triển lâu dài.
           </Heading>
-          <div className="about-values">
+          <div className="home-about-values">
             {[
               [
                 "Tư duy giải quyết vấn đề",
@@ -100,8 +96,11 @@ export default function Home() {
                 "Hướng tới ứng dụng",
                 "Đánh giá khả năng triển khai, vận hành và cải tiến của từng giải pháp.",
               ],
-            ].map(([title, text]) => (
-              <div className="value" key={title}>
+            ].map(([title, text], i) => (
+              <div className="home-value" key={title}>
+                <span className="home-value-index" aria-hidden="true">
+                  0{i + 1}
+                </span>
                 <div>
                   <Text as="h3" variant="heading">
                     {title}
@@ -132,7 +131,7 @@ export default function Home() {
         </div>
         <div className="home-strategy-grid">
           {[brandStrategy.vision, brandStrategy.mission].map((purpose) => (
-            <LayerCard className="home-strategy-card" key={purpose.id}>
+            <article className="home-strategy-card" key={purpose.id}>
               <div className="home-strategy-label">
                 <Text as="h3" variant="heading">
                   {purpose.title}
@@ -162,11 +161,11 @@ export default function Home() {
                 Tìm hiểu {purpose.title.toLowerCase()} của VEX
                 <ArrowUpRightIcon size={18} aria-hidden="true" />
               </Link>
-            </LayerCard>
+            </article>
           ))}
         </div>
       </section>
-      <section className="section solution-section">
+      <section className="section home-technology-section">
         <div className="container">
           <Heading
             number="03"
@@ -176,23 +175,89 @@ export default function Home() {
             Từ phần mềm đến hệ thống vật lý, VEX hướng tới khả năng tích hợp các
             công nghệ để giải quyết những bài toán đa dạng.
           </Heading>
-          <div className="technology-grid">
-            {technologies.map((item) => {
+          <div className="home-capability-grid">
+            {technologies.map((item, i) => {
               const Icon = technologyIcons[item.icon];
               return (
-                <ContentCard
+                <LayerCard
                   key={item.slug}
-                  title={item.title}
-                  description={item.text}
-                  href={`/solutions/${item.slug}/`}
-                  icon={<Icon size={26} />}
-                />
+                  className={`home-capability home-capability-${item.icon}`}
+                >
+                  <div className="home-capability-heading">
+                    <span className="home-capability-index">
+                      0{i + 1} / LĨNH VỰC
+                    </span>
+                    <Icon size={28} aria-hidden="true" />
+                  </div>
+                  {i === 0 && (
+                    <svg
+                      className="home-software-drawing"
+                      viewBox="0 0 420 170"
+                      fill="none"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M16 86H96L154 28H274L332 86H404M16 132H96L154 74H274L332 132H404"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                      />
+                      <path
+                        d="M154 28V74M274 28V74"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                      />
+                      <path
+                        d="M174 112L146 136L174 160M246 112L274 136L246 160M224 108L198 164"
+                        stroke="currentColor"
+                        strokeWidth="5"
+                      />
+                      {[16, 96, 332, 396].map((x) => (
+                        <rect
+                          key={x}
+                          x={x}
+                          y={82}
+                          width="8"
+                          height="8"
+                          fill="currentColor"
+                        />
+                      ))}
+                      <rect
+                        x="150"
+                        y="24"
+                        width="8"
+                        height="8"
+                        fill="currentColor"
+                      />
+                      <rect
+                        x="270"
+                        y="24"
+                        width="8"
+                        height="8"
+                        fill="currentColor"
+                      />
+                    </svg>
+                  )}
+                  <div className="home-capability-copy">
+                    <Text as="h3" variant="heading">
+                      {item.title}
+                    </Text>
+                    <Text variant="secondary">{item.text}</Text>
+                  </div>
+                  <Link
+                    href={`/solutions/${item.slug}/`}
+                    className="text-link"
+                    variant="plain"
+                  >
+                    Tìm hiểu giải pháp{" "}
+                    <ArrowUpRightIcon size={18} aria-hidden="true" />
+                  </Link>
+                </LayerCard>
               );
             })}
           </div>
         </div>
       </section>
-      <section className="section container">
+      <section className="section container home-services-section">
         <div className="heading-row">
           <Heading
             number="04"
@@ -207,7 +272,7 @@ export default function Home() {
             <ArrowUpRightIcon size={18} />
           </Link>
         </div>
-        <div className="service-list">
+        <div className="service-list home-service-list">
           {services.map((service, i) => (
             <Link
               href={`/solutions/${service.slug}/`}
@@ -227,8 +292,8 @@ export default function Home() {
           ))}
         </div>
       </section>
-      <section className="section solution-section">
-        <div className="container">
+      <section className="section home-project-section">
+        <div className="container home-project-layout">
           <Heading
             number="05"
             label="DỰ ÁN & SẢN PHẨM"
@@ -238,23 +303,57 @@ export default function Home() {
             số liệu hay kết quả chưa được kiểm chứng.
           </Heading>
           {publicProjects.length === 0 ? (
-            <ProjectEmpty />
+            <div className="home-project-note">
+              <span className="home-project-status">DANH MỤC CHƯA CÔNG BỐ</span>
+              <Text as="h3" variant="heading">
+                Chưa có dự án được công bố
+              </Text>
+              <Text variant="secondary">
+                Thông tin dự án và sản phẩm sẽ được giới thiệu khi có dữ liệu và
+                quyền công bố phù hợp. Bạn có thể liên hệ để trao đổi nhu cầu
+                phát triển hoặc hợp tác.
+              </Text>
+              <CTA>Trao đổi với VEX</CTA>
+            </div>
           ) : (
-            <div className="technology-grid">
-              {publicProjects.map((p) => (
-                <ContentCard
+            <div className="home-project-grid">
+              {publicProjects.map((p, i) => (
+                <LayerCard
                   key={p.slug}
-                  linkLabel="Xem dự án"
-                  title={p.title}
-                  description={p.summary}
-                  href={`/projects/${p.slug}/`}
-                />
+                  className={`home-project-card${i === 0 ? " home-project-featured" : ""}`}
+                >
+                  <img
+                    src={p.image}
+                    alt={p.imageAlt}
+                    width={p.imageWidth}
+                    height={p.imageHeight}
+                    loading="lazy"
+                  />
+                  <div className="home-project-card-copy">
+                    <span className="home-project-status">
+                      {projectOwnershipLabels[p.provenance.ownership]} ·{" "}
+                      {p.category} · {p.status}
+                    </span>
+                    <Text as="h3" variant="heading">
+                      {p.title}
+                    </Text>
+                    <Text variant="secondary">{p.summary}</Text>
+                    <Link
+                      href={`/projects/${p.slug}/`}
+                      className="text-link"
+                      variant="plain"
+                    >
+                      Xem dự án{" "}
+                      <ArrowUpRightIcon size={18} aria-hidden="true" />
+                    </Link>
+                  </div>
+                </LayerCard>
               ))}
             </div>
           )}
         </div>
       </section>
-      <section className="section container">
+      <section className="section container home-process-section">
         <Heading
           number="06"
           label="LỘ TRÌNH THAM KHẢO"
@@ -262,10 +361,13 @@ export default function Home() {
         >
           Phạm vi và các bước triển khai được thống nhất riêng cho từng dự án.
         </Heading>
-        <div className="process-grid">
+        <div className="home-process-grid">
           {process.map((step, i) => (
-            <div className="step" key={step.title}>
-              <div className="step-number">0{i + 1}</div>
+            <div className="home-process-step" key={step.title}>
+              <div className="home-process-number">
+                <span>0{i + 1}</span>
+                <ArrowUpRightIcon size={20} aria-hidden="true" />
+              </div>
               <Text as="h3" variant="heading">
                 {step.title}
               </Text>
@@ -274,7 +376,7 @@ export default function Home() {
           ))}
         </div>
       </section>
-      <section className="research-band">
+      <section className="research-band home-research-band">
         <div className="container research-layout">
           <div>
             <div className="eyebrow">NGHIÊN CỨU & PHÁT TRIỂN</div>
@@ -296,7 +398,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section className="section container academy-section">
+      <section className="section container academy-section home-academy-section">
         <div>
           <Badge variant="outline">ĐỊNH HƯỚNG TƯƠNG LAI</Badge>
           <Text as="h2" variant="heading">
@@ -338,6 +440,6 @@ export default function Home() {
         </section>
       )}
       <CTASection />
-    </>
+    </div>
   );
 }

@@ -1,0 +1,225 @@
+/* Phone refinements sit after the shared desktop styles. Kumo retains behavior. */
+@media (max-width: 1120px) {
+  .mobile-menu-dialog {
+    top: calc(12px + env(safe-area-inset-top, 0px));
+    width: min(512px, calc(100vw - 32px));
+    max-width: none;
+    max-height: calc(
+      100dvh - 24px - env(safe-area-inset-top, 0px) -
+        env(safe-area-inset-bottom, 0px)
+    );
+    padding: 20px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scroll-padding-block: 72px 16px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .mobile-menu-top {
+    position: sticky;
+    top: -20px;
+    z-index: 1;
+    background: var(--vex-white);
+    padding-top: 20px;
+    padding-bottom: 12px;
+    margin-top: -20px;
+    margin-bottom: 12px;
+  }
+
+  .mobile-menu-top button {
+    min-width: 44px;
+    min-height: 44px;
+    flex-shrink: 0;
+  }
+
+  .mobile-navigation {
+    margin-top: 16px;
+    gap: 0;
+  }
+
+  .mobile-navigation a {
+    min-height: 48px;
+    gap: 12px;
+    padding-block: 10px;
+    line-height: 1.5;
+  }
+}
+
+/* Wide phone landscape and touch tablets also need readable, generous controls. */
+@media (max-width: 760px),
+  (max-width: 1120px) and (hover: none) and (pointer: coarse) {
+  .cta,
+  .form-card .submit {
+    min-height: 44px;
+  }
+
+  .form-card input:not([type="hidden"]):not([type="checkbox"]),
+  .form-card textarea,
+  .form-card button.service-select {
+    font-size: 16px;
+    min-height: 44px;
+    scroll-margin-block: 88px 24px;
+  }
+
+  .form-card button.service-select {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .form-card textarea {
+    min-height: 144px;
+    line-height: 1.6;
+    resize: vertical;
+  }
+
+  .form-card label:has([data-kumo-component="Checkbox"]) {
+    /* Padding also enlarges a single-line label with Kumo's minimum-height reset. */
+    padding-block: 12px;
+    width: 100%;
+  }
+
+  [data-kumo-component="Select"][data-kumo-part="option"] {
+    min-height: 44px;
+    padding-block: 10px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 760px) {
+  .header-inner {
+    height: 64px;
+    gap: 16px;
+  }
+
+  header .logo {
+    min-height: 44px;
+  }
+
+  header .logo img {
+    width: 92px;
+  }
+
+  .header-actions,
+  .menu-toggle {
+    flex-shrink: 0;
+  }
+
+  .menu-toggle {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .contact-grid {
+    gap: 28px;
+  }
+
+  .contact-grid > .contact-channels > h2 {
+    font-size: 28px;
+  }
+
+  .contact-list {
+    margin-top: 24px;
+  }
+
+  .contact-list > a,
+  .contact-list > div {
+    padding-block: 18px;
+    gap: 12px;
+    min-height: 44px;
+  }
+
+  .form-card {
+    padding: 20px;
+  }
+
+  .form-title {
+    gap: 10px;
+  }
+
+  .form-title h2 {
+    font-size: 22px;
+  }
+
+  .form-card > p {
+    margin-block: 12px 20px;
+  }
+
+  .form-card p {
+    line-height: 1.65;
+  }
+
+  .form-card form,
+  .form-grid {
+    gap: 16px;
+  }
+
+  footer {
+    padding-block: 40px max(20px, env(safe-area-inset-bottom, 0px));
+  }
+
+  .footer-top {
+    gap: 24px 20px;
+  }
+
+  .footer-brand .logo img {
+    width: 112px;
+  }
+
+  .footer-top > div.footer-brand:first-child p {
+    margin-top: 16px;
+    font-size: 16px;
+    line-height: 1.65;
+  }
+
+  footer h2 {
+    margin-bottom: 12px;
+  }
+
+  .footer-contact {
+    margin-top: 12px;
+  }
+
+  .footer-navigation a,
+  .footer-contact a,
+  .footer-bottom a {
+    min-height: 44px;
+    line-height: 1.6;
+  }
+
+  footer .legal strong,
+  footer .legal p {
+    line-height: 1.7;
+  }
+
+  footer .legal p {
+    margin-block: 10px;
+  }
+
+  .footer-bottom {
+    margin-top: 24px;
+    padding-top: 16px;
+    gap: 8px;
+  }
+
+  .footer-bottom > div {
+    gap: 0 20px;
+  }
+}
+
+@media (max-width: 600px) {
+  .form-card .submit {
+    width: 100%;
+    min-height: 44px;
+    justify-content: center;
+  }
+
+  .footer-contact {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 12px;
+  }
+
+  .footer-contact > a:first-child {
+    grid-column: 1 / -1;
+  }
+}

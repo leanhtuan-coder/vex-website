@@ -1,5 +1,15 @@
 # Báo cáo QA — 10/10/2026
 
+## Tối ưu mobile
+
+Đợt này dùng CSS theo breakpoint để thu gọn Hero, visual, portrait và khoảng cách section; header/menu/form/footer dễ thao tác hơn trên điện thoại. Không thêm dependency hoặc thay đổi nội dung đã duyệt. Tại 390 × 844px, chiều dài Home giảm 11%, About 10,5% và Leadership 15,2%; nhóm CTA Hero xuất hiện sớm hơn 93px. Menu ngang nằm trong viewport, nút đóng và các mục đạt vùng chạm tối thiểu 44px; input và Kumo Select dùng chữ 16px.
+
+`npm run check` đạt TypeScript, ESLint, 164 content checks và build 18 trang/404. `npm run verify:ui` đạt 198 lượt layout. QA mobile bổ sung đạt 126 layout Chromium và 54 layout WebKit trên toàn bộ 18 route, ba kích thước menu dọc/ngang ở mỗi engine, form, focus/Escape, reduced motion và nội dung không JavaScript. 18 lượt axe mobile không có violation; không lỗi JavaScript/console, ảnh hoặc tràn ngang. Đây là browser emulation trên Windows, chưa thử điện thoại vật lý hay bàn phím ảo thật.
+
+About, Leadership và Contact tại 1440px có screenshot trùng byte với baseline `7c59d08`. Home giữ cùng bố cục/kích thước; khác biệt screenshot chỉ nằm trong nét signal SVG có animation sẵn. Đã xem crop trước/sau Hero, hồ sơ và form cùng menu ngang. [Tài liệu mobile](MOBILE.md) ghi số đo, breakpoint và giới hạn; ảnh/report tại `artifacts/mobile/`, với trang so sánh `comparison.html`.
+
+Lighthouse 13.5.0 mô phỏng mobile trên build local cuối: Home và Contact đều Performance 94, Accessibility/Best Practices/SEO 100; LCP 2,5s và TBT 0ms. CLS lần lượt 0.001 và 0.009. Đây là phép đo lab, chưa có RUM. Main JS 594.27KB (gzip 185.12KB), CSS 236.98KB (gzip 39.21KB), tăng khoảng 1,4KB CSS nén; cảnh báo main chunk hơn 500KB của Vite còn hiện diện. Báo cáo tại `artifacts/mobile/performance.json` và Lighthouse HTML/JSON.
+
 ## Leadership Team
 
 Bốn hồ sơ đã được duyệt nguyên văn dùng chung nguồn dữ liệu trên Home, About và `/leadership/`. `npm run check` đạt TypeScript, ESLint, 164 kiểm tra publication và build 18 trang/404. `npm run verify:ui` đạt 198 lượt layout (18 route × 11 chiều rộng), không có lỗi JavaScript/console hoặc violation axe được ghi nhận. `npm audit` ghi nhận 0 vulnerability.

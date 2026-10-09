@@ -44,6 +44,8 @@ Phase 2 có trang R&D, cơ chế đăng bài/tuyển dụng và mẫu chi tiết
 
 Visual Elements pilot bổ sung đúng ba section Home: Hero precision stack, bốn scene SVG riêng cho Software/AI/Robotics/Automation và khối R&D. Bộ primitive/pattern/divider dùng CSS/SVG thuần, không thêm package; mobile và reduced motion tĩnh. [Thiết kế và kết quả pilot](docs/VEX-VISUAL-ELEMENTS.md), [đánh giá chín nguồn/giấy phép](docs/VISUAL-SOURCES.md) và [notice thư viện UI](THIRD_PARTY_UI_NOTICES.txt) mô tả phạm vi. Notice cũng được copy theo allowlist vào bản static.
 
+Mobile có lớp CSS riêng cho bố cục chung/Home, header/menu/form/footer và hồ sơ lãnh đạo. Hero, illustration và portrait được thu gọn; CTA và control giữ vùng bấm tối thiểu 44px, form dùng chữ 16px. Menu cuộn trong viewport ở cả chiều dọc/ngang, hỗ trợ safe area. Nội dung và bố cục desktop tiếp tục dùng thiết kế đã duyệt. [Đo trước/sau và kiểm tra mobile](docs/MOBILE.md) mô tả phạm vi, screenshot và giới hạn kiểm thử bằng trình duyệt mô phỏng.
+
 | Nơi                                                  | Trách nhiệm                                               |
 | ---------------------------------------------------- | --------------------------------------------------------- |
 | `src/brand.css`                                      | Font SVN-Aguda 400/900, palette và ánh xạ token Kumo      |

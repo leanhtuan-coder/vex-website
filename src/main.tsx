@@ -20,6 +20,9 @@ import "./visual-system.css";
 import "./styles-visual-elements.css";
 import "./styles-visual-hero.css";
 import "./styles-leadership-preview.css";
+import "./styles-mobile.css";
+import "./styles-mobile-leadership.css";
+import "./styles-mobile-shell.css";
 const root = document.getElementById("root")!;
 const meta = getPage(window.location.pathname);
 // Keep development and unknown-path fallback metadata accurate as well.

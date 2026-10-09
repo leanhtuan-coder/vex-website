@@ -1,0 +1,141 @@
+/* Keep portraits proportional to a phone screen without delaying the profile text. */
+@media (max-width: 600px) {
+  .leadership-layout {
+    gap: 24px;
+  }
+
+  .leadership-profile-list {
+    gap: 32px;
+  }
+
+  .leadership-profile > .leadership-portrait,
+  .executive-portrait-column {
+    width: min(100%, clamp(232px, 64vw, 264px));
+  }
+
+  .leadership-profile-text {
+    padding-top: 16px;
+  }
+
+  .leadership-profile-text > h3,
+  .executive-profile-heading h2 {
+    font-size: 24px;
+    line-height: 1.35;
+    letter-spacing: -0.4px;
+  }
+
+  .leadership-role {
+    margin-top: 8px;
+    font-size: 18px;
+    line-height: 1.55;
+  }
+
+  .leadership-role-badge {
+    margin-top: 8px;
+  }
+
+  .leadership-vietnamese-title {
+    margin-top: 12px;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .leadership-profile-links {
+    padding-top: 8px;
+    margin-top: 8px;
+  }
+
+  .leadership-profile-links a {
+    font-size: 16px;
+  }
+
+  .executive-introduction {
+    gap: 12px;
+    padding-top: 8px;
+    padding-bottom: 16px;
+  }
+
+  .executive-index {
+    gap: 8px 16px;
+  }
+
+  .executive-introduction > a,
+  .executive-index a {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  .executive-profile-list {
+    gap: 36px;
+  }
+
+  .executive-profile {
+    gap: 20px;
+  }
+
+  .executive-profile + .executive-profile {
+    padding-top: 36px;
+  }
+
+  .executive-profile-number {
+    margin-bottom: 12px;
+  }
+
+  .executive-role {
+    margin-top: 8px;
+    font-size: 18px;
+    line-height: 1.6;
+  }
+
+  .executive-role-meta {
+    gap: 8px 12px;
+    margin-top: 12px;
+  }
+
+  .executive-role-meta p {
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .executive-biography {
+    gap: 16px;
+    margin-top: 24px;
+    padding-top: 20px;
+  }
+
+  .executive-biography p {
+    font-size: 16px;
+    line-height: 1.75;
+  }
+
+  .executive-profile-detail {
+    margin-top: 24px;
+  }
+
+  .executive-profile-detail h3 {
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+
+  .executive-profile-detail ul {
+    gap: 8px;
+    line-height: 1.75;
+  }
+
+  .executive-profile-detail li {
+    padding-left: 18px;
+  }
+
+  .executive-profile-detail li::before {
+    top: 11px;
+  }
+
+  .executive-profile-links {
+    gap: 8px 20px;
+    margin-top: 20px;
+  }
+
+  .executive-profile-links a {
+    font-size: 16px;
+  }
+}

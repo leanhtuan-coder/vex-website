@@ -143,9 +143,6 @@ export function Footer() {
             <Link href="/terms/" variant="plain">
               Điều khoản sử dụng
             </Link>
-            <Link href="/sitemap.xml" variant="plain">
-              Sitemap
-            </Link>
           </div>
         </div>
       </div>

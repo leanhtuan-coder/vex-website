@@ -9,6 +9,7 @@ import { Banner } from "@cloudflare/kumo/components/banner";
 import { LayerCard } from "@cloudflare/kumo/components/layer-card";
 import { ArrowUpRightIcon, EnvelopeIcon } from "@phosphor-icons/react";
 import { company } from "../content/company";
+import { primaryButtonStyle } from "./button-theme";
 const topics = [
   "Tư vấn giải pháp",
   "Hợp tác kinh doanh",
@@ -166,6 +167,7 @@ export default function ContactForm() {
           variant="primary"
           size="lg"
           className="submit"
+          style={primaryButtonStyle}
           disabled={!consent}
           loading={state === "opening"}
         >

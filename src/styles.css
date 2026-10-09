@@ -924,6 +924,19 @@ header nav a[aria-current="page"] {
 .research-band a {
   margin-top: 28px;
 }
+.cta-on-dark {
+  --text-color-kumo-default: var(--vex-cyan);
+  --text-color-kumo-strong: var(--vex-cyan);
+  --color-kumo-base: var(--vex-white);
+  --color-kumo-tint: var(--vex-cyan-soft);
+  --color-kumo-line: var(--vex-white);
+  --color-kumo-brand: var(--vex-white);
+  --color-kumo-focus: var(--vex-white);
+}
+.cta-on-dark:focus-visible {
+  outline: 3px solid var(--vex-white);
+  outline-offset: 4px;
+}
 .academy-section {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1221,6 +1234,8 @@ footer h2 {
   .form-card textarea {
     font-size: 16px;
   }
+  .cta,
+  .submit,
   .header-actions a,
   .header-actions button,
   .hero-actions a {

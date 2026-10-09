@@ -1,5 +1,8 @@
 import type { ReactNode } from "react";
-import { LinkButton } from "@cloudflare/kumo/components/button";
+import {
+  LinkButton,
+  type LinkButtonProps,
+} from "@cloudflare/kumo/components/button";
 import { Link } from "@cloudflare/kumo/components/link";
 import { Text } from "@cloudflare/kumo/components/text";
 import { LayerCard } from "@cloudflare/kumo/components/layer-card";
@@ -11,23 +14,30 @@ import {
   BrainIcon,
   TreeStructureIcon,
 } from "@phosphor-icons/react";
+import { primaryButtonStyle } from "./button-theme";
 export function CTA({
   children,
   href = "/contact/",
   secondary = false,
+  onDark = false,
+  size = "base",
 }: {
   children: ReactNode;
   href?: string;
   secondary?: boolean;
+  onDark?: boolean;
+  size?: LinkButtonProps["size"];
 }) {
   return (
     <LinkButton
       href={href}
-      variant={secondary ? "secondary" : "primary"}
-      size="lg"
+      variant={secondary || onDark ? "secondary" : "primary"}
+      size={size}
+      className={`cta${onDark ? " cta-on-dark" : ""}`}
+      style={secondary || onDark ? undefined : primaryButtonStyle}
     >
       {children}
-      <ArrowUpRightIcon size={18} />
+      <ArrowUpRightIcon size={size === "lg" ? 18 : 16} />
     </LinkButton>
   );
 }
@@ -114,7 +124,7 @@ export function CTASection() {
             Chia sẻ nhu cầu để tìm hướng giải quyết phù hợp.
           </Text>
         </div>
-        <CTA>Liên hệ hợp tác</CTA>
+        <CTA size="lg">Liên hệ hợp tác</CTA>
       </div>
     </section>
   );

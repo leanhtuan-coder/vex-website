@@ -1,5 +1,13 @@
 # Báo cáo QA — 09/10/2026
 
+## Cập nhật CTA và favicon
+
+Đã chạy lại check (type/lint/build) và verify:ui sau thay đổi CTA/favicon/footer: đạt 132 lượt layout và quét axe, không có lỗi Console/hydration. Rà trực quan và đo normal/hover/focus ở 1440, 390 và 320px: chữ/icon không bị cắt, không tràn ngang.
+
+CTA header/R&D/empty dùng cỡ base 36px desktop; hero/closing/submit 40px; toàn bộ CTA/submit mobile tối thiểu 44px. Kumo style API giữ gradient primary từ cyan tới cyan-hover: tương phản thấp nhất 5,80:1 ở normal, 7,27:1 khi hover. R&D chữ cyan trên nền trắng đạt 5,80:1, hover 5,31:1; focus trắng 3px và offset 4px hiện rõ trên nền cyan.
+
+Favicon mới: SVG glyph E/pixel từ vector logo, PNG 32px, Apple touch 180px; HTTP 200 và giải mã ảnh đạt. Đã bỏ link Sitemap ở footer; sitemap XML tiếp tục được tạo cho crawler. Ảnh kiểm tra ở artifacts/cta-final-*.png.
+
 ## Các lệnh đã chạy
 
 - `npm run check`: TypeScript strict, ESLint và production build đạt. Kiểm tra thêm trên Node 24 đạt.

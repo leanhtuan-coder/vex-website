@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <title>VEX</title>
+  <rect width="32" height="32" rx="6" fill="#00707E"/>
+  <!-- E and pixel motif: original paths from Logo VEX final.pdf, page 1. -->
+  <g transform="translate(3.097 3) scale(0.1159685) translate(-389.7278 -388.4008)">
+    <path transform="matrix(1 0 0 -1 577.3795 544.735)" d="M0 0H-115.629C-116.952 0-118.024 1.073-118.024 2.396V33.239H0Z" fill="#fff"/>
+    <path transform="matrix(1 0 0 -1 424.4355 476.88758)" d="M0 0V-81.79C0-93.208 9.256-102.464 20.673-102.464H187.816V-135.712H0V-110.073L-34.7-84.434V6.12H0V33.247H187.816V0Z" fill="#fff"/>
+    <path transform="matrix(1 0 0 -1 444.9898 388.40083)" d="M0 0V-24.138H-20.552V-55.225H-55.262V-20.552H-24.138V0Z" fill="#67C08B"/>
+  </g>
+</svg>

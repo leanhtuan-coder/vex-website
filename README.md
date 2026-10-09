@@ -52,6 +52,10 @@ R&D chi tiết, tin tức, tuyển dụng, analytics và tiếng Anh thuộc Pha
 
 Import Kumo theo từng component: Button/LinkButton, Link, Text, LayerCard, Badge, Empty, Dialog, Input/InputArea, Select, Checkbox và Banner. Control giữ cơ chế focus/validation/popup của Kumo; HTML/CSS riêng phục vụ cấu trúc và nhận diện website.
 
+CTA dùng cỡ Kumo base (36px) cho header và hành động phụ, lg (40px) cho hero và hành động chính; trên mobile vùng bấm tối thiểu 44px. `button-theme.ts` điều chỉnh gradient qua style API của Kumo để chữ trắng giữ tương phản ở cả normal/hover. CTA trên nền cyan dùng token màu riêng và focus trắng.
+
+Favicon SVG dùng glyph E và motif pixel từ vector logo gốc, có PNG 32px và Apple touch 180px. URL tài nguyên mới tránh cache favicon cũ. Footer chỉ hiển thị các liên kết chính sách; sitemap XML vẫn được tạo cho crawler.
+
 Font WOFF2 local. Cyan `#00707E`, mint `#67C08B`, trắng và xám `#E6E7E8` theo Brand Guidelines. Chú thích HEX của mint trong PDF bị lặp cyan nên mint lấy từ màu tô vector. Các nền/hover được pha từ màu thương hiệu; màu lỗi/cảnh báo dùng cho ngữ nghĩa UI.
 
 ## Form và phát hành

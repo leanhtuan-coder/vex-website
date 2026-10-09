@@ -37,8 +37,12 @@ export default function Home() {
               tính ứng dụng cho doanh nghiệp và tổ chức.
             </Text>
             <div className="hero-actions">
-              <CTA href="/solutions/">Khám phá giải pháp</CTA>
-              <CTA secondary>Kết nối với VEX</CTA>
+              <CTA size="lg" href="/solutions/">
+                Khám phá giải pháp
+              </CTA>
+              <CTA size="lg" secondary>
+                Kết nối với VEX
+              </CTA>
             </div>
             <div className="hero-foot">
               <span className="status-dot" />
@@ -233,7 +237,7 @@ export default function Home() {
               năng ứng dụng và cải tiến theo bài toán cụ thể là định hướng phát
               triển của VEX.
             </Text>
-            <CTA secondary href="/contact/">
+            <CTA onDark href="/contact/">
               Trao đổi hợp tác nghiên cứu
             </CTA>
           </div>

@@ -6,7 +6,7 @@
 
 CTA header/R&D/empty dùng cỡ base 36px desktop; hero/closing/submit 40px; toàn bộ CTA/submit mobile tối thiểu 44px. Kumo style API giữ gradient primary từ cyan tới cyan-hover: tương phản thấp nhất 5,80:1 ở normal, 7,27:1 khi hover. R&D chữ cyan trên nền trắng đạt 5,80:1, hover 5,31:1; focus trắng 3px và offset 4px hiện rõ trên nền cyan.
 
-Favicon mới: SVG glyph E/pixel từ vector logo, PNG 32px, Apple touch 180px; HTTP 200 và giải mã ảnh đạt. Đã bỏ link Sitemap ở footer; sitemap XML tiếp tục được tạo cho crawler. Ảnh kiểm tra ở artifacts/cta-final-*.png.
+Favicon dùng toàn bộ logo VEX và motif pixel, giữ nguyên tỷ lệ; có SVG, PNG 32px và Apple touch 180px. URL icon có tên `vex-logo-*` để tránh cache bản glyph E trước đó. Đã bỏ link Sitemap ở footer; sitemap XML tiếp tục được tạo cho crawler. Ảnh kiểm tra CTA ở artifacts/cta-final-*.png.
 
 ## Các lệnh đã chạy
 

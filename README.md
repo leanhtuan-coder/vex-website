@@ -55,7 +55,7 @@ Import Kumo theo từng component: Button/LinkButton, Link, Text, LayerCard, Bad
 
 CTA dùng cỡ Kumo base (36px) cho header và hành động phụ, lg (40px) cho hero và hành động chính; trên mobile vùng bấm tối thiểu 44px. `button-theme.ts` điều chỉnh gradient qua style API của Kumo để chữ trắng giữ tương phản ở cả normal/hover. CTA trên nền cyan dùng token màu riêng và focus trắng.
 
-Favicon SVG dùng glyph E và motif pixel từ vector logo gốc, có PNG 32px và Apple touch 180px. URL tài nguyên mới tránh cache favicon cũ. Footer chỉ hiển thị các liên kết chính sách; sitemap XML vẫn được tạo cho crawler.
+Favicon dùng đầy đủ logo VEX và motif pixel từ vector logo gốc, giữ nguyên tỷ lệ trên nền trắng, có SVG, PNG 32px và Apple touch 180px. URL tài nguyên mới tránh cache favicon cũ. Footer chỉ hiển thị các liên kết chính sách; sitemap XML vẫn được tạo cho crawler.
 
 Font WOFF2 local. Cyan `#00707E`, mint `#67C08B`, trắng và xám `#E6E7E8` theo Brand Guidelines. Chú thích HEX của mint trong PDF bị lặp cyan nên mint lấy từ màu tô vector. Các nền/hover được pha từ màu thương hiệu; màu lỗi/cảnh báo dùng cho ngữ nghĩa UI.
 

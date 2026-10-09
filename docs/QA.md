@@ -1,5 +1,13 @@
 # Báo cáo QA — 09/10/2026
 
+## Bổ sung nội dung chiến lược thương hiệu
+
+Home dùng hai khối rút gọn, liên kết vào Tầm nhìn và Sứ mệnh trên About. About có nguyên văn nội dung đầy đủ, thông điệp hỗ trợ, năm giá trị Việt/Anh và phần lãnh đạo kế tiếp. Nguồn nội dung chung giữ trạng thái draft và nhãn chờ phê duyệt; không thêm chức danh, hồ sơ hay chân dung chưa xác nhận.
+
+`npm run check` và `npm run verify:ui` đạt trên bản ghép, gồm 187 lượt layout, HTML không JS, metadata, axe và kiểm tra tương tác hiện có. Hai link sai từ R&D tới Robotics/Embedded được sửa về IoT & Embedded; bước kiểm tra link HTML nay đối chiếu route với sitemap để SPA fallback 200 không che giấu link tới trang chưa công bố.
+
+QA tập trung Home/About ở 320, 390, 768, 1024 và 1440px đạt: 34 trường nội dung khớp tài liệu bổ sung, Home không lặp statement dài; About đầy đủ statement/supportingMessages, năm giá trị và thứ tự các section. Không overflow/pageerror, axe section mới không có violation; font SVN-Aguda và số cột đúng breakpoint. Click cả hai liên kết Home → About thấy heading bên dưới sticky header. Không JS ở 390/768/1440 vẫn đủ nội dung và CSS. Đã xem ảnh riêng section ở desktop/tablet/mobile; báo cáo brand-strategy-qa.json và ảnh brand-*.png trong artifacts.
+
 ## Mở rộng Phase 2 và định hướng Academy
 
 Đã bổ sung Research, Insights, Careers, Media và Academy, nâng tổng số trang public lên 17. `npm run check` đạt; `npm run verify:ui` đạt 187 lượt layout (17 route × 11 chiều rộng), không có violation axe hoặc lỗi Console/JavaScript/hydration được ghi nhận. Menu Khám phá dùng Kumo DropdownMenu, kiểm tra Escape và trả focus; menu mobile có các trang mới. HTML không JS vẫn có nội dung và CSS đầy đủ.
@@ -33,11 +41,11 @@ Width đã kiểm tra: 320, 360, 375, 390, 430, 768, 1024, 1280, 1440, 1920, 256
 
 Form checks không gửi email thật: đồng ý trước khi soạn; kiểm tra dữ liệu bắt buộc/khoảng trắng; Select bằng bàn phím; topic vào FormData; thông báo yêu cầu mở email và người dùng phải tự gửi; không ghi localStorage. Security headers được mô phỏng từ dist/\_headers trong lượt UI; host preview không tự áp dụng file.
 
-Build có thông báo Vite rằng các trang bổ sung được import cả eager/lazy ở **entry SSR**. Đây là chủ đích để HTML tĩnh đầy đủ; bundle trình duyệt vẫn có chunk riêng cho Contact, Research/Academy, ContentGrowth và Media. Main JS khoảng 536KB (gzip 170KB) nên Vite cảnh báo dung lượng; kết quả Lighthouse hiện vẫn đạt mục tiêu tham khảo. Không tăng ngưỡng để ẩn cảnh báo.
+Build có thông báo Vite rằng các trang bổ sung được import cả eager/lazy ở **entry SSR**. Đây là chủ đích để HTML tĩnh đầy đủ; bundle trình duyệt vẫn có chunk riêng cho Contact, Research/Academy, ContentGrowth và Media. Sau bổ sung nội dung chiến lược, main JS khoảng 544KB (gzip 172KB) nên Vite cảnh báo dung lượng. Không tăng ngưỡng để ẩn cảnh báo.
 
 ## Lighthouse đo thật
 
-Lighthouse 13.5.0, Chromium của Playwright, production dist tại localhost:4173. Mobile dùng mô phỏng mặc định; desktop 1440×900, CPU 1×, RTT 40ms, throughput 10240Kbps. Đo bằng script measure-performance; không phải dữ liệu production.
+Lighthouse 13.5.0, Chromium của Playwright, production dist tại localhost:4173. Mobile dùng mô phỏng mặc định; desktop 1440×900, CPU 1×, RTT 40ms, throughput 10240Kbps. Đo bằng script measure-performance; không phải dữ liệu production. Bảng này là baseline Phase 2 trước bổ sung nội dung chiến lược; không chạy lại Lighthouse cho thay đổi nội dung và section lần này.
 
 | Lượt đo          | Performance | Accessibility | Best Practices | SEO |  LCP |   CLS |
 | ---------------- | ----------: | ------------: | -------------: | --: | ---: | ----: |

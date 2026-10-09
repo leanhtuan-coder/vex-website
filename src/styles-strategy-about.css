@@ -1,0 +1,187 @@
+.brand-purpose-section {
+  background: var(--vex-mint-soft);
+}
+.brand-purpose-section .section-heading h2,
+.brand-values-section .section-heading h2,
+.brand-leadership-section .section-heading h2 {
+  text-wrap: balance;
+}
+.brand-draft-note {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  margin-top: 24px;
+}
+.brand-draft-note p {
+  font-size: 13px;
+  max-width: 660px;
+  line-height: 1.7;
+}
+.brand-draft-note > span {
+  flex-shrink: 0;
+}
+.brand-purpose-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px;
+  margin-top: 40px;
+}
+.brand-purpose-grid article {
+  min-width: 0;
+  scroll-margin-top: 12px;
+}
+.brand-purpose-card {
+  height: 100%;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  border-top: 3px solid var(--vex-cyan);
+}
+.brand-purpose-heading > span {
+  display: block;
+  color: var(--vex-cyan);
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+.brand-purpose-heading h3 {
+  font-size: 28px;
+  line-height: 1.4;
+  font-weight: 900;
+}
+.brand-purpose-statement p {
+  font-size: 16px;
+  line-height: 1.85;
+  color: var(--vex-ink);
+}
+.brand-purpose-support {
+  display: grid;
+  gap: 16px;
+  border-top: 1px solid var(--vex-gray);
+  padding-top: 24px;
+}
+.brand-purpose-support p {
+  font-size: 14px;
+  line-height: 1.85;
+}
+.brand-values-list {
+  padding: 0;
+  margin: 40px 0 0;
+  list-style: none;
+}
+.brand-value-row {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 0.85fr) minmax(0, 1.25fr);
+  align-items: start;
+  gap: 28px;
+  padding-block: 32px;
+  border-top: 1px solid var(--vex-cyan-line);
+}
+.brand-value-row:last-child {
+  border-bottom: 1px solid var(--vex-cyan-line);
+}
+.brand-value-number {
+  color: var(--vex-cyan);
+  font-size: 22px;
+  line-height: 1.45;
+  font-weight: 900;
+}
+.brand-value-name,
+.brand-value-description {
+  min-width: 0;
+}
+.brand-value-name h3 {
+  font-size: 21px;
+  line-height: 1.5;
+  font-weight: 900;
+  text-wrap: balance;
+}
+.brand-value-name > span {
+  display: block;
+  font-size: 12px;
+  color: var(--vex-muted);
+  line-height: 1.8;
+  margin-top: 8px;
+}
+.brand-value-description p {
+  font-size: 15px;
+  line-height: 1.85;
+}
+.brand-leadership-section {
+  background: var(--vex-cyan-soft);
+}
+.brand-leadership-card {
+  min-width: 0;
+  padding: 36px;
+  border-left: 3px solid var(--vex-cyan);
+}
+.brand-leadership-card h3 {
+  font-size: 27px;
+  line-height: 1.4;
+  font-weight: 900;
+}
+.brand-leadership-card p {
+  margin-top: 16px;
+  font-size: 15px;
+}
+.brand-leadership-card .text-link {
+  margin-top: 24px;
+}
+@media (max-width: 900px) {
+  .brand-purpose-grid {
+    grid-template-columns: 1fr;
+  }
+  .brand-purpose-card {
+    padding: 32px;
+  }
+  .brand-value-row {
+    grid-template-columns: 48px minmax(0, 1fr);
+    gap: 16px 24px;
+  }
+  .brand-value-description {
+    grid-column: 2;
+    max-width: 640px;
+  }
+}
+@media (max-width: 760px) {
+  .brand-purpose-grid,
+  .brand-values-list {
+    margin-top: 32px;
+  }
+  .brand-purpose-card {
+    padding: 24px;
+    gap: 24px;
+  }
+  .brand-purpose-heading h3 {
+    font-size: 25px;
+  }
+  .brand-purpose-statement p {
+    font-size: 15px;
+  }
+  .brand-value-row {
+    grid-template-columns: 32px minmax(0, 1fr);
+    column-gap: 16px;
+    padding-block: 28px;
+  }
+  .brand-value-name h3 {
+    font-size: 20px;
+  }
+  .brand-value-description p {
+    font-size: 14px;
+  }
+  .brand-leadership-card {
+    padding: 24px;
+  }
+  .brand-leadership-card .text-link {
+    min-height: 44px;
+  }
+}
+@media (max-width: 380px) {
+  .brand-purpose-card {
+    padding: 20px;
+  }
+  .brand-value-row {
+    column-gap: 12px;
+  }
+}

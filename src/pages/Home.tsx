@@ -1,6 +1,7 @@
 import { Badge } from "@cloudflare/kumo/components/badge";
 import { Text } from "@cloudflare/kumo/components/text";
 import { Link } from "@cloudflare/kumo/components/link";
+import { LayerCard } from "@cloudflare/kumo/components/layer-card";
 import {
   ArrowUpRightIcon,
   CodeIcon,
@@ -12,6 +13,7 @@ import { services, technologies } from "../content/services";
 import { process } from "../content/company";
 import { publicProjects } from "../content/projects";
 import { publicArticles } from "../content/articles";
+import { brandStrategy } from "../content/brand-strategy";
 import {
   CTA,
   Heading,
@@ -21,6 +23,7 @@ import {
   technologyIcons,
 } from "../components/shared";
 import TechnologyVisual from "../components/TechnologyVisual";
+import "../styles-strategy-home.css";
 export default function Home() {
   return (
     <>
@@ -114,10 +117,59 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <section className="section container home-strategy-section">
+        <div className="home-strategy-heading">
+          <Heading
+            number="02"
+            label="TẦM NHÌN & SỨ MỆNH"
+            title={brandStrategy.title}
+          />
+          {brandStrategy.status === "draft" && (
+            <Badge variant="outline" className="home-strategy-draft">
+              {brandStrategy.draftLabel}
+            </Badge>
+          )}
+        </div>
+        <div className="home-strategy-grid">
+          {[brandStrategy.vision, brandStrategy.mission].map((purpose) => (
+            <LayerCard className="home-strategy-card" key={purpose.id}>
+              <div className="home-strategy-label">
+                <Text as="h3" variant="heading">
+                  {purpose.title}
+                </Text>
+                <Text variant="secondary" size="sm">
+                  <span lang="en">{purpose.englishTitle}</span>
+                </Text>
+              </div>
+              <Text
+                as="p"
+                variant="heading"
+                DANGEROUS_className="home-strategy-message"
+              >
+                {purpose.message}
+              </Text>
+              <Text
+                variant="secondary"
+                DANGEROUS_className="home-strategy-summary"
+              >
+                {purpose.summary}
+              </Text>
+              <Link
+                href={`/about/#${purpose.id}`}
+                variant="plain"
+                className="text-link home-strategy-link"
+              >
+                Tìm hiểu {purpose.title.toLowerCase()} của VEX
+                <ArrowUpRightIcon size={18} aria-hidden="true" />
+              </Link>
+            </LayerCard>
+          ))}
+        </div>
+      </section>
       <section className="section solution-section">
         <div className="container">
           <Heading
-            number="02"
+            number="03"
             label="LĨNH VỰC CÔNG NGHỆ"
             title="Kết nối năng lực. Mở rộng khả năng."
           >
@@ -143,7 +195,7 @@ export default function Home() {
       <section className="section container">
         <div className="heading-row">
           <Heading
-            number="03"
+            number="04"
             label="GIẢI PHÁP & DỊCH VỤ"
             title="Từ yêu cầu thực tế đến giải pháp phù hợp."
           >
@@ -178,7 +230,7 @@ export default function Home() {
       <section className="section solution-section">
         <div className="container">
           <Heading
-            number="04"
+            number="05"
             label="DỰ ÁN & SẢN PHẨM"
             title="Từ ý tưởng đến những hệ thống thực tế."
           >
@@ -204,7 +256,7 @@ export default function Home() {
       </section>
       <section className="section container">
         <Heading
-          number="05"
+          number="06"
           label="LỘ TRÌNH THAM KHẢO"
           title="Cách tiếp cận một bài toán công nghệ."
         >

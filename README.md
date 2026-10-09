@@ -39,22 +39,23 @@ Phase 2 có trang R&D, cơ chế đăng bài/tuyển dụng và mẫu chi tiết
 
 ## Source
 
-| Nơi                                          | Trách nhiệm                                           |
-| -------------------------------------------- | ----------------------------------------------------- |
-| `src/brand.css`                              | Font SVN-Aguda 400/900, palette và ánh xạ token Kumo  |
-| `src/styles.css`                             | Bố cục corporate, responsive, focus và reduced motion |
-| `src/content/`                               | Công ty, giải pháp, dự án và SEO                      |
-| `content/website.ts`                         | Nguồn biên tập bài viết, việc làm, case study         |
-| `scripts/prepare-content.mjs`                | Kiểm tra và xuất dữ liệu đã duyệt trước khi bundle    |
-| `src/content/published.json`                 | Dữ liệu public sinh tự động, không chỉnh trực tiếp    |
-| `src/analytics.ts`                           | Adapter Umami, không hoạt động khi tracking tắt       |
-| `src/components/`                            | Header/footer, CTA, card, empty state, sơ đồ và form  |
-| `src/pages/`                                 | Các trang và template chi tiết                        |
-| `src/App.tsx`, `src/main.tsx`                | Điều hướng URL và hydration                           |
-| `src/Prerender.tsx`, `scripts/prerender.mjs` | Form eager ở build tĩnh, lazy trên trình duyệt        |
-| `scripts/prepare-public.mjs`                 | Tạo lại public từ allowlist tài nguyên                |
-| `.github/workflows/ci.yml`                   | Kiểm tra source; không publish                        |
-| `.github/workflows/deploy-pages.yml`         | Kiểm tra và phát hành dist lên Pages từ main          |
+| Nơi                                          | Trách nhiệm                                               |
+| -------------------------------------------- | --------------------------------------------------------- |
+| `src/brand.css`                              | Font SVN-Aguda 400/900, palette và ánh xạ token Kumo      |
+| `src/styles.css`                             | Bố cục corporate, responsive, focus và reduced motion     |
+| `src/content/`                               | Công ty, giải pháp, dự án và SEO                          |
+| `src/content/brand-strategy.ts`              | Bản thảo Tầm nhìn, Sứ mệnh, giá trị dùng chung Home/About |
+| `content/website.ts`                         | Nguồn biên tập bài viết, việc làm, case study             |
+| `scripts/prepare-content.mjs`                | Kiểm tra và xuất dữ liệu đã duyệt trước khi bundle        |
+| `src/content/published.json`                 | Dữ liệu public sinh tự động, không chỉnh trực tiếp        |
+| `src/analytics.ts`                           | Adapter Umami, không hoạt động khi tracking tắt           |
+| `src/components/`                            | Header/footer, CTA, card, empty state, sơ đồ và form      |
+| `src/pages/`                                 | Các trang và template chi tiết                            |
+| `src/App.tsx`, `src/main.tsx`                | Điều hướng URL và hydration                               |
+| `src/Prerender.tsx`, `scripts/prerender.mjs` | Form eager ở build tĩnh, lazy trên trình duyệt            |
+| `scripts/prepare-public.mjs`                 | Tạo lại public từ allowlist tài nguyên                    |
+| `.github/workflows/ci.yml`                   | Kiểm tra source; không publish                            |
+| `.github/workflows/deploy-pages.yml`         | Kiểm tra và phát hành dist lên Pages từ main              |
 
 Import Kumo theo từng component: Button/LinkButton, Link, Text, LayerCard, Badge, Empty, Dialog, DropdownMenu, Input/InputArea, Select, Checkbox và Banner. Control giữ cơ chế focus/validation/popup của Kumo; HTML/CSS riêng phục vụ cấu trúc và nhận diện website. Trang mới và form được tách chunk; CSS có sẵn ngay trong HTML để không mất bố cục khi tắt JavaScript.
 

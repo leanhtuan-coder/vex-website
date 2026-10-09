@@ -44,7 +44,7 @@ export const researchDirections = [
       "Robot cần thực hiện nhiệm vụ nào?",
       "Điều gì xảy ra khi tín hiệu hoặc điều khiển lỗi?",
     ],
-    href: "/solutions/robotics-iot/",
+    href: "/solutions/iot-embedded/",
   },
   {
     id: "embedded",
@@ -56,7 +56,7 @@ export const researchDirections = [
       "Thiết bị thu thập và phản hồi những tín hiệu gì?",
       "Hệ thống xử lý mất kết nối thế nào?",
     ],
-    href: "/solutions/robotics-iot/",
+    href: "/solutions/iot-embedded/",
   },
   {
     id: "automation",

@@ -9,6 +9,8 @@ import "./styles.css";
 import "./styles-research.css";
 import "./styles-growth.css";
 import "./styles-media.css";
+import "./styles-strategy-about.css";
+import "./styles-strategy-home.css";
 const root = document.getElementById("root")!;
 const meta = getPage(window.location.pathname);
 // Keep development and unknown-path fallback metadata accurate as well.

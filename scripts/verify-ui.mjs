@@ -166,6 +166,14 @@ for (const path of routes) {
 for (const target of linkTargets) {
   const response = await page.request.get(origin + target);
   assert.ok(response.ok(), `Broken route ${target}: ${response.status()}`);
+  if (response.headers()["content-type"]?.includes("text/html")) {
+    const pathname = new URL(target, origin).pathname;
+    const path = pathname.endsWith("/") ? pathname : `${pathname}/`;
+    assert.ok(
+      routes.includes(path),
+      `Link targets an unpublished route: ${target}`,
+    );
+  }
 }
 await page.setViewportSize({ width: 390, height: 950 });
 await page.goto(origin + "/");

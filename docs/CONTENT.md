@@ -4,6 +4,8 @@
 
 `company.ts` là nguồn footer/contact/schema; `services.ts` quản lý giải pháp; `research.ts` và `academy.ts` quản lý định hướng; `pages.ts` quản lý SEO/sitemap. Bài viết, việc làm và case study nằm trong ba mảng của `content/website.ts`; kiểu dữ liệu ở `src/content/articles.ts`, `careers.ts` và `projects.ts`.
 
+`src/content/brand-strategy.ts` là nguồn chung cho Tầm nhìn, Sứ mệnh và năm Giá trị cốt lõi do chủ website cung cấp ngày 09/10/2026. Home dùng message/summary ngắn; About dùng statement đầy đủ và supportingMessages. Các giá trị giữ số thứ tự, tên Việt/Anh và mô tả nguyên văn. Trạng thái hiện tại `draft`, với nhãn bản thảo trên website; chỉ đổi sang `approved` sau xác nhận phê duyệt chính thức. Brand Guidelines không có bộ Vision/Mission/Core Values khác để thay thế. Leadership hiện chỉ hiển thị tên và chức danh pháp lý đã đối chiếu từ company.ts; chưa có ảnh/hồ sơ bổ sung nên không tạo thay thế.
+
 `npm run prepare:content` kiểm tra và tạo `src/content/published.json`. Trình duyệt chỉ nhập JSON đã lọc; source biên tập và validator không đi vào bundle. File sinh tự động không commit và không chỉnh trực tiếp. `pretypecheck`, `predev` và `prebuild` tự chạy publisher; bản clone mới chạy `npm ci`, `npm run check` như bình thường.
 
 Quy trình: chuẩn bị nội dung và quyền sử dụng, điền bản nháp, chủ nội dung duyệt, đặt `approvedForPublication: true` cùng trạng thái hợp lệ, chạy check/UI rồi push. `main` phát hành tự động. Cờ duyệt kiểm soát website; repo GitHub là public nên không lưu bản nháp mật, tài liệu khách hàng, thông tin cá nhân hoặc credentials trong source.
@@ -30,7 +32,7 @@ Dự án cần: slug/tên, danh mục, trạng thái Concept/Research/Prototype/
 
 - Dự án/sản phẩm, ảnh/demo, trạng thái và bằng chứng kết quả được phép giới thiệu.
 - Hồ sơ lãnh đạo ngoài Lê Anh Tuấn nếu được phép đăng.
-- Slogan, tầm nhìn, sứ mệnh và giá trị chính thức.
+- Phê duyệt chính thức bản thảo Tầm nhìn, Sứ mệnh và Giá trị cốt lõi đã tích hợp; slogan chính thức nếu có.
 - Phạm vi dịch vụ thương mại, SLA và quy trình chuẩn. Home hiện ghi quy trình tham khảo.
 - Tin tức/tác giả/ngày phát hành, vị trí tuyển dụng còn mở và nghiên cứu được phép mô tả.
 - Người phụ trách nội dung và rà soát privacy khi thay đổi xử lý dữ liệu.

@@ -12,6 +12,7 @@ import { company } from "../content/company";
 import { services } from "../content/services";
 import { publicProjects } from "../content/projects";
 import { analyticsEnabled } from "../analytics";
+import BrandStrategyAbout from "../components/BrandStrategyAbout";
 export function About() {
   return (
     <>
@@ -46,6 +47,7 @@ export function About() {
           </Text>
         </div>
       </section>
+      <BrandStrategyAbout />
       <section className="section solution-section">
         <div className="container">
           <Heading

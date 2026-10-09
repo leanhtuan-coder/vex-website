@@ -41,6 +41,8 @@ Phase 2 có trang R&D, cơ chế đăng bài/tuyển dụng và mẫu chi tiết
 
 ## Source
 
+Visual Elements pilot bổ sung đúng ba section Home: Hero precision stack, bốn scene SVG riêng cho Software/AI/Robotics/Automation và khối R&D. Bộ primitive/pattern/divider dùng CSS/SVG thuần, không thêm package; mobile và reduced motion tĩnh. [Thiết kế và kết quả pilot](docs/VEX-VISUAL-ELEMENTS.md), [đánh giá chín nguồn/giấy phép](docs/VISUAL-SOURCES.md) và [notice thư viện UI](THIRD_PARTY_UI_NOTICES.txt) mô tả phạm vi. Notice cũng được copy theo allowlist vào bản static.
+
 | Nơi                                                  | Trách nhiệm                                               |
 | ---------------------------------------------------- | --------------------------------------------------------- |
 | `src/brand.css`                                      | Font SVN-Aguda 400/900, palette và ánh xạ token Kumo      |

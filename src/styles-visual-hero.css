@@ -1,0 +1,82 @@
+/* Native VEX precision stack. Geometry supplies depth; no SVG filters. */
+.home-signature .vex-hero-datum {
+  opacity: 0.3;
+}
+
+.home-signature .vex-hero-rails {
+  opacity: 0.4;
+}
+
+.home-signature .vex-hero-plane-back {
+  fill: var(--vex-cyan);
+  stroke: var(--vex-white);
+  stroke-width: 1;
+  stroke-opacity: 0.55;
+}
+
+.home-signature .vex-hero-plane-mid {
+  fill: var(--vex-mint);
+}
+
+.home-signature .vex-hero-depth {
+  fill: var(--vex-cyan);
+  fill-opacity: 0.25;
+}
+
+.home-signature .vex-hero-inlay {
+  fill: var(--vex-cyan);
+}
+
+.home-signature .vex-hero-inlay-line {
+  stroke: var(--vex-mint);
+  stroke-width: 1.2;
+}
+
+.home-signature .vex-hero-pin {
+  fill: var(--vex-cyan);
+}
+
+.home-signature .vex-hero-terminals {
+  fill: var(--vex-cyan);
+}
+
+.home-signature .vex-hero-signal {
+  fill: none;
+  stroke: var(--vex-mint);
+  stroke-width: 2;
+  stroke-dasharray: 5 95;
+  stroke-dashoffset: 0;
+}
+
+@media (min-width: 801px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .home-signature .vex-hero-signal {
+    animation: vex-hero-signal-travel 680ms ease-out 1;
+  }
+
+  .home-signature .vex-hero-plane-front {
+    transition: transform 220ms ease-out;
+  }
+
+  .home-signature:hover .vex-hero-plane-front {
+    transform: translate(2px, -3px);
+  }
+}
+
+@keyframes vex-hero-signal-travel {
+  from {
+    stroke-dashoffset: 100;
+  }
+
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-signature .vex-hero-signal,
+  .home-signature .vex-hero-plane-front {
+    animation: none;
+    transition: none;
+    transform: none;
+  }
+}

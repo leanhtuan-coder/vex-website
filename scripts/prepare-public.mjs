@@ -35,6 +35,7 @@ for (const file of [
   "assets/vex-logo-apple-touch-icon.png",
   "CNAME",
   "robots.txt",
+  "THIRD_PARTY_UI_NOTICES.txt",
   "sitemap.xml",
   "logo.png",
   "favicon.png",

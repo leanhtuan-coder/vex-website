@@ -1,0 +1,217 @@
+/* Original VEX SVG kit. Scope the first rollout to three Home sections. */
+:root {
+  --vex-visual-duration: 220ms;
+  --vex-visual-ease: cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+.vex-technical-divider {
+  display: block;
+  width: 100%;
+  height: 16px;
+  margin-top: 32px;
+  overflow: visible;
+  pointer-events: none;
+}
+.vex-divider-line {
+  stroke: var(--vex-cyan-line);
+}
+.vex-divider-arrow {
+  stroke: var(--vex-cyan);
+}
+.vex-divider-pixel {
+  fill: var(--vex-mint);
+}
+.vex-visual-pilot .home-capability-grid {
+  margin-top: 32px;
+}
+.vex-visual-pilot .home-capability-software {
+  grid-row: auto;
+}
+.vex-visual-pilot .home-capability-automation {
+  grid-column: span 7;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+.vex-visual-pilot .home-capability-automation .home-capability-copy {
+  display: block;
+}
+.vex-visual-pilot .home-capability-automation .home-capability-copy p {
+  margin-top: 12px;
+}
+.vex-visual-pilot .home-capability-automation > a {
+  margin-top: auto;
+}
+.vex-visual-pilot .home-capability-software .home-capability-copy h3 {
+  font-size: 25px;
+}
+.vex-visual-pilot .home-capability-software .home-capability-copy p {
+  max-width: none;
+}
+.vex-technology-visual {
+  width: 100%;
+  min-width: 0;
+  color: var(--vex-cyan);
+  pointer-events: none;
+}
+.vex-technology-visual svg {
+  display: block;
+  width: 100%;
+  height: 184px;
+  overflow: visible;
+}
+.home-capability-software .vex-technology-visual {
+  color: var(--vex-white);
+}
+.vex-scene-rail,
+.vex-scene-registration {
+  stroke: currentColor;
+  stroke-width: 1;
+  opacity: 0.3;
+}
+.vex-scene-line,
+.vex-scene-outline,
+.vex-scene-soft,
+.vex-scene-surface {
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+}
+.vex-scene-outline {
+  fill: none;
+}
+.vex-scene-surface {
+  fill: var(--vex-white);
+}
+.vex-scene-soft {
+  fill: var(--vex-cyan-soft);
+}
+.home-capability-software .vex-scene-surface {
+  fill: var(--vex-cyan);
+}
+.home-capability-software .vex-scene-soft {
+  fill: var(--vex-cyan);
+  stroke-opacity: 0.5;
+}
+.vex-scene-accent {
+  fill: var(--vex-mint);
+  stroke: currentColor;
+  stroke-width: 1.2;
+}
+.vex-scene-mark {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.5;
+  stroke-linecap: square;
+}
+.vex-scene-pixels {
+  color: var(--vex-mint);
+}
+.vex-scene-arm {
+  stroke: var(--vex-cyan-soft);
+  stroke-width: 18;
+  stroke-linejoin: bevel;
+}
+.vex-scene-lift {
+  transition: transform var(--vex-visual-duration) var(--vex-visual-ease);
+}
+.vex-visual-pilot .home-research-band .research-layout {
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 64px;
+}
+.vex-visual-pilot .home-research-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+.vex-visual-pilot .home-research-copy > p {
+  margin-top: 24px;
+  max-width: 52ch;
+}
+.vex-visual-pilot .home-research-copy > .cta {
+  margin-top: 28px;
+}
+.vex-research-visual {
+  width: 100%;
+  color: var(--vex-white);
+  pointer-events: none;
+}
+.vex-research-visual svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.vex-research-rails,
+.vex-research-registration {
+  stroke: currentColor;
+  stroke-width: 1;
+  opacity: 0.36;
+}
+.vex-research-plane-back {
+  fill: none;
+  stroke: var(--vex-mint);
+  stroke-width: 1;
+}
+.vex-research-plane {
+  fill: var(--vex-cyan);
+  stroke: currentColor;
+  stroke-width: 1.5;
+}
+.vex-research-arrow-back,
+.vex-research-pixels {
+  fill: var(--vex-mint);
+  color: var(--vex-mint);
+}
+.vex-research-arrow-front {
+  fill: var(--vex-white);
+}
+@media (min-width: 801px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .vex-visual-pilot .home-capability:hover .vex-scene-lift,
+  .vex-visual-pilot .home-capability:focus-within .vex-scene-lift {
+    transform: translateY(-3px);
+  }
+}
+@media (max-width: 1000px) {
+  .vex-visual-pilot .home-capability,
+  .vex-visual-pilot .home-capability-software,
+  .vex-visual-pilot .home-capability-automation {
+    grid-column: auto;
+  }
+  .vex-visual-pilot .home-research-band .research-layout {
+    gap: 36px;
+  }
+  .vex-technology-visual svg {
+    height: 156px;
+  }
+}
+@media (max-width: 800px) {
+  .vex-visual-pilot .home-capability-software,
+  .vex-visual-pilot .home-capability-automation {
+    grid-column: auto;
+  }
+  .vex-visual-pilot .home-research-band .research-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 36px;
+  }
+  .vex-research-visual {
+    max-width: 560px;
+    justify-self: center;
+  }
+}
+@media (max-width: 600px) {
+  .vex-technical-divider {
+    margin-top: 24px;
+  }
+  .vex-technology-visual svg {
+    height: 148px;
+  }
+  .vex-visual-pilot .home-capability-copy h3 {
+    font-size: 25px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .vex-scene-lift {
+    transition: none;
+    transform: none;
+  }
+}

@@ -1,5 +1,9 @@
 # Báo cáo QA — 09/10/2026
 
+## VEX Visual Elements pilot
+
+Home Hero/Technology/R&D đã có ba section thử nghiệm với visual SVG riêng, không thêm dependency. `npm run check` gồm 106 content checks và build 17 trang/404 đạt; full UI đạt 187 lượt layout. QA riêng 11 viewport, axe 390/768/1440, ID/SSR/no-JS, focus/mobile44px, reduced motion và vòng đời animation đạt; đã xem ảnh desktop/mobile/tablet. Lighthouse Home mobile94/desktop100, Accessibility/Best Practices/SEO100; đây là phép đo local lab. Notice thư viện UI được bổ sung theo allowlist cho bản static. Chi tiết, mức tăng payload và đường dẫn ảnh trước/sau ở [VEX-VISUAL-ELEMENTS.md](VEX-VISUAL-ELEMENTS.md); các phần dưới ghi kết quả các phase trước.
+
 ## Visual redesign và corporate enhancement
 
 Đã triển khai bố cục editorial và visual SVG pixel/grid/mũi tên trên Home/Media, typography và container chung, các trang corporate/R&D/Careers/Insights/Contact, footer nhóm liên kết và CTA tương phản rõ. Logo nguyên bản và bốn download không thay đổi; header/footer dùng SVG đầy đủ thay PNG. Navigation/footer 14px, body 16–17px; input và Select mobile 44px.

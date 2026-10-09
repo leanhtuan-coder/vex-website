@@ -22,11 +22,14 @@ import {
   technologyIcons,
 } from "../components/shared";
 import TechnologyVisual from "../components/TechnologyVisual";
+import TechnologyIllustration from "../components/visuals/TechnologyIllustration";
+import ResearchVisual from "../components/visuals/ResearchVisual";
+import { VexDivider } from "../components/visuals/VexPrimitives";
 import "../styles-strategy-home.css";
 import "../styles-home-redesign.css";
 export default function Home() {
   return (
-    <div className="home-page">
+    <div className="home-page vex-visual-pilot">
       <section className="home-hero">
         <div className="container home-hero-grid">
           <div className="home-hero-copy">
@@ -175,6 +178,7 @@ export default function Home() {
             Từ phần mềm đến hệ thống vật lý, VEX hướng tới khả năng tích hợp các
             công nghệ để giải quyết những bài toán đa dạng.
           </Heading>
+          <VexDivider />
           <div className="home-capability-grid">
             {technologies.map((item, i) => {
               const Icon = technologyIcons[item.icon];
@@ -189,54 +193,9 @@ export default function Home() {
                     </span>
                     <Icon size={28} aria-hidden="true" />
                   </div>
-                  {i === 0 && (
-                    <svg
-                      className="home-software-drawing"
-                      viewBox="0 0 420 170"
-                      fill="none"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M16 86H96L154 28H274L332 86H404M16 132H96L154 74H274L332 132H404"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                      />
-                      <path
-                        d="M154 28V74M274 28V74"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                      />
-                      <path
-                        d="M174 112L146 136L174 160M246 112L274 136L246 160M224 108L198 164"
-                        stroke="currentColor"
-                        strokeWidth="5"
-                      />
-                      {[16, 96, 332, 396].map((x) => (
-                        <rect
-                          key={x}
-                          x={x}
-                          y={82}
-                          width="8"
-                          height="8"
-                          fill="currentColor"
-                        />
-                      ))}
-                      <rect
-                        x="150"
-                        y="24"
-                        width="8"
-                        height="8"
-                        fill="currentColor"
-                      />
-                      <rect
-                        x="270"
-                        y="24"
-                        width="8"
-                        height="8"
-                        fill="currentColor"
-                      />
-                    </svg>
-                  )}
+                  <TechnologyIllustration
+                    kind={item.icon === "hardware" ? "robotics" : item.icon}
+                  />
                   <div className="home-capability-copy">
                     <Text as="h3" variant="heading">
                       {item.title}
@@ -378,15 +337,13 @@ export default function Home() {
       </section>
       <section className="research-band home-research-band">
         <div className="container research-layout">
-          <div>
+          <div className="home-research-copy">
             <div className="eyebrow">NGHIÊN CỨU & PHÁT TRIỂN</div>
             <Text as="h2" variant="heading">
               Nghiên cứu hôm nay.
               <br />
               Hướng tới ứng dụng ngày mai.
             </Text>
-          </div>
-          <div>
             <Text variant="secondary">
               Thử nghiệm công nghệ, kết hợp phần mềm và phần cứng, đánh giá khả
               năng ứng dụng và cải tiến theo bài toán cụ thể là định hướng phát
@@ -396,6 +353,7 @@ export default function Home() {
               Khám phá hướng nghiên cứu
             </CTA>
           </div>
+          <ResearchVisual />
         </div>
       </section>
       <section className="section container academy-section home-academy-section">

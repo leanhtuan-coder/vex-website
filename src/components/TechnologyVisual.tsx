@@ -1,6 +1,9 @@
 import { ArrowUpRightIcon } from "@phosphor-icons/react";
+import { useId } from "react";
 
 export default function TechnologyVisual() {
+  const gridId = `vex-signature-grid-${useId().replace(/:/g, "")}`;
+
   return (
     <figure className="home-signature">
       <div className="home-signature-heading">
@@ -15,7 +18,7 @@ export default function TechnologyVisual() {
       >
         <defs>
           <pattern
-            id="vex-signature-grid"
+            id={gridId}
             width="40"
             height="40"
             patternUnits="userSpaceOnUse"
@@ -26,54 +29,88 @@ export default function TechnologyVisual() {
         <rect
           width="560"
           height="500"
-          fill="url(#vex-signature-grid)"
-          opacity="0.12"
+          fill={`url(#${gridId})`}
+          opacity="0.085"
         />
-        <g stroke="currentColor" strokeWidth="1" opacity="0.35">
-          <path d="M40 80H164M396 80H520M40 420H164M396 420H520" />
-          <path d="M80 40V128M80 372V460M480 40V128M480 372V460" />
+        <g className="vex-hero-datum" stroke="currentColor" strokeWidth="1">
+          <path d="M40 80H176M384 80H520M40 420H176M384 420H520" />
+          <path d="M80 40V116M80 384V460M480 40V116M480 384V460" />
           <path d="M36 76V84M36 416V424M524 76V84M524 416V424" />
+          <path d="M74 80H86M80 74V86M474 420H486M480 414V426" />
         </g>
-        <path
-          d="M0 170H108L188 250H324L404 330H560"
+
+        <g className="vex-hero-rails" stroke="currentColor" strokeWidth="1.2">
+          <path d="M24 202H108L188 282H296L380 202H536" />
+          <path d="M24 338H108L188 258H296L380 338H536" />
+          <path d="M120 146L168 106M270 146L318 106M406 282L454 242M270 418L318 378M120 418L168 378" />
+        </g>
+
+        <g className="vex-hero-stack">
+          <path
+            className="vex-hero-plane-back"
+            d="M120 146H270L406 282L270 418H120L256 282Z"
+          />
+          <path
+            className="vex-hero-plane-mid"
+            d="M144 126H294L430 262L294 398H144L280 262Z"
+          />
+          <path
+            className="vex-hero-depth"
+            d="M318 106L454 242L430 262L294 126ZM454 242L318 378L294 398L430 262Z"
+          />
+          <g className="vex-hero-plane-front">
+            <path
+              className="home-signature-white"
+              d="M168 106H318L454 242L318 378H168L304 242Z"
+            />
+            <path
+              className="vex-hero-inlay"
+              d="M216 130H308L420 242L308 354H216L328 242Z"
+            />
+            <path
+              className="vex-hero-inlay-line"
+              d="M252 146H300L396 242L300 338H252"
+            />
+            <rect
+              className="vex-hero-pin"
+              x="296"
+              y="122"
+              width="8"
+              height="8"
+            />
+            <rect
+              className="vex-hero-pin"
+              x="296"
+              y="354"
+              width="8"
+              height="8"
+            />
+          </g>
+        </g>
+
+        <g className="home-signature-pixels vex-hero-pixels">
+          <rect x="52" y="122" width="16" height="16" />
+          <rect x="76" y="146" width="12" height="12" />
+          <rect x="52" y="354" width="16" height="16" />
+          <rect x="76" y="334" width="12" height="12" />
+          <rect x="478" y="234" width="16" height="16" />
+          <rect x="508" y="236" width="12" height="12" />
+        </g>
+        <g
+          className="vex-hero-terminals"
           stroke="currentColor"
           strokeWidth="1.5"
-          opacity="0.7"
-        />
-        <path
-          d="M0 330H108L188 250M324 250L404 170H560"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          opacity="0.7"
-        />
-        <path
-          className="home-signature-mint"
-          d="M104 122H182L310 250L182 378H104L232 250Z"
-        />
-        <path
-          className="home-signature-white"
-          d="M208 122H326L454 250L326 378H208L336 250Z"
-        />
-        <path
-          d="M176 94H338L494 250L338 406H176"
-          stroke="currentColor"
-          strokeWidth="1"
-          opacity="0.35"
-        />
-        <g className="home-signature-pixels">
-          <rect x="52" y="122" width="18" height="18" />
-          <rect x="78" y="148" width="18" height="18" />
-          <rect x="52" y="352" width="18" height="18" />
-          <rect x="78" y="326" width="18" height="18" />
-          <rect x="478" y="242" width="16" height="16" />
-          <rect x="508" y="244" width="12" height="12" />
+        >
+          <rect x="18" y="196" width="12" height="12" />
+          <rect x="18" y="332" width="12" height="12" />
+          <rect x="530" y="196" width="12" height="12" />
+          <rect x="530" y="332" width="12" height="12" />
         </g>
-        <g stroke="currentColor" strokeWidth="1.5">
-          <rect x="16" y="164" width="12" height="12" />
-          <rect x="16" y="324" width="12" height="12" />
-          <rect x="532" y="164" width="12" height="12" />
-          <rect x="532" y="324" width="12" height="12" />
-        </g>
+        <path
+          className="vex-hero-signal"
+          d="M30 202H108L188 282H296L380 202H530"
+          pathLength="100"
+        />
       </svg>
       <figcaption className="home-signature-caption">
         <span>

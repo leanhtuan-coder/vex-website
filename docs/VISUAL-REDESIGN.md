@@ -40,3 +40,7 @@ Kumo tiếp tục cung cấp Text, Link, Button/LinkButton, Badge, LayerCard, Em
 Không sửa dữ liệu công ty, nội dung Tầm nhìn/Sứ mệnh/giá trị, trạng thái draft, cổng phê duyệt nội dung hoặc metadata/route. Không thêm dự án, bài viết, tuyển dụng, ảnh đội ngũ hoặc thành tích mẫu. Tracking tiếp tục tắt; form chỉ soạn email và chưa nhận dữ liệu tự động. Không thay DNS, chứng chỉ hoặc cấu hình hosting.
 
 Kết quả kiểm tra bản ghép và Lighthouse được ghi trong [QA.md](QA.md). Ảnh và báo cáo máy nằm trong `artifacts/`, không phục vụ trên website.
+
+## Visual Elements pilot tiếp theo
+
+Home Hero, bốn lĩnh vực công nghệ và R&D đã có bộ visual SVG riêng với mặt phẳng so le, pixel, đường kỹ thuật và divider. Các trang khác giữ bố cục baseline trong vòng thử nghiệm này. Chi tiết triển khai/QA và ảnh đối chiếu ở [VEX-VISUAL-ELEMENTS.md](VEX-VISUAL-ELEMENTS.md); đánh giá đủ chín nguồn, dependency thực tế và license ở [VISUAL-SOURCES.md](VISUAL-SOURCES.md). Không thêm dependency hoặc sao chép code/asset catalog; logo/font/file tải không thay.

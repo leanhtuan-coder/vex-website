@@ -11,14 +11,14 @@ const { default: App } = await import("../.prerender/Prerender.js");
 // Content metadata is bundled separately to use the same TS source on build and client.
 await build({
   build: {
-    ssr: "src/content/pages.ts",
+    ssr: "src/content/build-data.ts",
     outDir: ".prerender",
     emptyOutDir: false,
   },
   logLevel: "silent",
 });
-const { pages, notFound, structuredData } = await import(
-  "../.prerender/pages.js"
+const { pages, notFound, structuredData, analyticsOrigin } = await import(
+  "../.prerender/build-data.js"
 );
 const template = await readFile("dist/index.html", "utf8");
 const escape = (s) =>
@@ -40,6 +40,10 @@ for (const meta of [...pages, notFound]) {
     ["robots", meta.noindex ? "noindex, follow" : "index, follow"],
     ["twitter:title", meta.title],
     ["twitter:description", meta.description],
+    [
+      "twitter:image",
+      "https://vex.biz.vn" + (meta.image ?? "/assets/og-image.jpg"),
+    ],
   ])
     html = html.replace(
       new RegExp(`<meta name="${name}" content="[^"]*"[^>]*>`),
@@ -49,10 +53,17 @@ for (const meta of [...pages, notFound]) {
     ["og:title", meta.title],
     ["og:description", meta.description],
     ["og:url", "https://vex.biz.vn" + meta.path],
+    ["og:type", meta.type ?? "website"],
+    ["og:image", "https://vex.biz.vn" + (meta.image ?? "/assets/og-image.jpg")],
   ])
     html = html.replace(
       new RegExp(`<meta property="${property}" content="[^"]*"[^>]*>`),
       `<meta property="${property}" content="${escape(value)}">`,
+    );
+  if (meta.publishedAt)
+    html = html.replace(
+      "</head>",
+      `<meta property="article:published_time" content="${meta.publishedAt}T00:00:00+07:00">${meta.updatedAt ? `<meta property="article:modified_time" content="${meta.updatedAt}T00:00:00+07:00">` : ""}</head>`,
     );
   html = html
     .replace(
@@ -68,13 +79,14 @@ for (const meta of [...pages, notFound]) {
   await writeFile(`${directory}/index.html`, html);
   if (meta.noindex) await writeFile("dist/404.html", html);
 }
-const sitemap = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${pages.map((p) => `<url><loc>https://vex.biz.vn${p.path}</loc></url>`).join("")}</urlset>`;
+const sitemap = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${pages.map((p) => `<url><loc>https://vex.biz.vn${p.path}</loc>${p.updatedAt || p.publishedAt ? `<lastmod>${p.updatedAt || p.publishedAt}</lastmod>` : ""}</url>`).join("")}</urlset>`;
 await writeFile("dist/sitemap.xml", sitemap);
 await writeFile("sitemap.xml", sitemap);
 await writeFile("dist/.nojekyll", "");
+const analyticsHost = analyticsOrigin();
 await writeFile(
   "dist/_headers",
-  `/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  Permissions-Policy: camera=(), microphone=(), geolocation=()\n  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests\n`,
+  `/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  Permissions-Policy: camera=(), microphone=(), geolocation=()\n  Content-Security-Policy: default-src 'self'; script-src 'self'${analyticsHost ? ` ${analyticsHost}` : ""}; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'${analyticsHost ? ` ${analyticsHost}` : ""}; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests\n`,
 );
 await rm(".prerender", { recursive: true });
 console.log(

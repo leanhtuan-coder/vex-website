@@ -762,6 +762,18 @@ header nav a[aria-current="page"] {
 .desktop-navigation {
   gap: 22px;
   font-size: 12px;
+  align-items: center;
+}
+.explore-trigger {
+  font-size: inherit;
+  font-weight: 400;
+  padding-inline: 8px;
+}
+.explore-menu {
+  min-width: 250px;
+}
+.explore-menu a[aria-current="page"] {
+  color: var(--vex-cyan);
 }
 .mobile-menu-dialog {
   padding: 24px;

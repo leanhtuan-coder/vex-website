@@ -3,7 +3,7 @@ import AxeBuilder from "@axe-core/playwright";
 import assert from "node:assert/strict";
 import { mkdir, writeFile, readFile } from "node:fs/promises";
 const origin = "http://127.0.0.1:4173";
-const routes = [
+const requiredRoutes = [
   "/",
   "/about/",
   "/solutions/",
@@ -11,6 +11,11 @@ const routes = [
   "/contact/",
   "/privacy-policy/",
   "/terms/",
+  "/research/",
+  "/insights/",
+  "/careers/",
+  "/media/",
+  "/academy/",
   ...[
     "custom-software",
     "ai-computer-vision",
@@ -19,6 +24,13 @@ const routes = [
     "system-integration",
   ].map((s) => `/solutions/${s}/`),
 ];
+const sitemap = await readFile("dist/sitemap.xml", "utf8");
+const routes = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map(
+  (match) => new URL(match[1]).pathname,
+);
+for (const path of requiredRoutes)
+  assert.ok(routes.includes(path), `Missing required route ${path}`);
+assert.equal(new Set(routes).size, routes.length, "Duplicate sitemap URLs");
 const widths = [320, 360, 375, 390, 430, 768, 1024, 1280, 1440, 1920, 2560];
 await mkdir("artifacts", { recursive: true });
 const browser = await chromium.launch();
@@ -46,6 +58,12 @@ await context.route("**/*", async (route) => {
 });
 const page = await context.newPage();
 const errors = [];
+const externalRequests = [];
+page.on("request", (request) => {
+  const url = new URL(request.url());
+  if (["http:", "https:"].includes(url.protocol) && url.origin !== origin)
+    externalRequests.push(request.url());
+});
 const inaccessible = [];
 const linkTargets = new Set();
 page.on("pageerror", (error) => errors.push(error.message));
@@ -141,6 +159,12 @@ await page.goto(origin + "/");
 await page.getByRole("button", { name: "Mở menu" }).click();
 const dialog = page.getByRole("dialog");
 await expect(dialog).toBeVisible();
+await expect(
+  dialog.getByRole("link", { name: "Nghiên cứu & Phát triển", exact: true }),
+).toBeVisible();
+await expect(
+  dialog.getByRole("link", { name: "Tài nguyên thương hiệu", exact: true }),
+).toBeVisible();
 await dialog.evaluate(async (element) => {
   await Promise.all(
     element
@@ -179,7 +203,34 @@ await page
   .getByRole("link", { name: "Về VEX", exact: true })
   .click();
 await page.waitForURL(origin + "/about/");
+await page.setViewportSize({ width: 1440, height: 950 });
+const explore = page.getByRole("button", { name: "Khám phá VEX" });
+await explore.click();
+await expect(page.getByRole("menu")).toBeVisible();
+await expect(
+  page.getByRole("menuitem", { name: "Nghiên cứu & Phát triển" }),
+).toBeVisible();
+await page.keyboard.press("Escape");
+await expect(page.getByRole("menu")).toHaveCount(0);
+await expect(explore).toBeFocused();
+await page.setViewportSize({ width: 390, height: 950 });
+for (const [topic, label] of [
+  ["research", "Hợp tác nghiên cứu"],
+  ["academy", "Hợp tác giáo dục"],
+  ["careers", "Tuyển dụng"],
+  ["media", "Truyền thông"],
+  ["invalid", "Tư vấn giải pháp"],
+]) {
+  await page.goto(`${origin}/contact/?topic=${topic}`);
+  await expect(
+    page.getByRole("combobox", { name: "Chủ đề liên hệ" }),
+  ).toContainText(label);
+}
 await page.goto(origin + "/contact/");
+await page.evaluate(() => {
+  window.__analyticsEvents = [];
+  window.umami = { track: (payload) => window.__analyticsEvents.push(payload) };
+});
 const submit = page.getByRole("button", { name: "Soạn email liên hệ" });
 await expect(submit).toBeDisabled();
 await page.getByLabel("Họ và tên").fill("   ");
@@ -226,6 +277,29 @@ await page.screenshot({
   fullPage: false,
 });
 assert.equal(await page.evaluate(() => localStorage.length), 0);
+assert.deepEqual(
+  await page.evaluate(() => window.__analyticsEvents),
+  [],
+  "Analytics stays disabled even if a tracker exists",
+);
+await expect(page.locator("script[data-website-id]")).toHaveCount(0);
+assert.deepEqual(
+  externalRequests,
+  [],
+  "No third-party requests with tracking disabled",
+);
+for (const path of [
+  "/insights/not-published/",
+  "/careers/not-published/",
+  "/solutions/custom-software/extra/",
+]) {
+  await page.goto(origin + path);
+  await expect(page.locator("h1")).toHaveText("Không tìm thấy trang.");
+  await expect(page.locator("meta[name=robots]")).toHaveAttribute(
+    "content",
+    "noindex, follow",
+  );
+}
 await page.goto(origin + "/missing-page/");
 await expect(page.locator("h1")).toHaveText("Không tìm thấy trang.");
 await expect(page.locator("meta[name=robots]")).toHaveAttribute(
@@ -260,5 +334,5 @@ await browser.close();
 assert.deepEqual(errors, []);
 assert.deepEqual(inaccessible, []);
 console.log(
-  `PASS: ${routes.length} routes x ${widths.length} widths, prerender/no-JS, links, 404, accessibility, menu focus, consent, validation and email preparation.`,
+  `PASS: ${routes.length} routes x ${widths.length} widths, prerender/no-JS, links, 404, accessibility, menus, topic presets, consent, validation, email preparation and tracking disabled.`,
 );

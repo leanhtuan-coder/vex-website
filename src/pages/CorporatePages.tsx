@@ -11,6 +11,7 @@ import {
 import { company } from "../content/company";
 import { services } from "../content/services";
 import { publicProjects } from "../content/projects";
+import { analyticsEnabled } from "../analytics";
 export function About() {
   return (
     <>
@@ -241,6 +242,8 @@ export function ProjectDetail({ slug }: { slug: string }) {
           className="project-image"
           src={p.image}
           alt={p.imageAlt}
+          width={p.imageWidth}
+          height={p.imageHeight}
           loading="lazy"
         />
         <div className="tags">
@@ -300,10 +303,12 @@ export function Privacy() {
           Dữ liệu kỹ thuật và bên cung cấp hạ tầng
         </Text>
         <Text>
-          Mã website không cài marketing pixel, công cụ analytics hoặc cookie
-          theo dõi. Dịch vụ lưu trữ, DNS, mạng và email có thể xử lý dữ liệu kỹ
-          thuật như địa chỉ IP hoặc thông tin truy cập theo hoạt động và chính
-          sách riêng của các bên cung cấp.
+          {analyticsEnabled
+            ? "Website sử dụng Umami để đo lượt xem và tương tác với các đường dẫn công khai. Sự kiện không chứa nội dung form, email, số điện thoại, query URL hoặc mã nhận diện do VEX gán. Website tôn trọng Do Not Track và Global Privacy Control."
+            : "Mã website không cài marketing pixel, công cụ analytics hoặc cookie theo dõi."}{" "}
+          Dịch vụ lưu trữ, DNS, mạng và email có thể xử lý dữ liệu kỹ thuật như
+          địa chỉ IP hoặc thông tin truy cập theo hoạt động và chính sách riêng
+          của các bên cung cấp.
         </Text>
         <Text as="h2" variant="heading">
           Lựa chọn và yêu cầu của bạn

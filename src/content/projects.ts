@@ -13,6 +13,8 @@ export interface Project {
   summary: string;
   image: string;
   imageAlt: string;
+  imageWidth: number;
+  imageHeight: number;
   context: string;
   problem: string;
   solution: string;
@@ -22,8 +24,9 @@ export interface Project {
   challenges: string;
   nextSteps: string;
 }
-// Add only projects whose ownership, media, status and public release are approved.
-export const projects: Project[] = [];
+// Draft and unapproved project source never enters the browser module graph.
+export const projects = publication.projects as Project[];
 export const publicProjects = projects.filter(
   (project) => project.approvedForPublication,
 );
+import publication from "./published.json";

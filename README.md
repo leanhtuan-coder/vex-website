@@ -25,7 +25,7 @@ npm run measure:performance
 npm audit
 ```
 
-`check` chạy TypeScript, ESLint và build. UI checks kiểm tra 12 trang × 11 chiều rộng 320–2560px, link/ảnh/anchor, HTML không JS, metadata/404, axe, menu/focus và form. Security headers được mô phỏng từ file build để kiểm tra tương thích; hosting chưa tự áp dụng chúng. Lighthouse đo Home mobile/desktop, Contact mobile và Solutions mobile. Báo cáo và ảnh nằm trong `artifacts/` (không commit).
+`check` chạy publisher, TypeScript, ESLint và build. UI checks kiểm tra toàn bộ route trong sitemap × 11 chiều rộng 320–2560px (hiện 17 trang), link/ảnh/anchor, HTML không JS, metadata/404, axe, menu/focus, topic/form và analytics tắt. Security headers được mô phỏng từ file build để kiểm tra tương thích; hosting chưa tự áp dụng chúng. Lighthouse đo Home mobile/desktop, Contact mobile và Solutions mobile. Báo cáo và ảnh nằm trong `artifacts/` (không commit).
 
 ## Các trang
 
@@ -33,8 +33,9 @@ npm audit
 - Projects `/projects/`: chưa có dự án được duyệt công bố.
 - Contact `/contact/`: kênh liên hệ và biểu mẫu soạn email.
 - Privacy `/privacy-policy/`, Terms `/terms/` và `404.html`.
+- Research `/research/`, Insights `/insights/`, Careers `/careers/`, Media `/media/` và Academy `/academy/`.
 
-R&D chi tiết, tin tức, tuyển dụng, analytics và tiếng Anh thuộc Phase 2. Academy, CRM/API tiếp nhận thuộc Phase 3; Academy hiện chỉ là định hướng tương lai.
+Phase 2 có trang R&D, cơ chế đăng bài/tuyển dụng và mẫu chi tiết, thư viện logo tải xuống, topic liên hệ theo ngữ cảnh và cấu hình analytics tắt mặc định. Bài viết, việc làm và case study chỉ xuất bản khi có nội dung thật được duyệt. Tiếng Anh chưa bật. Phase 3 có trang định hướng Academy và pipeline quản lý/xuất bản nội dung; CRM/API, portal, microsite sản phẩm và CMS nâng cao cần nhu cầu vận hành cùng cấu hình cụ thể. Academy chưa mở tuyển sinh.
 
 ## Source
 
@@ -43,6 +44,10 @@ R&D chi tiết, tin tức, tuyển dụng, analytics và tiếng Anh thuộc Pha
 | `src/brand.css`                              | Font SVN-Aguda 400/900, palette và ánh xạ token Kumo  |
 | `src/styles.css`                             | Bố cục corporate, responsive, focus và reduced motion |
 | `src/content/`                               | Công ty, giải pháp, dự án và SEO                      |
+| `content/website.ts`                         | Nguồn biên tập bài viết, việc làm, case study         |
+| `scripts/prepare-content.mjs`                | Kiểm tra và xuất dữ liệu đã duyệt trước khi bundle    |
+| `src/content/published.json`                 | Dữ liệu public sinh tự động, không chỉnh trực tiếp    |
+| `src/analytics.ts`                           | Adapter Umami, không hoạt động khi tracking tắt       |
 | `src/components/`                            | Header/footer, CTA, card, empty state, sơ đồ và form  |
 | `src/pages/`                                 | Các trang và template chi tiết                        |
 | `src/App.tsx`, `src/main.tsx`                | Điều hướng URL và hydration                           |
@@ -51,7 +56,7 @@ R&D chi tiết, tin tức, tuyển dụng, analytics và tiếng Anh thuộc Pha
 | `.github/workflows/ci.yml`                   | Kiểm tra source; không publish                        |
 | `.github/workflows/deploy-pages.yml`         | Kiểm tra và phát hành dist lên Pages từ main          |
 
-Import Kumo theo từng component: Button/LinkButton, Link, Text, LayerCard, Badge, Empty, Dialog, Input/InputArea, Select, Checkbox và Banner. Control giữ cơ chế focus/validation/popup của Kumo; HTML/CSS riêng phục vụ cấu trúc và nhận diện website.
+Import Kumo theo từng component: Button/LinkButton, Link, Text, LayerCard, Badge, Empty, Dialog, DropdownMenu, Input/InputArea, Select, Checkbox và Banner. Control giữ cơ chế focus/validation/popup của Kumo; HTML/CSS riêng phục vụ cấu trúc và nhận diện website. Trang mới và form được tách chunk; CSS có sẵn ngay trong HTML để không mất bố cục khi tắt JavaScript.
 
 CTA dùng cỡ Kumo base (36px) cho header và hành động phụ, lg (40px) cho hero và hành động chính; trên mobile vùng bấm tối thiểu 44px. `button-theme.ts` điều chỉnh gradient qua style API của Kumo để chữ trắng giữ tương phản ở cả normal/hover. CTA trên nền cyan dùng token màu riêng và focus trắng.
 
@@ -62,6 +67,10 @@ Font WOFF2 local. Cyan `#00707E`, mint `#67C08B`, trắng và xám `#E6E7E8` the
 ## Form và phát hành
 
 Theo xác nhận của chủ website, chưa có backend; form chỉ tạo `mailto:contact@vex.biz.vn`. Người dùng kiểm tra và tự nhấn gửi trong ứng dụng email. Không báo VEX đã nhận; không ghi dữ liệu vào localStorage/log. Có validation, consent, giới hạn độ dài, honeypot và chặn thao tác lặp; đây không thay thế chống spam server khi thêm API.
+
+Các CTA R&D/Academy/tuyển dụng/truyền thông mở Contact với chủ đề tương ứng. `position` chỉ được đưa vào email khi khớp slug vị trí đang mở đã công bố; query tự nhập không trở thành thông tin công ty hoặc analytics.
+
+Analytics giữ tắt theo xác nhận của chủ website. Không tải script bên ngoài, không có cookie banner hoặc marketing pixel. Cấu hình mẫu trong `.env.example`; cách bật và sự kiện ở [analytics](docs/ANALYTICS.md). Website không đo “gửi form thành công” vì chỉ soạn email.
 
 Chỉ upload **nội dung dist/** lên hosting. Build có HTML riêng, SEO/JSON-LD, sitemap/robots, CNAME, 404, `.nojekyll` và mẫu `_headers`; không có PDF nội bộ hay source map. Không phục vụ repo hoặc index.html nguồn.
 

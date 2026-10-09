@@ -2,8 +2,13 @@ import { hydrateRoot, createRoot } from "react-dom/client";
 import App from "./App";
 import { getPage, structuredData } from "./content/pages";
 import { company } from "./content/company";
+import { initializeAnalytics } from "./analytics";
 import "@cloudflare/kumo/styles/standalone";
 import "./styles.css";
+// Route styles are present in the initial HTML, including when JS is disabled.
+import "./styles-research.css";
+import "./styles-growth.css";
+import "./styles-media.css";
 const root = document.getElementById("root")!;
 const meta = getPage(window.location.pathname);
 // Keep development and unknown-path fallback metadata accurate as well.
@@ -19,6 +24,17 @@ for (const [selector, attribute, value] of [
   ['meta[property="og:title"]', "content", meta.title],
   ['meta[property="og:description"]', "content", meta.description],
   ['meta[property="og:url"]', "content", company.url + meta.path],
+  ['meta[property="og:type"]', "content", meta.type ?? "website"],
+  [
+    'meta[property="og:image"]',
+    "content",
+    company.url + (meta.image ?? "/assets/og-image.jpg"),
+  ],
+  [
+    'meta[name="twitter:image"]',
+    "content",
+    company.url + (meta.image ?? "/assets/og-image.jpg"),
+  ],
 ] as const)
   document.querySelector(selector)?.setAttribute(attribute, value);
 const schema = document.querySelector('script[type="application/ld+json"]');
@@ -28,3 +44,4 @@ const app = <App path={window.location.pathname} />;
 if (root.querySelector("main") && root.dataset.route === meta.path)
   hydrateRoot(root, app);
 else createRoot(root).render(app);
+initializeAnalytics();

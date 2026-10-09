@@ -2,17 +2,29 @@
 
 ## Cập nhật
 
-`company.ts` là nguồn footer/contact/schema; `services.ts` quản lý title, summary, bài toán, đối tượng, cách tiếp cận, công nghệ, phạm vi và kỳ vọng; `pages.ts` quản lý SEO/sitemap. Nội dung dài còn lại đặt trong component trang tương ứng.
+`company.ts` là nguồn footer/contact/schema; `services.ts` quản lý giải pháp; `research.ts` và `academy.ts` quản lý định hướng; `pages.ts` quản lý SEO/sitemap. Bài viết, việc làm và case study nằm trong ba mảng của `content/website.ts`; kiểu dữ liệu ở `src/content/articles.ts`, `careers.ts` và `projects.ts`.
+
+`npm run prepare:content` kiểm tra và tạo `src/content/published.json`. Trình duyệt chỉ nhập JSON đã lọc; source biên tập và validator không đi vào bundle. File sinh tự động không commit và không chỉnh trực tiếp. `pretypecheck`, `predev` và `prebuild` tự chạy publisher; bản clone mới chạy `npm ci`, `npm run check` như bình thường.
+
+Quy trình: chuẩn bị nội dung và quyền sử dụng, điền bản nháp, chủ nội dung duyệt, đặt `approvedForPublication: true` cùng trạng thái hợp lệ, chạy check/UI rồi push. `main` phát hành tự động. Cờ duyệt kiểm soát website; repo GitHub là public nên không lưu bản nháp mật, tài liệu khách hàng, thông tin cá nhân hoặc credentials trong source.
+
+Ngày publication dùng giờ Việt Nam và cố định cho HTML/hydration. Có thể đặt `VEX_CONTENT_DATE=YYYY-MM-DD` để tái lập kiểm tra. Bài ngày tương lai và việc chưa tới ngày đăng hoặc đã quá hạn không có trang, sitemap, schema hay dữ liệu trong bundle. Cần build/deploy vào ngày đăng và ngay khi đóng/hết hạn để cập nhật HTML static.
 
 Thêm giải pháp với slug chữ thường có gạch ngang, điền toàn bộ kiểu Service. Build tự tạo chi tiết và metadata từ dữ liệu. Kiểm tra link/anchor sau cập nhật.
 
+## Bài viết và tuyển dụng
+
+Hai danh sách hiện trống. Bài công khai cần slug, title, summary, category, tác giả thật, ngày đăng được xác nhận, `status: published`, cờ duyệt và body có cấu trúc. `authorType: Organization` dành cho tác giả tổ chức; mặc định Person. Ngày sửa chỉ thêm khi có chỉnh sửa thật. Body hỗ trợ paragraph, heading h2/h3 có ID, list và image; không nhận raw HTML. Ảnh cần local `/assets/...`, alt và width/height. Mục lục, tìm kiếm/bộ lọc, bài liên quan, chi tiết, Article và sitemap được tạo từ dữ liệu đã duyệt.
+
+Việc làm cần title/department/summary, hình thức và địa điểm thật, công việc, yêu cầu, quyền lợi, hướng dẫn ứng tuyển, ngày đăng/hạn, `status: open` và cờ duyệt. Lương chỉ thêm khi được phê duyệt. Hạn bao gồm hết ngày đó theo giờ Việt Nam; JobPosting có validThrough và chỉ có trên chi tiết đang mở. Publisher kiểm tra ngày/số/khoảng lương. CTA mang slug vị trí sang Contact; chỉ vị trí public đang mở được đưa vào email. Website không nhận/lưu CV và không xác nhận VEX đã nhận hồ sơ.
+
 ## Dự án
 
-`projects.ts` hiện rỗng theo xác nhận của chủ website. “Chưa có dự án được công bố” là trạng thái nội dung thật. Không có case study mẫu trên trang public.
+Mảng projects trong `content/website.ts` hiện rỗng theo xác nhận của chủ website. “Chưa có dự án được công bố” là trạng thái nội dung thật. Không có case study mẫu trên trang public.
 
 Dự án cần: slug/tên, danh mục, trạng thái Concept/Research/Prototype/Pilot/Commercial Product, mô tả, ảnh/alt, bối cảnh, bài toán, giải pháp, công nghệ, vai trò VEX, kết quả có bằng chứng, thách thức và hướng phát triển. Xác nhận quyền dùng ảnh và quyền công bố, kể cả sự đồng ý của khách hàng nếu cần. Chỉ đặt `approvedForPublication: true` sau kiểm tra. Build sẽ tạo danh sách, chi tiết và sitemap; mục chưa duyệt không có URL public.
 
-Thêm ảnh được duyệt vào allowlist `scripts/prepare-public.mjs`, tối ưu file và khai báo kích thước/alt. Không đưa nguồn chứa dữ liệu nhạy cảm vào tài nguyên public.
+Ảnh cần `imageWidth`/`imageHeight`. Publisher chỉ đưa ảnh của nội dung đã công bố vào allowlist build tự động; ảnh bản nháp không được copy. Chỉ chấp nhận định dạng ảnh, chặn traversal/PDF/symlink ngoài assets và SVG chứa nội dung chủ động/tham chiếu ngoài. Thư viện hiện có bốn tệp logo SVG/PNG màu-trắng tải thật; ảnh/video dự án chưa có. Không public PDF/AI/font nguồn hoặc tài nguyên nhạy cảm.
 
 ## Thông tin còn cần
 
@@ -23,11 +35,11 @@ Thêm ảnh được duyệt vào allowlist `scripts/prepare-public.mjs`, tối 
 - Tin tức/tác giả/ngày phát hành, vị trí tuyển dụng còn mở và nghiên cứu được phép mô tả.
 - Người phụ trách nội dung và rà soát privacy khi thay đổi xử lý dữ liệu.
 
-## Các giai đoạn sau
+## Trạng thái các phase
 
-Phase 2: Insights/News, Careers, R&D chi tiết, thư viện media, case study đã duyệt, analytics có mục đích rõ và tiếng Anh. Không tạo bài mẫu, JobPosting hoặc Article schema khi thiếu dữ liệu thật.
+Phase 2 có R&D chi tiết, danh mục và template Insights/Careers, thư viện logo, case study template cùng publisher và cấu hình analytics tắt theo xác nhận. Nội dung public chưa được duyệt vẫn trống; không tạo bài mẫu, Article hoặc JobPosting trên danh mục trống. Tiếng Anh chưa bật; cần nội dung được biên tập và xác nhận nhu cầu.
 
-Phase 3: Academy khi kế hoạch đào tạo được thông qua; microsite khi có sản phẩm; CMS khi quy trình biên tập cần; CRM/API/portal theo hoạt động thực tế. Phiên bản hiện tại không có tuyển sinh/khóa học đang mở.
+Phase 3 có trang định hướng Academy và pipeline nội dung bằng Git; chưa có tuyển sinh/khóa học. Microsite/portal cần sản phẩm thực; CMS nâng cao cần quy trình biên tập; CRM/API cần kênh tiếp nhận, hạ tầng và cấu hình thật. Không dựng hệ thống quản trị hoặc portal giả. Xem [analytics](ANALYTICS.md) và [vận hành](OPERATIONS.md).
 
 ## Khi bổ sung API form
 

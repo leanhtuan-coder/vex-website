@@ -9,7 +9,12 @@ Thumbs.db
 node_modules/
 dist/
 .prerender/
+.content-build/
+src/content/published.json
 playwright-report/
 test-results/
 public/
 artifacts/
+.env
+.env.*
+!.env.example

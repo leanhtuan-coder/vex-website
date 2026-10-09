@@ -34,6 +34,7 @@ export function CTA({
       variant={secondary || onDark ? "secondary" : "primary"}
       size={size}
       className={`cta${onDark ? " cta-on-dark" : ""}`}
+      data-vex-event="cta_click"
       style={secondary || onDark ? undefined : primaryButtonStyle}
     >
       {children}

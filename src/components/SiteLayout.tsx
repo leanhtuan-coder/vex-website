@@ -1,10 +1,16 @@
 import { useState } from "react";
 import { Button } from "@cloudflare/kumo/components/button";
 import { Dialog } from "@cloudflare/kumo/components/dialog";
+import { DropdownMenu } from "@cloudflare/kumo/components/dropdown";
 import { Link } from "@cloudflare/kumo/components/link";
 import { Text } from "@cloudflare/kumo/components/text";
-import { ListIcon, XIcon, ArrowUpRightIcon } from "@phosphor-icons/react";
-import { company, navigation } from "../content/company";
+import {
+  ListIcon,
+  XIcon,
+  ArrowUpRightIcon,
+  CaretDownIcon,
+} from "@phosphor-icons/react";
+import { company, navigation, exploreNavigation } from "../content/company";
 import { CTA, Logo } from "./shared";
 function active(href: string, path: string) {
   return href === "/" ? path === "/" : path.startsWith(href);
@@ -26,6 +32,30 @@ export function SiteHeader({ path }: { path: string }) {
               {item.label}
             </Link>
           ))}
+          <DropdownMenu>
+            <DropdownMenu.Trigger
+              render={
+                <Button
+                  variant="ghost"
+                  className="explore-trigger"
+                  aria-label="Khám phá VEX"
+                >
+                  Khám phá <CaretDownIcon size={14} />
+                </Button>
+              }
+            />
+            <DropdownMenu.Content className="explore-menu" sideOffset={16}>
+              {exploreNavigation.map((item) => (
+                <DropdownMenu.LinkItem
+                  key={item.href}
+                  href={item.href}
+                  aria-current={active(item.href, path) ? "page" : undefined}
+                >
+                  {item.label}
+                </DropdownMenu.LinkItem>
+              ))}
+            </DropdownMenu.Content>
+          </DropdownMenu>
         </nav>
         <div className="header-actions">
           <CTA>Liên hệ hợp tác</CTA>
@@ -61,7 +91,7 @@ export function SiteHeader({ path }: { path: string }) {
                 className="mobile-navigation"
                 aria-label="Điều hướng di động"
               >
-                {navigation.map((item) => (
+                {[...navigation, ...exploreNavigation].map((item) => (
                   <Link
                     variant="plain"
                     key={item.href}
@@ -97,7 +127,7 @@ export function Footer() {
             <Text as="h2" variant="heading">
               Khám phá
             </Text>
-            {navigation.slice(1).map((item) => (
+            {[...navigation.slice(1), ...exploreNavigation].map((item) => (
               <Link variant="plain" key={item.href} href={item.href}>
                 {item.label}
               </Link>

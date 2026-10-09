@@ -1,0 +1,130 @@
+.growth-empty {
+  min-height: 280px;
+  border: 1px solid var(--vex-cyan-line);
+  border-radius: var(--vex-radius);
+  background: var(--vex-cyan-soft);
+  padding: 40px 24px;
+}
+.growth-empty p {
+  max-width: 640px;
+  font-size: 14px;
+  line-height: 1.9;
+}
+.growth-section-title {
+  margin-bottom: 32px;
+}
+.growth-section-title h2 {
+  font-size: 28px;
+  line-height: 1.5;
+}
+.growth-filters {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(200px, 0.6fr);
+  gap: 20px;
+  max-width: 820px;
+}
+.growth-filters > div,
+.growth-select {
+  min-width: 0;
+  width: 100%;
+}
+.growth-result-count {
+  margin-block: 24px;
+}
+.growth-card-grid {
+  margin-top: 0;
+}
+.growth-card-image {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: var(--vex-radius);
+}
+.growth-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 16px;
+  font-size: 12px;
+  color: var(--vex-muted);
+  line-height: 1.8;
+}
+.growth-byline {
+  display: grid;
+  gap: 12px;
+}
+.growth-body > h2 {
+  margin-top: 40px;
+}
+.growth-body > h2,
+.growth-body > h3 {
+  scroll-margin-top: 110px;
+}
+.growth-body > p {
+  margin-block: 20px;
+}
+.growth-figure {
+  margin: 0 0 32px;
+}
+.growth-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--vex-radius);
+}
+.growth-figure figcaption {
+  margin-top: 12px;
+  font-size: 12px;
+  line-height: 1.8;
+  color: var(--vex-muted);
+}
+.growth-related-links {
+  margin-top: 40px;
+  padding-top: 32px;
+  border-top: 1px solid var(--vex-gray);
+}
+.growth-job-facts {
+  margin: 0;
+  display: grid;
+  gap: 8px;
+  line-height: 1.8;
+}
+.growth-job-facts dt {
+  color: var(--vex-muted);
+}
+.growth-job-facts dd {
+  margin: 0 0 12px;
+  overflow-wrap: anywhere;
+}
+.growth-application {
+  padding: 28px;
+  border: 1px solid var(--vex-cyan-line);
+  border-radius: var(--vex-radius);
+  background: var(--vex-cyan-soft);
+}
+.growth-application > a {
+  margin-top: 24px;
+}
+@media (max-width: 760px) {
+  .growth-filters {
+    grid-template-columns: 1fr;
+  }
+  .growth-filters input {
+    font-size: 16px;
+  }
+  .growth-filters input,
+  .growth-select {
+    min-height: 44px;
+  }
+  .growth-empty {
+    padding: 32px 20px;
+    min-height: 300px;
+  }
+  .growth-section-title h2 {
+    font-size: 26px;
+  }
+  .growth-application {
+    padding: 24px;
+  }
+}

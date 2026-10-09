@@ -1,5 +1,15 @@
 # Báo cáo QA — 09/10/2026
 
+## Mở rộng Phase 2 và định hướng Academy
+
+Đã bổ sung Research, Insights, Careers, Media và Academy, nâng tổng số trang public lên 17. `npm run check` đạt; `npm run verify:ui` đạt 187 lượt layout (17 route × 11 chiều rộng), không có violation axe hoặc lỗi Console/JavaScript/hydration được ghi nhận. Menu Khám phá dùng Kumo DropdownMenu, kiểm tra Escape và trả focus; menu mobile có các trang mới. HTML không JS vẫn có nội dung và CSS đầy đủ.
+
+Kiểm tra topic research/academy/careers/media, query không hợp lệ và route lồng sai đạt. Form tiếp tục chỉ soạn email; stub analytics không nhận sự kiện và không có request analytics khi tracking tắt. Không gửi hoặc nhận email thật. Position chỉ nhận slug của việc làm public đang mở; hiện chưa có việc làm sản xuất để kiểm tra ngữ cảnh vị trí trên domain thật.
+
+Thư viện logo có bốn lượt tải SVG/PNG màu-trắng đúng tên và bytes. R&D/Academy đã rà trực quan tại 1440, 390 và 320px; Media kiểm tra 11 chiều rộng. Publisher được kiểm tra bằng fixture trong bộ nhớ: draft/chưa duyệt/ngày tương lai/việc hết hạn và trường ngoài whitelist không đi vào bundle; ngày, slug, HTML/URL không an toàn, ảnh thiếu thông tin và SVG chủ động bị chặn. Fixture không lưu hoặc xuất bản lên website.
+
+Nội dung bài viết, việc làm và dự án vẫn trống; không sinh Article/JobPosting hoặc thành tích mẫu. Academy ghi rõ đang chuẩn bị, chưa tuyển sinh. Analytics chưa có cấu hình provider thật và đang tắt theo xác nhận của chủ website. Dist không chứa PDF, source map, OTF, source TypeScript hoặc file env. `npm audit --audit-level=high` báo 0 vulnerability.
+
 ## Cập nhật CTA và favicon
 
 Đã chạy lại check (type/lint/build) và verify:ui sau thay đổi CTA/favicon/footer: đạt 132 lượt layout và quét axe, không có lỗi Console/hydration. Rà trực quan và đo normal/hover/focus ở 1440, 390 và 320px: chữ/icon không bị cắt, không tràn ngang.
@@ -11,17 +21,17 @@ Favicon dùng toàn bộ logo VEX và motif pixel, giữ nguyên tỷ lệ; có 
 ## Các lệnh đã chạy
 
 - `npm run check`: TypeScript strict, ESLint và production build đạt. Kiểm tra thêm trên Node 24 đạt.
-- `npm run verify:ui`: đạt 132 lượt layout (12 route × 11 chiều rộng), HTML không JS, ảnh, link/anchor, SEO metadata, sitemap, 404, menu bàn phím/focus trap/Escape và form.
+- `npm run verify:ui`: đạt 187 lượt layout (17 route × 11 chiều rộng), HTML không JS, ảnh, link/anchor, SEO metadata, sitemap, 404, menu bàn phím/focus trap/Escape, topic và form.
 - Axe WCAG 2 A/AA, 2.1 AA, 2.2 AA: không có violation trong các trang đã quét và menu mobile. Không có lỗi Console/JavaScript/hydration được ghi nhận.
 - `npm audit` và `npm audit --omit=dev`: 0 vulnerability tại thời điểm kiểm tra. Công cụ Lighthouse đã cập nhật 13.5.0; không dùng phiên bản có cảnh báo dependency.
 - Rà soát dist: không có PDF nội bộ, source map, OTF nguồn hoặc cấu hình dev; không phát hiện mẫu private key/access token trong source và dist.
 - Kiểm tra ảnh chụp desktop/mobile: logo không còn chữ TECHNOLOGY/SOLUTIONS bên cạnh; heading R&D và CTA trên nền cyan đọc rõ; form/điều hướng không tràn ngang.
 
-Width đã kiểm tra: 320, 360, 375, 390, 430, 768, 1024, 1280, 1440, 1920, 2560px. Trang public: Home, About, Solutions, Projects, Contact, Privacy, Terms và 5 chi tiết giải pháp.
+Width đã kiểm tra: 320, 360, 375, 390, 430, 768, 1024, 1280, 1440, 1920, 2560px. Trang public: Home, About, Solutions, Projects, Contact, Privacy, Terms, Research, Insights, Careers, Media, Academy và 5 chi tiết giải pháp.
 
 Form checks không gửi email thật: đồng ý trước khi soạn; kiểm tra dữ liệu bắt buộc/khoảng trắng; Select bằng bàn phím; topic vào FormData; thông báo yêu cầu mở email và người dùng phải tự gửi; không ghi localStorage. Security headers được mô phỏng từ dist/\_headers trong lượt UI; host preview không tự áp dụng file.
 
-Build có thông báo Vite rằng ContactPage được import cả eager/lazy ở **entry SSR**. Đây là chủ đích để HTML tĩnh đầy đủ; bundle trình duyệt vẫn tạo chunk ContactPage riêng (~107KB, gzip ~36KB). Không phải lỗi build hoặc tải toàn bộ form trên Home.
+Build có thông báo Vite rằng các trang bổ sung được import cả eager/lazy ở **entry SSR**. Đây là chủ đích để HTML tĩnh đầy đủ; bundle trình duyệt vẫn có chunk riêng cho Contact, Research/Academy, ContentGrowth và Media. Main JS khoảng 536KB (gzip 170KB) nên Vite cảnh báo dung lượng; kết quả Lighthouse hiện vẫn đạt mục tiêu tham khảo. Không tăng ngưỡng để ẩn cảnh báo.
 
 ## Lighthouse đo thật
 
@@ -29,10 +39,10 @@ Lighthouse 13.5.0, Chromium của Playwright, production dist tại localhost:41
 
 | Lượt đo          | Performance | Accessibility | Best Practices | SEO |  LCP |   CLS |
 | ---------------- | ----------: | ------------: | -------------: | --: | ---: | ----: |
-| Home mobile      |          96 |           100 |            100 | 100 | 2,4s | 0,002 |
+| Home mobile      |          95 |           100 |            100 | 100 | 2,4s | 0,002 |
 | Home desktop     |         100 |           100 |            100 | 100 | 0,5s | 0,002 |
-| Contact mobile   |          97 |           100 |            100 | 100 | 2,3s | 0,001 |
-| Solutions mobile |          97 |           100 |            100 | 100 | 2,3s | 0,016 |
+| Contact mobile   |          96 |           100 |            100 | 100 | 2,3s | 0,001 |
+| Solutions mobile |          96 |           100 |            100 | 100 | 2,3s | 0,016 |
 
 Lượt cuối TBT cả bốn lượt đo 0ms. Báo cáo JSON/HTML đầy đủ và ảnh ở artifacts; không đưa chúng vào tài nguyên website. Điểm có thể dao động theo máy/mạng.
 
@@ -42,4 +52,4 @@ Lượt cuối TBT cả bốn lượt đo 0ms. Báo cáo JSON/HTML đầy đủ 
 
 Lighthouse vẫn gợi ý thu nhỏ PNG logo và giảm JS/CSS chưa dùng của thư viện; các điểm trên đã đạt mục tiêu tham khảo trong brief. Chưa có dữ liệu thực để xác nhận LCP p75 hoặc INP. Axe/Lighthouse không thay thế kiểm tra screen reader trên thiết bị thật hay xác nhận tuân thủ WCAG toàn bộ.
 
-Các kết quả layout/axe/Lighthouse ở trên đo trên preview; mỗi lần phát hành cần kiểm tra lại URL, HTTPS, header, HTTP 404 và mailto trên domain thật. Workflow Pages trên `main` lưu QA và trạng thái deploy trong Actions. \_headers chỉ là mẫu, Pages không tự đọc. Form chưa có API theo xác nhận của chủ website. Không kiểm tra gửi/nhận email thật. Dự án và nội dung Phase 2/3 cần dữ liệu được duyệt theo CONTENT.md.
+Các kết quả layout/axe/Lighthouse ở trên đo trên preview; mỗi lần phát hành cần kiểm tra lại URL, HTTPS, header, HTTP 404 và mailto trên domain thật. Workflow Pages trên `main` lưu QA và trạng thái deploy trong Actions. \_headers chỉ là mẫu, Pages không tự đọc. Form chưa có API theo xác nhận của chủ website. Không kiểm tra gửi/nhận email thật. Bài viết, việc làm, dự án, tiếng Anh và những phần Phase 3 còn lại cần dữ liệu/hạ tầng thật theo CONTENT.md; không tuyên bố đã hoàn thành CMS/CRM/portal hoặc tích hợp analytics production.

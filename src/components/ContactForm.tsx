@@ -1,4 +1,4 @@
-import { useRef, useState, type FormEvent } from "react";
+import { useRef, useState, useSyncExternalStore, type FormEvent } from "react";
 import { Button } from "@cloudflare/kumo/components/button";
 import { Input, InputArea } from "@cloudflare/kumo/components/input";
 import { Select } from "@cloudflare/kumo/components/select";
@@ -10,15 +10,26 @@ import { LayerCard } from "@cloudflare/kumo/components/layer-card";
 import { ArrowUpRightIcon, EnvelopeIcon } from "@phosphor-icons/react";
 import { company } from "../content/company";
 import { primaryButtonStyle } from "./button-theme";
-const topics = [
-  "Tư vấn giải pháp",
-  "Hợp tác kinh doanh",
-  "Hợp tác công nghệ",
-  "Tuyển dụng",
-  "Truyền thông",
-  "Khác",
-];
+import { contactTopics, topicFromSearch } from "../content/contact-topics";
+import { trackWebsiteEvent } from "../analytics";
+import { publicJobs } from "../content/careers";
+const topics = Object.values(contactTopics);
+function subscribeToLocation(listener: () => void) {
+  window.addEventListener("popstate", listener);
+  return () => window.removeEventListener("popstate", listener);
+}
 export default function ContactForm() {
+  const initialTopic = useSyncExternalStore(
+    subscribeToLocation,
+    () => topicFromSearch(window.location.search),
+    () => contactTopics.solution,
+  );
+  const position = useSyncExternalStore(
+    subscribeToLocation,
+    () => new URLSearchParams(window.location.search).get("position") ?? "",
+    () => "",
+  );
+  const selectedJob = publicJobs.find((job) => job.slug === position);
   const [state, setState] = useState<"idle" | "opening" | "prepared" | "error">(
     "idle",
   );
@@ -46,8 +57,8 @@ export default function ContactForm() {
       return;
     }
     if (Date.now() - lastSubmit.current < 3000) return;
-    const body = `Họ và tên: ${name}\nDoanh nghiệp / tổ chức: ${String(data.get("organization") ?? "").trim()}\nEmail: ${data.get("email")}\nĐiện thoại: ${data.get("phone")}\nChủ đề: ${data.get("topic")}\n\n${message}`;
-    const href = `mailto:${company.email}?subject=${encodeURIComponent("Liên hệ VEX — " + data.get("topic"))}&body=${encodeURIComponent(body)}`;
+    const body = `Họ và tên: ${name}\nDoanh nghiệp / tổ chức: ${String(data.get("organization") ?? "").trim()}\nEmail: ${data.get("email")}\nĐiện thoại: ${data.get("phone")}\nChủ đề: ${data.get("topic")}\n${selectedJob ? `Vị trí: ${selectedJob.title}\n` : ""}\n${message}`;
+    const href = `mailto:${company.email}?subject=${encodeURIComponent("Liên hệ VEX — " + data.get("topic") + (selectedJob ? " — " + selectedJob.title : ""))}&body=${encodeURIComponent(body)}`;
     if (href.length > 7500) {
       setError(
         "Nội dung quá dài để soạn email qua trình duyệt. Hãy rút gọn hoặc gửi trực tiếp đến " +
@@ -62,6 +73,7 @@ export default function ContactForm() {
     setError("");
     try {
       window.location.href = href;
+      trackWebsiteEvent("email_prepared");
       setState("prepared");
     } catch {
       setError(
@@ -83,6 +95,12 @@ export default function ContactForm() {
         chỉ dùng để soạn email; bạn kiểm tra và nhấn gửi trong ứng dụng email.
       </Text>
       <form onSubmit={submit}>
+        {selectedJob && (
+          <Text variant="secondary" size="sm">
+            Vị trí đang trao đổi: {selectedJob.title}. Biểu mẫu chỉ soạn email,
+            chưa nhận hồ sơ tự động.
+          </Text>
+        )}
         <div className="form-grid">
           <Input
             label="Họ và tên *"
@@ -126,9 +144,10 @@ export default function ContactForm() {
           />
         </div>
         <Select
+          key={initialTopic}
           label="Chủ đề liên hệ"
           name="topic"
-          defaultValue={topics[0]}
+          defaultValue={initialTopic}
           items={topics.map((topic) => ({ value: topic, label: topic }))}
           className="service-select"
         />

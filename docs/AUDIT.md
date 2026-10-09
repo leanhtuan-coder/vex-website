@@ -27,3 +27,7 @@ Không thêm framework SSR, database hoặc CMS khi chưa cần. Content công t
 Không đưa PDF đăng ký, số giấy tờ, ngày sinh hay địa chỉ cá nhân lên website. Bỏ postcode và hồ sơ founder chưa xác minh khỏi JSON-LD. Không biến slogan/tầm nhìn/sứ mệnh bản nháp thành tuyên bố chính thức.
 
 Phase 1 đã triển khai: brand system, header/footer, Home/About/Solutions/Projects/Contact, 5 chi tiết giải pháp, privacy/terms/404, responsive, SEO, QA và tài liệu. Phase 2/3 xem CONTENT.md. Không có menu trỏ tới trang chưa tồn tại. Production dùng workflow Pages trên `main`; trạng thái từng lần phát hành xem Actions/Deployments.
+
+Đợt mở rộng Phase 2/3 thêm Research, Insights, Careers, Media và Academy, đưa số trang static hiện có lên 17. Mẫu bài viết/việc làm chỉ xuất bản khi có dữ liệu đã duyệt. Pipeline biên tập lọc trước bundle, kiểm tra nội dung và ảnh; ngày publication cố định giữa SSR/hydration. Các trang mới lazy-load JS và có CSS ngay từ HTML; menu desktop dùng Kumo DropdownMenu, menu mobile vẫn Kumo Dialog. Không dựng bài viết/việc/case giả hoặc học phí/tuyển sinh/portal không có hoạt động thật.
+
+Analytics được chủ website xác nhận giữ tắt. Adapter/sự kiện đã chuẩn bị, chưa có tài khoản hay cấu hình provider. API tiếp nhận/CRM/CMS nâng cao, microsite/portal và tiếng Anh chưa bật; phần cần dữ liệu và hạ tầng xem CONTENT.md.

@@ -11,6 +11,7 @@ import {
 import { services, technologies } from "../content/services";
 import { process } from "../content/company";
 import { publicProjects } from "../content/projects";
+import { publicArticles } from "../content/articles";
 import {
   CTA,
   Heading,
@@ -237,8 +238,8 @@ export default function Home() {
               năng ứng dụng và cải tiến theo bài toán cụ thể là định hướng phát
               triển của VEX.
             </Text>
-            <CTA onDark href="/contact/">
-              Trao đổi hợp tác nghiên cứu
+            <CTA onDark href="/research/">
+              Khám phá hướng nghiên cứu
             </CTA>
           </div>
         </div>
@@ -258,8 +259,32 @@ export default function Home() {
           <Text variant="secondary" size="sm">
             Đang trong giai đoạn định hướng và chuẩn bị. Chưa mở tuyển sinh.
           </Text>
+          <Link href="/academy/" variant="plain" className="text-link">
+            Tìm hiểu định hướng VEX Academy <ArrowUpRightIcon size={18} />
+          </Link>
         </div>
       </section>
+      {publicArticles.length > 0 && (
+        <section className="section container">
+          <Heading label="TIN TỨC & GÓC NHÌN" title="Chia sẻ từ VEX.">
+            Bài viết và hoạt động được VEX công bố.
+          </Heading>
+          <div className="card-grid">
+            {publicArticles.slice(0, 3).map((article) => (
+              <ContentCard
+                key={article.slug}
+                title={article.title}
+                description={article.summary}
+                href={`/insights/${article.slug}/`}
+                linkLabel="Đọc bài viết"
+              />
+            ))}
+          </div>
+          <Link href="/insights/" variant="plain" className="text-link">
+            Xem tất cả bài viết <ArrowUpRightIcon size={18} />
+          </Link>
+        </section>
+      )}
       <CTASection />
     </>
   );

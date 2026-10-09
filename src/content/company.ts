@@ -22,6 +22,13 @@ export const navigation = [
   { href: "/projects/", label: "Dự án & Sản phẩm" },
   { href: "/contact/", label: "Liên hệ" },
 ];
+export const exploreNavigation = [
+  { href: "/research/", label: "Nghiên cứu & Phát triển" },
+  { href: "/insights/", label: "Tin tức & Góc nhìn" },
+  { href: "/careers/", label: "Tuyển dụng" },
+  { href: "/media/", label: "Tài nguyên thương hiệu" },
+  { href: "/academy/", label: "VEX Academy — Định hướng" },
+];
 export const process = [
   {
     title: "Phân tích nhu cầu",

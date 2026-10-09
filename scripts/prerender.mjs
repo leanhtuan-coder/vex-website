@@ -17,12 +17,24 @@ await build({
   },
   logLevel: "silent",
 });
-const { pages, notFound, structuredData, analyticsOrigin } = await import(
-  "../.prerender/build-data.js"
-);
+const { pages, notFound, structuredData, analyticsOrigin } =
+  await import("../.prerender/build-data.js");
 const template = await readFile("dist/index.html", "utf8");
 const escape = (s) =>
   s.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll('"', "&quot;");
+function updateMeta(html, attribute, key, value) {
+  // The source template is formatted across lines; whitespace must not prevent
+  // route metadata from reaching crawlers that do not execute JavaScript.
+  const pattern = new RegExp(
+    `<meta\\s+${attribute}="${key}"\\s+content="[^"]*"[^>]*>`,
+  );
+  if (!pattern.test(html))
+    throw new Error(`Missing metadata template: ${attribute}=${key}`);
+  return html.replace(
+    pattern,
+    `<meta ${attribute}="${key}" content="${escape(value)}">`,
+  );
+}
 async function render(path) {
   // The static entry eagerly imports every page; no unresolved lazy content is streamed.
   return renderToString(createElement(App, { path }));
@@ -45,10 +57,7 @@ for (const meta of [...pages, notFound]) {
       "https://vex.biz.vn" + (meta.image ?? "/assets/og-image.jpg"),
     ],
   ])
-    html = html.replace(
-      new RegExp(`<meta name="${name}" content="[^"]*"[^>]*>`),
-      `<meta name="${name}" content="${escape(value)}">`,
-    );
+    html = updateMeta(html, "name", name, value);
   for (const [property, value] of [
     ["og:title", meta.title],
     ["og:description", meta.description],
@@ -56,10 +65,7 @@ for (const meta of [...pages, notFound]) {
     ["og:type", meta.type ?? "website"],
     ["og:image", "https://vex.biz.vn" + (meta.image ?? "/assets/og-image.jpg")],
   ])
-    html = html.replace(
-      new RegExp(`<meta property="${property}" content="[^"]*"[^>]*>`),
-      `<meta property="${property}" content="${escape(value)}">`,
-    );
+    html = updateMeta(html, "property", property, value);
   if (meta.publishedAt)
     html = html.replace(
       "</head>",

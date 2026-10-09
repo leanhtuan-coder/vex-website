@@ -66,6 +66,7 @@ page.on("request", (request) => {
 });
 const inaccessible = [];
 const linkTargets = new Set();
+const routeMetadata = new Map();
 page.on("pageerror", (error) => errors.push(error.message));
 page.on("console", (message) => {
   if (
@@ -137,6 +138,18 @@ for (const path of routes) {
     await page.locator("link[rel=canonical]").getAttribute("href"),
     "https://vex.biz.vn" + path,
   );
+  routeMetadata.set(path, {
+    title: await page.title(),
+    description: await page
+      .locator("meta[name=description]")
+      .getAttribute("content"),
+    image: await page
+      .locator('meta[property="og:image"]')
+      .getAttribute("content"),
+    type: await page
+      .locator('meta[property="og:type"]')
+      .getAttribute("content"),
+  });
   const response = await page.request.get(origin + path);
   const source = await response.text();
   assert.ok(
@@ -313,6 +326,37 @@ for (const path of routes) {
   assert.equal(await staticPage.locator("h1").count(), 1);
   await expect(staticPage.locator("h1")).toBeVisible();
   await expect(staticPage.getByText("Đang tải nội dung…")).toHaveCount(0);
+  const metadata = routeMetadata.get(path);
+  assert.equal(
+    await staticPage.title(),
+    metadata.title,
+    `${path}: static title`,
+  );
+  for (const selector of [
+    "meta[name=description]",
+    'meta[property="og:description"]',
+    'meta[name="twitter:description"]',
+  ])
+    await expect(staticPage.locator(selector)).toHaveAttribute(
+      "content",
+      metadata.description,
+    );
+  for (const selector of [
+    'meta[property="og:image"]',
+    'meta[name="twitter:image"]',
+  ])
+    await expect(staticPage.locator(selector)).toHaveAttribute(
+      "content",
+      metadata.image,
+    );
+  await expect(staticPage.locator('meta[property="og:type"]')).toHaveAttribute(
+    "content",
+    metadata.type,
+  );
+  await expect(staticPage.locator('link[rel="canonical"]')).toHaveAttribute(
+    "href",
+    "https://vex.biz.vn" + path,
+  );
 }
 const build404 = await readFile("dist/404.html", "utf8");
 assert.ok(build404.includes("noindex, follow"));

@@ -4,6 +4,8 @@
 
 Đã bổ sung Research, Insights, Careers, Media và Academy, nâng tổng số trang public lên 17. `npm run check` đạt; `npm run verify:ui` đạt 187 lượt layout (17 route × 11 chiều rộng), không có violation axe hoặc lỗi Console/JavaScript/hydration được ghi nhận. Menu Khám phá dùng Kumo DropdownMenu, kiểm tra Escape và trả focus; menu mobile có các trang mới. HTML không JS vẫn có nội dung và CSS đầy đủ.
 
+Kiểm tra phát hành phát hiện bộ thay metadata chỉ khớp thẻ một dòng. Đã sửa để nhận template nhiều dòng và fail build nếu thiếu thẻ; kiểm tra không JS đối chiếu title, description/OG/Twitter, ảnh, type và canonical với metadata của trang sau hydration trên toàn bộ route. Bản sửa chỉ thay HTML head và bước QA, giữ nguyên bundle giao diện đã kiểm tra.
+
 Kiểm tra topic research/academy/careers/media, query không hợp lệ và route lồng sai đạt. Form tiếp tục chỉ soạn email; stub analytics không nhận sự kiện và không có request analytics khi tracking tắt. Không gửi hoặc nhận email thật. Position chỉ nhận slug của việc làm public đang mở; hiện chưa có việc làm sản xuất để kiểm tra ngữ cảnh vị trí trên domain thật.
 
 Thư viện logo có bốn lượt tải SVG/PNG màu-trắng đúng tên và bytes. R&D/Academy đã rà trực quan tại 1440, 390 và 320px; Media kiểm tra 11 chiều rộng. Publisher được kiểm tra bằng fixture trong bộ nhớ: draft/chưa duyệt/ngày tương lai/việc hết hạn và trường ngoài whitelist không đi vào bundle; ngày, slug, HTML/URL không an toàn, ảnh thiếu thông tin và SVG chủ động bị chặn. Fixture không lưu hoặc xuất bản lên website.

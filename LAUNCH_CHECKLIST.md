@@ -1,6 +1,6 @@
 # Checklist phát hành VEX
 
-Cập nhật 09/10/2026. Bản ghép corporate enhancement đã đạt kiểm tra local và sẵn sàng phát hành. Phần baseline được giữ để phân biệt bằng chứng trước/sau enhancement; Git, CI, deploy và kiểm tra domain của lần phát hành mới vẫn chờ xác nhận.
+Cập nhật 09/10/2026. Corporate enhancement của source commit `e68b93d` đã đạt kiểm tra local, CI, Pages và kiểm tra production trên https://vex.biz.vn. Phần baseline được giữ để phân biệt bằng chứng trước/sau enhancement. Các tài liệu ghi kết quả phát hành được cập nhật trong commit riêng, không thay source nội dung/giao diện.
 
 ## Baseline đã kiểm tra
 
@@ -60,15 +60,17 @@ Nếu sau này quyết định đổi sang API: xác nhận endpoint, phản h�
 
 ## Git, triển khai và kiểm tra domain
 
-- [ ] Review diff cuối, xác nhận không thay dữ liệu pháp lý/quyền công bố ngoài phạm vi đã duyệt.
-- [ ] Commit/push và CI của commit cuối đạt.
-- [ ] Workflow Pages trên `main` deploy đúng artifact `dist/` và báo thành công.
-- [ ] Kiểm tra trên domain thật: URL public trả 200 và đủ nội dung mới; URL không tồn tại trả 404/noindex.
-- [ ] Kiểm tra navigation, FAQ, topic liên hệ, clipboard và download trên bản đã phát hành.
-- [ ] Kiểm tra canonical/OG/sitemap/favicon full logo và phản hồi CSS/JS/ảnh/font.
-- [ ] Ghi HTTPS, redirect và response headers thực tế của lần phát hành. Không coi `_headers` là đã áp dụng trên GitHub Pages.
-- [ ] Ghi commit/deploy URL và kết quả sau phát hành trong tài liệu QA; giữ commit/artifact trước để rollback.
+- [x] Review diff cuối, xác nhận không thay dữ liệu pháp lý/quyền công bố ngoài phạm vi đã duyệt.
+- [x] Commit/push và CI của commit cuối đạt.
+- [x] Workflow Pages trên `main` deploy đúng artifact `dist/` và báo thành công.
+- [x] Kiểm tra trên domain thật: URL public trả 200 và đủ nội dung mới; URL không tồn tại trả 404/noindex.
+- [x] Kiểm tra navigation, FAQ, topic liên hệ, clipboard và download trên bản đã phát hành.
+- [x] Kiểm tra canonical/OG/sitemap/favicon full logo và phản hồi CSS/JS/ảnh/font.
+- [x] Ghi HTTPS, redirect và response headers thực tế của lần phát hành. Không coi `_headers` là đã áp dụng trên GitHub Pages.
+- [x] Ghi source commit, workflow/deploy URL và kết quả sau phát hành trong tài liệu QA; giữ lịch sử Git/Actions để truy vết và rollback.
 
-HTTPS đã hoạt động ở lần kiểm tra production trước, trong khi HTTP vẫn có thể trả 200 và `enforce_https` chưa bật. Đợt enhancement giữ nguyên DNS, chứng chỉ và cấu hình SSL/redirect theo phạm vi đã thống nhất. Việc còn chờ kiểm tra bản phát hành mới không phải đề nghị tự đổi cấu hình hosting.
+Source release: [e68b93d](https://github.com/leanhtuan-coder/vex-website/commit/e68b93db5bc041accb2a48c67565c19c14e72cc3). [CI 37926298722](https://github.com/leanhtuan-coder/vex-website/actions/runs/37926298722) và [Publish Pages 37926298682](https://github.com/leanhtuan-coder/vex-website/actions/runs/37926298682) đều success. Production xác nhận 17 route public/metadata/sitemap, bốn URL lỗi 404/noindex, bảy file logo và 22 asset khớp dist; browser kiểm tra Home/About/Solutions/Media/Contact tại 390/1440px, FAQ/nhu cầu/clipboard và bốn download đạt. Không submit form hay gửi email thật. Bằng chứng chi tiết ở [docs/QA.md](docs/QA.md).
+
+HTTPS hợp lệ, `www` trả 301 về apex; HTTP vẫn trả 200. Pages API xác nhận CNAME `vex.biz.vn`, status `built`, `https_enforced: false`. Response có `Cache-Control: max-age=600`; HSTS, CSP, X-Content-Type-Options, X-Frame-Options và Referrer-Policy không hiện diện. `_headers` không được GitHub Pages tự áp dụng. Giữ nguyên DNS, chứng chỉ và cấu hình hosting theo phạm vi đã thống nhất.
 
 Nội dung NOT_AVAILABLE có thể tiếp tục chưa công bố mà website vẫn phát hành trung thực. Cần chặn phát hành nếu có dữ liệu giả, file/link giả, báo tiếp nhận sai, mất nội dung đã duyệt hoặc lỗi kỹ thuật thực tế.

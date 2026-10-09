@@ -29,6 +29,20 @@ Lighthouse 13.5.0 đo trên production dist cuối tại localhost:4173, Node 24
 
 Ảnh SVG thay PNG giảm tải logo, nhưng phần nội dung và Accordion mới làm bundle lớn hơn baseline. Lighthouse vẫn gợi ý giảm JS không dùng và chuỗi request chặn render. Không tuyên bố điểm lab hoặc mọi chỉ số đều tăng so với baseline; kết quả đủ để đánh giá chi phí của lần bổ sung này và ưu tiên tối ưu bundle tiếp theo.
 
+## Production của corporate enhancement
+
+Source release [e68b93d](https://github.com/leanhtuan-coder/vex-website/commit/e68b93db5bc041accb2a48c67565c19c14e72cc3) đã push `main`. [CI 37926298722](https://github.com/leanhtuan-coder/vex-website/actions/runs/37926298722) và [Publish Pages 37926298682](https://github.com/leanhtuan-coder/vex-website/actions/runs/37926298682) đều success. Kết quả sau phát hành ngày 09/10/2026 kiểm tra trực tiếp [vex.biz.vn](https://vex.biz.vn); các tài liệu kết quả được commit riêng sau source release.
+
+HTTP xác nhận 17 route public trả 200, HTML sau chuẩn hóa CR khớp `dist/`, canonical/metadata/favicon full logo và sitemap đủ 17 URL. Bốn URL không tồn tại trả 404/noindex và nội dung khớp trang 404. Bảy file logo cùng toàn bộ 22 asset CSS/JS/font/ảnh được tải và đối chiếu bytes với dist. Báo cáo: `artifacts/phase-production-http.json` và `artifacts/production-assets-redesign.json`.
+
+Browser production kiểm tra Home/About/Solutions/Media/Contact ở 390 và 1440px, tổng cộng 10 lượt layout: HTTP 200/canonical đúng, không overflow và không có lỗi JavaScript/console hoặc request bên thứ ba trong các lượt này. Đã xem 14 ảnh. About có đúng bốn định hướng Why VEX, Journey 10/03/2026, nhãn VM draft/năm giá trị và một hồ sơ lãnh đạo chỉ tên/chức danh pháp lý, không có ảnh/bio giả. Sáu native disclosure chuyển nhu cầu hợp lệ sang Contact; ID sai bị bỏ qua. Tám FAQ thao tác bàn phím đạt. Tracking giữ tắt.
+
+Media copy hai HEX vào clipboard thật đạt. Bốn download đúng filename và toàn bộ bytes khớp nguồn: SVG màu 1309 bytes, PNG màu 26003 bytes, SVG trắng 1309 bytes, PNG trắng 25403 bytes. Báo cáo browser và ảnh: `artifacts/production-enhancement/summary.json`, `artifacts/production-enhancement/`. Không submit form hoặc gửi/nhận email thật; không gọi model/profile/PDF có điều kiện là dữ liệu thật đã kiểm tra.
+
+HTTPS hợp lệ; www trả 301 về apex; HTTP vẫn trả 200. Pages API read-only xác nhận CNAME `vex.biz.vn`, status `built`, `https_enforced: false`. Response GitHub có `Cache-Control: max-age=600`; HSTS, CSP, X-Content-Type-Options, X-Frame-Options và Referrer-Policy không hiện diện. Không thay DNS/SSL/hosting. `_headers` là mẫu và không được GitHub Pages tự áp dụng; kết quả mô phỏng header trong preview không phải header production.
+
+Các số Lighthouse ở phần trên vẫn là local lab, không phải phép đo production hoặc RUM. Bộ production này tập trung HTTP/asset và tương tác trên năm trang tại hai viewport; kết quả 187 lượt layout/axe thuộc local/CI, không được đổi nhãn thành 187 lượt browser production.
+
 ## Bổ sung nội dung chiến lược thương hiệu
 
 Home dùng hai khối rút gọn, liên kết vào Tầm nhìn và Sứ mệnh trên About. About có nguyên văn nội dung đầy đủ, thông điệp hỗ trợ, năm giá trị Việt/Anh và phần lãnh đạo kế tiếp. Nguồn nội dung chung giữ trạng thái draft và nhãn chờ phê duyệt; không thêm chức danh, hồ sơ hay chân dung chưa xác nhận.
@@ -91,4 +105,4 @@ Lượt cuối TBT cả bốn lượt đo 0ms. Báo cáo JSON/HTML đầy đủ 
 
 Lighthouse vẫn gợi ý thu nhỏ PNG logo và giảm JS/CSS chưa dùng của thư viện; các điểm trên đã đạt mục tiêu tham khảo trong brief. Chưa có dữ liệu thực để xác nhận LCP p75 hoặc INP. Axe/Lighthouse không thay thế kiểm tra screen reader trên thiết bị thật hay xác nhận tuân thủ WCAG toàn bộ.
 
-Các kết quả layout/axe/Lighthouse ở trên đo trên preview; mỗi lần phát hành cần kiểm tra lại URL, HTTPS, header, HTTP 404 và mailto trên domain thật. Workflow Pages trên `main` lưu QA và trạng thái deploy trong Actions. \_headers chỉ là mẫu, Pages không tự đọc. Form chưa có API theo xác nhận của chủ website. Không kiểm tra gửi/nhận email thật. Bài viết, việc làm, dự án, tiếng Anh và những phần Phase 3 còn lại cần dữ liệu/hạ tầng thật theo CONTENT.md; không tuyên bố đã hoàn thành CMS/CRM/portal hoặc tích hợp analytics production.
+Kết quả layout/axe/Lighthouse local và bằng chứng production được tách riêng ở trên. Mỗi lần phát hành tiếp theo cần kiểm tra lại URL, HTTPS, header, HTTP 404 và luồng Contact trên domain thật. Workflow Pages trên `main` lưu QA và trạng thái deploy trong Actions. \_headers chỉ là mẫu, Pages không tự đọc. Form chưa có API theo xác nhận của chủ website; lượt browser production lần này không submit form hoặc kiểm tra gửi/nhận email thật. Bài viết, việc làm, dự án, tiếng Anh và những phần Phase 3 còn lại cần dữ liệu/hạ tầng thật theo CONTENT.md; không tuyên bố đã hoàn thành CMS/CRM/portal hoặc tích hợp analytics production.

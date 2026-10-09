@@ -75,4 +75,4 @@ Kiểm tra slug/ngày, quyền công bố, nguồn ảnh/file, phiên bản và 
 
 Đọc thêm [quản lý nội dung](docs/CONTENT.md), [audit enhancement](docs/ENHANCEMENT-AUDIT.md), [checklist phát hành](LAUNCH_CHECKLIST.md) và [analytics đang tắt](docs/ANALYTICS.md).
 
-Kiểm tra local của bản ghép enhancement đã hoàn tất: check/106 publication checks, 187 UI/axe và các tương tác FAQ/nhu cầu/media đều đạt. Cấu trúc quản trị sẵn sàng nhận nội dung đã duyệt; việc thiếu ảnh, bio, case study, bài viết hoặc PDF public vẫn là yêu cầu nội dung, không phải lỗi kỹ thuật. Git/deploy/domain của lần phát hành mới chưa được xác nhận tại thời điểm cập nhật này.
+Kiểm tra local của bản ghép enhancement đã hoàn tất: check/106 publication checks, 187 UI/axe và các tương tác FAQ/nhu cầu/media đều đạt. Cấu trúc quản trị sẵn sàng nhận nội dung đã duyệt; việc thiếu ảnh, bio, case study, bài viết hoặc PDF public vẫn là yêu cầu nội dung, không phải lỗi kỹ thuật. Source `e68b93d` đã đạt CI/Pages và kiểm tra domain/browser production ngày 09/10/2026; bằng chứng và phạm vi thực tế ở [QA production](docs/QA.md#production-của-corporate-enhancement).

@@ -490,6 +490,79 @@ export function validatePdfSignature(header: string, trailer: string) {
 
 function approvedLeader(value: unknown, path: string): LeadershipProfile {
   const item = object(value, path);
+  const profileSlug = slug(item.slug, `${path}.slug`);
+  const optionalTextFields = [
+    "titleVietnamese",
+    "abbreviation",
+    "initials",
+    "shortBiography",
+  ] as const;
+  const optionalListFields = [
+    "biography",
+    "responsibilities",
+    "expertise",
+    "education",
+    "careerHighlights",
+  ] as const;
+  const optionalFields: Partial<LeadershipProfile> = {};
+  for (const field of optionalTextFields)
+    if (item[field] !== undefined)
+      optionalFields[field] = text(item[field], `${path}.${field}`);
+  for (const field of optionalListFields) {
+    if (item[field] === undefined) continue;
+    const values = texts(item[field], `${path}.${field}`, false);
+    if (values.length > 0) optionalFields[field] = values;
+  }
+  if (item.id !== undefined) optionalFields.id = slug(item.id, `${path}.id`);
+  if (item.displayOrder !== undefined) {
+    const order = number(item.displayOrder, `${path}.displayOrder`);
+    if (!Number.isInteger(order))
+      fail(`${path}.displayOrder`, "use a positive whole display order");
+    optionalFields.displayOrder = order;
+  }
+  if (item.photoFocalPoint !== undefined) {
+    const focalPoint = object(item.photoFocalPoint, `${path}.photoFocalPoint`);
+    const x = number(focalPoint.x, `${path}.photoFocalPoint.x`, 0);
+    const y = number(focalPoint.y, `${path}.photoFocalPoint.y`, 0);
+    if (x > 100 || y > 100)
+      fail(`${path}.photoFocalPoint`, "use x and y percentages from 0 to 100");
+    optionalFields.photoFocalPoint = { x, y };
+  }
+  for (const field of ["linkedinUrl", "personalWebsite"] as const) {
+    if (item[field] === undefined) continue;
+    const href = link(item[field], `${path}.${field}`);
+    if (!href.startsWith("https://"))
+      fail(`${path}.${field}`, "use a verified public HTTPS profile URL");
+    if (field === "linkedinUrl") {
+      const parsed = new URL(href);
+      if (
+        !["linkedin.com", "www.linkedin.com"].includes(parsed.hostname) ||
+        !/^\/in\/[^/]+\/?$/.test(parsed.pathname) ||
+        parsed.search ||
+        parsed.hash
+      )
+        fail(`${path}.${field}`, "use the supplied LinkedIn /in/ profile URL");
+    }
+    optionalFields[field] = href;
+  }
+  let portrait: ContentImage | undefined;
+  if (item.photo !== undefined) {
+    const source = object(item.photo, `${path}.photo`);
+    // User-uploaded executive portraits have an exact, slug-bound public path.
+    // Other legacy editorial images retain the existing assets allowlist.
+    portrait =
+      source.src === `/images/leadership/${profileSlug}.webp`
+        ? {
+            src: source.src,
+            alt: text(source.alt, `${path}.photo.alt`),
+            width: dimension(source.width, `${path}.photo.width`),
+            height: dimension(source.height, `${path}.photo.height`),
+            ...(source.caption === undefined
+              ? {}
+              : { caption: text(source.caption, `${path}.photo.caption`) }),
+          }
+        : image(source, `${path}.photo`);
+  }
   let links: LeadershipProfile["links"];
   if (item.links !== undefined) {
     if (!Array.isArray(item.links))
@@ -507,29 +580,13 @@ function approvedLeader(value: unknown, path: string): LeadershipProfile {
     });
   }
   return {
-    slug: slug(item.slug, `${path}.slug`),
+    slug: profileSlug,
     name: text(item.name, `${path}.name`),
     role: text(item.role, `${path}.role`),
     contentState: "VERIFIED",
     approvedForPublication: true,
-    ...(item.photo === undefined
-      ? {}
-      : { photo: image(item.photo, `${path}.photo`) }),
-    ...(item.biography === undefined
-      ? {}
-      : { biography: texts(item.biography, `${path}.biography`, false) }),
-    ...(item.responsibilities === undefined
-      ? {}
-      : {
-          responsibilities: texts(
-            item.responsibilities,
-            `${path}.responsibilities`,
-            false,
-          ),
-        }),
-    ...(item.expertise === undefined
-      ? {}
-      : { expertise: texts(item.expertise, `${path}.expertise`, false) }),
+    ...optionalFields,
+    ...(portrait === undefined ? {} : { photo: portrait }),
     ...(links === undefined ? {} : { links }),
   };
 }
@@ -601,7 +658,12 @@ export function validatePublication(
     .map((item, index) => approvedProject(item, `projects[${index}]`));
   const leadership = (records.leadership || [])
     .filter((item) => eligible(item, true))
-    .map((item, index) => approvedLeader(item, `leadership[${index}]`));
+    .map((item, index) => approvedLeader(item, `leadership[${index}]`))
+    .sort(
+      (first, second) =>
+        (first.displayOrder ?? Number.MAX_SAFE_INTEGER) -
+        (second.displayOrder ?? Number.MAX_SAFE_INTEGER),
+    );
   const documentCandidates = (records.documents || [])
     .filter((item) => eligible(item, true))
     .map((item, index) => approvedDocument(item, `documents[${index}]`));
@@ -609,6 +671,12 @@ export function validatePublication(
   unique(jobCandidates, "jobs.slug");
   unique(projects, "projects.slug");
   unique(leadership, "leadership.slug");
+  unique(
+    leadership
+      .filter((item): item is LeadershipProfile & { id: string } => !!item.id)
+      .map((item) => ({ slug: item.id })),
+    "leadership.id",
+  );
   unique(documentCandidates, "documents.slug");
   const documents = documentCandidates.filter(
     (item) => !item.publishedAt || item.publishedAt <= acceptedDate,

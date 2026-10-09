@@ -45,6 +45,7 @@ const JobPage = lazy(() =>
   })),
 );
 const MediaPage = lazy(() => import("./pages/MediaPage"));
+const LeadershipPage = lazy(() => import("./pages/LeadershipPage"));
 export interface ExtendedPageComponents {
   Research: ComponentType;
   Academy: ComponentType;
@@ -53,6 +54,7 @@ export interface ExtendedPageComponents {
   Careers: ComponentType;
   CareerDetail: ComponentType<{ slug: string }>;
   Media: ComponentType;
+  Leadership: ComponentType;
 }
 export default function App({
   path = "/",
@@ -71,6 +73,7 @@ export default function App({
   const Careers = extendedComponents?.Careers ?? CareersPage;
   const CareerDetail = extendedComponents?.CareerDetail ?? JobPage;
   const Media = extendedComponents?.Media ?? MediaPage;
+  const Leadership = extendedComponents?.Leadership ?? LeadershipPage;
   const route = normalizePath(path);
   const meta = getPage(route);
   const view = meta.noindex ? (
@@ -79,6 +82,8 @@ export default function App({
     <Home />
   ) : route === "/about/" ? (
     <About />
+  ) : route === "/leadership/" ? (
+    <Leadership />
   ) : route === "/solutions/" ? (
     <Solutions />
   ) : route.startsWith("/solutions/") ? (

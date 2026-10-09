@@ -1,7 +1,10 @@
 import { cp, mkdir, rm, readFile, realpath, lstat } from "node:fs/promises";
 import { resolve, dirname, relative, isAbsolute } from "node:path";
+import { readLeadershipPortrait } from "./leadership-images.mjs";
 const workspace = await realpath(resolve(import.meta.dirname, ".."));
-const publicDirectory = resolve(workspace, "public");
+// Source uploads live in public/images/leadership. Build staging is separate so
+// regeneration never deletes user portraits or copies unapproved public files.
+const publicDirectory = resolve(workspace, ".public-build");
 if (dirname(publicDirectory) !== workspace)
   throw new Error("Invalid generated public directory");
 try {
@@ -47,6 +50,29 @@ const publication = JSON.parse(
 );
 const assetsDirectory = await realpath(resolve(workspace, "assets"));
 for (const image of publication.images) {
+  if (image.startsWith("/images/leadership/")) {
+    const leader = publication.leadership.find(
+      (profile) => profile.photo?.src === image,
+    );
+    if (
+      !leader ||
+      leader.contentState !== "VERIFIED" ||
+      leader.approvedForPublication !== true ||
+      image !== `/images/leadership/${leader.slug}.webp`
+    )
+      throw new Error("Only approved leadership portraits may be published");
+    const portrait = await readLeadershipPortrait(workspace, image);
+    if (
+      !portrait ||
+      portrait.width !== leader.photo.width ||
+      portrait.height !== leader.photo.height
+    )
+      throw new Error("Leadership upload changed after content publication");
+    const destination = resolve(publicDirectory, image.slice(1));
+    await mkdir(dirname(destination), { recursive: true });
+    await cp(portrait.source, destination);
+    continue;
+  }
   if (
     !/^\/assets\/(?:[A-Za-z0-9_-]+\/)*[A-Za-z0-9_-]+\.(?:png|jpe?g|webp|avif|svg)$/.test(
       image,

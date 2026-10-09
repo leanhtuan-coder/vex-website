@@ -1,0 +1,77 @@
+.home-page .home-leadership {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.5fr);
+  gap: 64px;
+  border-top: 1px solid var(--vex-gray);
+}
+.home-leadership-heading h2 {
+  margin-top: 16px;
+  font-size: clamp(28px, 3vw, 40px);
+  line-height: 1.3;
+}
+.home-leadership-heading .text-link {
+  margin-top: 24px;
+  min-height: 44px;
+  font-size: 14px;
+}
+.home-leadership-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 32px;
+}
+.home-leadership-list .home-leadership-person {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 10px;
+  padding: 20px 28px 20px 0;
+  min-width: 0;
+  border-bottom: 1px solid var(--vex-gray);
+  color: var(--vex-ink);
+}
+.home-leadership-person h3 {
+  font-size: 20px;
+  line-height: 1.45;
+}
+.home-leadership-person .home-leadership-role {
+  color: var(--vex-muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+.home-leadership-person > svg {
+  position: absolute;
+  right: 0;
+  top: 24px;
+  color: var(--vex-cyan);
+  transition: transform 180ms ease;
+}
+.home-leadership-person:hover h3 {
+  color: var(--vex-cyan);
+}
+.home-leadership-person:hover > svg {
+  transform: translate(2px, -2px);
+}
+@media (max-width: 1023px) {
+  .home-page .home-leadership {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+@media (max-width: 600px) {
+  .home-leadership-list {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .home-leadership-person .home-leadership-role {
+    font-size: 16px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-leadership-person > svg {
+    transition: none;
+  }
+  .home-leadership-person:hover > svg {
+    transform: none;
+  }
+}

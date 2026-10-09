@@ -8,7 +8,7 @@ Các trạng thái nội bộ `VERIFIED`, `DRAFT`, `PENDING_APPROVAL`, `NOT_AVAI
 
 `corporate-identity.ts` chứa Why VEX đã được chủ website duyệt công khai dưới dạng định hướng, cùng một mốc đăng ký thành lập đã xác nhận. `challenges.ts` chỉ ánh xạ sáu nhóm nhu cầu tới dữ liệu giải pháp hiện có; `faq.ts` giải đáp từ nội dung dịch vụ/quy trình/kênh liên hệ đã công khai. Không tạo sản phẩm thương mại, thành tích hoặc SLA từ các định hướng này.
 
-`src/content/brand-strategy.ts` là nguồn chung cho Tầm nhìn, Sứ mệnh và năm Giá trị cốt lõi do chủ website cung cấp ngày 09/10/2026. Home dùng message/summary ngắn; About dùng statement đầy đủ và supportingMessages. Các giá trị giữ số thứ tự, tên Việt/Anh và mô tả nguyên văn. Trạng thái hiện tại `draft`, với nhãn bản thảo trên website; chỉ đổi sang `approved` sau xác nhận phê duyệt chính thức. Brand Guidelines không có bộ Vision/Mission/Core Values khác để thay thế. Leadership hiện chỉ hiển thị tên và chức danh pháp lý đã đối chiếu từ company.ts; chưa có ảnh/hồ sơ bổ sung nên không tạo thay thế.
+`src/content/brand-strategy.ts` là nguồn chung cho Tầm nhìn, Sứ mệnh và năm Giá trị cốt lõi do chủ website cung cấp ngày 09/10/2026. Home dùng message/summary ngắn; About dùng statement đầy đủ và supportingMessages. Các giá trị giữ số thứ tự, tên Việt/Anh và mô tả nguyên văn. Trạng thái hiện tại `draft`, với nhãn bản thảo trên website; chỉ đổi sang `approved` sau xác nhận phê duyệt chính thức. Brand Guidelines không có bộ Vision/Mission/Core Values khác để thay thế. Leadership có bốn hồ sơ với chức danh điều hành, tiểu sử và trách nhiệm được chủ website duyệt nguyên văn; thông tin đại diện pháp luật tiếp tục lấy riêng từ company.ts.
 
 `npm run prepare:content` kiểm tra và tạo `src/content/published.json`. Trình duyệt chỉ nhập JSON đã lọc; source biên tập và validator không đi vào bundle. File sinh tự động không commit và không chỉnh trực tiếp. `pretypecheck`, `predev` và `prebuild` tự chạy publisher; bản clone mới chạy `npm ci`, `npm run check` như bình thường.
 
@@ -34,14 +34,16 @@ Dự án cần: slug/tên, danh mục, trạng thái Concept/Research/Prototype/
 
 ## Hồ sơ lãnh đạo và tài liệu công khai
 
-Mảng leadership hiện chỉ có tên/chức danh pháp lý của Lê Anh Tuấn. Ảnh, biography, responsibilities, expertise và links là tùy chọn có xác minh/quyền công bố. Ảnh hiển thị tỷ lệ 4:5, không tạo placeholder khi chưa có; liên kết hồ sơ chỉ nhận HTTPS đã duyệt. Không tự nâng chức danh thành Founder/CEO hoặc thêm bằng cấp.
+Mảng leadership chứa bốn hồ sơ được duyệt: Lê Anh Tuấn, Hoàng Mai, Đỗ Mai Trang và Huỳnh Ngô Cẩm Tú, theo đúng thứ tự brief. Home dùng preview ngắn, About dùng overview và `/leadership/` hiển thị tiểu sử/phạm vi phụ trách đầy đủ từ cùng projection. Chức danh tiếng Anh luôn hiển thị đầy đủ; abbreviation chỉ là badge phụ. Chỉ ba LinkedIn do người dùng cung cấp được xuất bản; CFO không có liên kết thay thế. Học vấn, chuyên môn và thành tích chưa có dữ liệu được bỏ trống.
+
+Ảnh thật chưa được cung cấp; fallback chữ viết tắt theo thương hiệu giữ tỷ lệ 4:5. Upload bốn WebP đúng tên vào `public/images/leadership/`, rồi build/deploy hoặc restart dev để tự nhận ảnh. Vite dùng `.public-build` được sinh từ allowlist; không xóa thư mục ảnh nguồn và không publish README/file tùy ý trong public. Metadata ảnh lấy từ file thật, crop chỉnh qua `photoFocalPoint`. Xem [hướng dẫn Leadership](LEADERSHIP.md) và [quy ước ảnh](../public/images/leadership/README.md).
 
 Mảng documents hiện trống. Khi có file được duyệt, lưu **bản dành riêng cho công khai** dưới `assets/documents/public-*.pdf`, thêm metadata và cờ VERIFIED/duyệt. Publisher kiểm tra đường dẫn, file thường, chữ ký PDF và dung lượng thật; allowlist chỉ copy file đã công bố. Chữ ký PDF không thay thế việc kiểm tra nội dung/quyền sử dụng hoặc quét malware. PDF Brand Guidelines nguồn ở root không được tự đưa lên web. Download Center tự xuất hiện khi có file thật; About nhận Company Profile đúng danh mục. Không cần tạo link chờ hoặc file PDF giả.
 
 ## Thông tin còn cần
 
 - Dự án/sản phẩm, ảnh/demo, trạng thái và bằng chứng kết quả được phép giới thiệu.
-- Hồ sơ lãnh đạo ngoài Lê Anh Tuấn nếu được phép đăng.
+- Bốn ảnh lãnh đạo đã được phép công bố; LinkedIn CFO và các thông tin học vấn/chuyên môn/thành tích chỉ bổ sung khi được xác nhận.
 - Phê duyệt chính thức bản thảo Tầm nhìn, Sứ mệnh và Giá trị cốt lõi đã tích hợp; slogan chính thức nếu có.
 - Phạm vi dịch vụ thương mại, SLA và quy trình chuẩn. Home hiện ghi quy trình tham khảo.
 - Tin tức/tác giả/ngày phát hành, vị trí tuyển dụng còn mở và nghiên cứu được phép mô tả.

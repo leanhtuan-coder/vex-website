@@ -1,6 +1,6 @@
 # Checklist phát hành VEX
 
-Cập nhật 09/10/2026. Corporate enhancement của source commit `e68b93d` đã đạt kiểm tra local, CI, Pages và kiểm tra production trên https://vex.biz.vn. Phần baseline được giữ để phân biệt bằng chứng trước/sau enhancement. Các tài liệu ghi kết quả phát hành được cập nhật trong commit riêng, không thay source nội dung/giao diện.
+Cập nhật 10/10/2026. Leadership đã đạt kiểm tra local: typecheck/lint/build, 164 publication checks, 198 lượt layout toàn site, QA riêng 30 bố cục và upload/ảnh lỗi ở sáu bố cục. Lighthouse mobile Home/Leadership đạt Performance 94, ba nhóm còn lại 100. Hướng dẫn và bằng chứng ở [Leadership](docs/LEADERSHIP.md); ảnh chân dung thật chưa có. Corporate enhancement của source commit `e68b93d` trước đó đã đạt CI, Pages và kiểm tra production trên https://vex.biz.vn. Phần baseline được giữ để phân biệt bằng chứng các phase.
 
 ## Baseline đã kiểm tra
 
@@ -22,7 +22,7 @@ Axe tự động không phải chứng nhận tuân thủ WCAG toàn bộ. Kết
 - [x] Giữ thông tin pháp nhân và các kênh liên hệ đã đối chiếu trong `company.ts`.
 - [x] Chủ website đã duyệt Why VEX dưới dạng định hướng; không chuyển thành tuyên bố thành tích đã kiểm chứng.
 - [x] Vision/Mission/Core Values vẫn là bản thảo đã được yêu cầu hiển thị trước đó; giữ nhãn và trạng thái DRAFT.
-- [x] Chủ website xác nhận chưa có hồ sơ lãnh đạo mở rộng, thông điệp founder/CEO, PDF public hoặc mạng xã hội để bổ sung.
+- [x] Chủ website duyệt nguyên văn bốn hồ sơ lãnh đạo và ba LinkedIn trong brief; chưa có ảnh chân dung, thông điệp founder/CEO hoặc PDF public. LinkedIn CFO chưa được cung cấp.
 - [x] Đối chiếu Why VEX, Journey, FAQ và sáu nhóm nhu cầu trên bản ghép với nội dung đã đủ cơ sở; Journey chỉ dùng mốc thật.
 - [x] Source có cổng VERIFIED + quyền công bố cho leadership/case study/tài liệu; UI download điều kiện khi có file public, không tạo file mẫu.
 - [x] Kiểm tra bài viết/việc/case/profile/document chưa duyệt không vào bundle, HTML, sitemap hoặc JSON-LD.

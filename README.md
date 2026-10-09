@@ -25,11 +25,12 @@ npm run measure:performance
 npm audit
 ```
 
-`check` chạy publisher, TypeScript, ESLint, kiểm tra cổng công bố nội dung và build. UI checks kiểm tra toàn bộ route trong sitemap × 11 chiều rộng 320–2560px (hiện 17 trang), link/ảnh/anchor, HTML không JS, metadata/404, axe, menu/focus, topic/form, reduced motion, copy HEX, bốn download logo, FAQ, nhóm nhu cầu và analytics tắt. Security headers được mô phỏng từ file build để kiểm tra tương thích; hosting chưa tự áp dụng chúng. Lighthouse đo Home và Media mobile/desktop, Contact mobile và Solutions mobile. Báo cáo và ảnh nằm trong `artifacts/` (không commit).
+`check` chạy publisher, TypeScript, ESLint, kiểm tra cổng công bố nội dung và build. UI checks kiểm tra toàn bộ route trong sitemap × 11 chiều rộng 320–2560px (hiện 18 trang), link/ảnh/anchor, HTML không JS, metadata/404, axe, menu/focus, topic/form, reduced motion, copy HEX, bốn download logo, FAQ, nhóm nhu cầu và analytics tắt. Security headers được mô phỏng từ file build để kiểm tra tương thích; hosting chưa tự áp dụng chúng. Lighthouse đo Home và Media mobile/desktop, Contact mobile và Solutions mobile. Báo cáo và ảnh nằm trong `artifacts/` (không commit).
 
 ## Các trang
 
 - Home `/`, About `/about/`, Solutions `/solutions/` cùng 5 chi tiết giải pháp.
+- Leadership `/leadership/`: bốn hồ sơ được duyệt, với anchor tới từng thành viên.
 - Projects `/projects/`: chưa có dự án được duyệt công bố.
 - Contact `/contact/`: kênh liên hệ và biểu mẫu soạn email.
 - Privacy `/privacy-policy/`, Terms `/terms/` và `404.html`.
@@ -37,7 +38,7 @@ npm audit
 
 Phase 2 có trang R&D, cơ chế đăng bài/tuyển dụng và mẫu chi tiết, thư viện logo tải xuống, topic liên hệ theo ngữ cảnh và cấu hình analytics tắt mặc định. Bài viết, việc làm và case study chỉ xuất bản khi có nội dung thật được duyệt. Tiếng Anh chưa bật. Phase 3 có trang định hướng Academy và pipeline quản lý/xuất bản nội dung; CRM/API, portal, microsite sản phẩm và CMS nâng cao cần nhu cầu vận hành cùng cấu hình cụ thể. Academy chưa mở tuyển sinh.
 
-Đợt corporate enhancement có Why VEX được duyệt dưới dạng định hướng, Journey với mốc thành lập thật, sáu nhóm nhu cầu liên kết tới Contact và tám FAQ. Hồ sơ lãnh đạo, nguồn gốc case study và PDF public có model/gate riêng; hiện chỉ có hồ sơ pháp lý Lê Anh Tuấn, chưa có PDF hoặc case được công bố. [Danh sách nội dung cần bổ sung](CONTENT_REQUIREMENTS.md) và [checklist phát hành](LAUNCH_CHECKLIST.md) phân biệt dữ liệu còn thiếu với lỗi kỹ thuật.
+Đợt corporate enhancement có Why VEX được duyệt dưới dạng định hướng, Journey với mốc thành lập thật, sáu nhóm nhu cầu liên kết tới Contact và tám FAQ. Leadership có bốn hồ sơ được duyệt nguyên văn, overview trên About, preview trên Home và hồ sơ đầy đủ tại `/leadership/`. Chưa có ảnh chân dung, PDF public hoặc case study; [hướng dẫn Leadership](docs/LEADERSHIP.md), [danh sách nội dung cần bổ sung](CONTENT_REQUIREMENTS.md) và [checklist phát hành](LAUNCH_CHECKLIST.md) mô tả cách bổ sung.
 
 ## Source
 
@@ -58,13 +59,13 @@ Visual Elements pilot bổ sung đúng ba section Home: Hero precision stack, b�
 | `src/pages/`                                         | Các trang và template chi tiết                            |
 | `src/App.tsx`, `src/main.tsx`                        | Điều hướng URL và hydration                               |
 | `src/Prerender.tsx`, `scripts/prerender.mjs`         | Form eager ở build tĩnh, lazy trên trình duyệt            |
-| `scripts/prepare-public.mjs`                         | Tạo lại public từ allowlist tài nguyên                    |
+| `scripts/prepare-public.mjs`                         | Sinh `.public-build` theo allowlist; giữ nguyên ảnh nguồn |
 | `.github/workflows/ci.yml`                           | Kiểm tra source; không publish                            |
 | `.github/workflows/deploy-pages.yml`                 | Kiểm tra và phát hành dist lên Pages từ main              |
 
 Import Kumo theo từng component: Button/LinkButton, Link, Text, LayerCard, Badge, Empty, Dialog, DropdownMenu, Input/InputArea, Select, Checkbox và Banner. Control giữ cơ chế focus/validation/popup của Kumo; HTML/CSS riêng phục vụ cấu trúc và nhận diện website. Trang mới và form được tách chunk; CSS có sẵn ngay trong HTML để không mất bố cục khi tắt JavaScript.
 
-FAQ dùng Kumo Accordion primitive, mở sẵn để no-JS đọc đầy đủ. Sáu nhóm nhu cầu dùng disclosure HTML native cùng Kumo Text/Link/CTA để vẫn có thể mở khi tắt JavaScript. Cổng công bố mới có 106 kiểm tra fixture trong bộ nhớ, không đưa dữ liệu kiểm thử lên website.
+FAQ dùng Kumo Accordion primitive, mở sẵn để no-JS đọc đầy đủ. Sáu nhóm nhu cầu dùng disclosure HTML native cùng Kumo Text/Link/CTA để vẫn có thể mở khi tắt JavaScript. Cổng công bố có 164 kiểm tra fixture trong bộ nhớ, gồm điều kiện xuất bản hồ sơ và header ảnh WebP; không đưa dữ liệu kiểm thử lên website.
 
 CTA dùng cỡ Kumo base (36px) cho header/hero và phần lớn hành động, lg (40px) khi phù hợp; trên mobile vùng bấm tối thiểu 44px. `button-theme.ts` tạo nền cyan phẳng qua style API của Kumo và hover tối hơn. CTA trên nền cyan dùng nền trắng, chữ cyan và focus trắng.
 

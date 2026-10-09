@@ -1,9 +1,9 @@
 import { Badge } from "@cloudflare/kumo/components/badge";
 import { Link } from "@cloudflare/kumo/components/link";
 import { Text } from "@cloudflare/kumo/components/text";
-import { ArrowUpRightIcon } from "@phosphor-icons/react";
+import { ArrowUpRightIcon, LinkedinLogoIcon } from "@phosphor-icons/react";
 import { publicLeadership } from "../content/leadership";
-import { Heading } from "./shared";
+import LeadershipPortrait from "./LeadershipPortrait";
 import "../styles-leadership.css";
 
 export default function LeadershipProfiles() {
@@ -14,31 +14,26 @@ export default function LeadershipProfiles() {
       id="doi-ngu-lanh-dao"
       aria-labelledby="leadership-title"
     >
-      <div className="container editorial-grid leadership-layout">
-        <div id="leadership-title">
-          <Heading label="LEADERSHIP TEAM" title="Đội ngũ lãnh đạo" />
+      <div className="container leadership-layout">
+        <div className="section-heading leadership-section-heading">
+          <div className="eyebrow">OUR LEADERSHIP</div>
+          <Text as="h2" variant="heading" id="leadership-title">
+            Đội ngũ lãnh đạo
+          </Text>
+          <Text variant="secondary">
+            Những thành viên phụ trách định hướng chiến lược, công nghệ, thương
+            hiệu, tài chính và phát triển kinh doanh của VEX Technology
+            Solutions.
+          </Text>
         </div>
         <div className="leadership-profile-list">
           {publicLeadership.map((profile) => (
             <article
-              className={`leadership-profile${profile.photo ? " leadership-profile-with-photo" : ""}`}
+              className="leadership-profile"
               key={profile.slug}
               aria-labelledby={`leader-${profile.slug}-name`}
             >
-              {profile.photo && (
-                <figure className="leadership-photo">
-                  <img
-                    src={profile.photo.src}
-                    alt={profile.photo.alt}
-                    width={profile.photo.width}
-                    height={profile.photo.height}
-                    loading="lazy"
-                  />
-                  {profile.photo.caption && (
-                    <figcaption>{profile.photo.caption}</figcaption>
-                  )}
-                </figure>
-              )}
+              <LeadershipPortrait profile={profile} />
               <div className="leadership-profile-text">
                 <Text
                   as="h3"
@@ -47,68 +42,48 @@ export default function LeadershipProfiles() {
                 >
                   {profile.name}
                 </Text>
-                <Text variant="secondary">{profile.role}</Text>
-                {profile.biography && profile.biography.length > 0 && (
-                  <div className="leadership-biography">
-                    {profile.biography.map((paragraph, index) => (
-                      <Text key={index}>{paragraph}</Text>
-                    ))}
-                  </div>
+                <Text DANGEROUS_className="leadership-role" lang="en">
+                  {profile.role}
+                </Text>
+                {profile.abbreviation && (
+                  <Badge variant="outline" className="leadership-role-badge">
+                    {profile.abbreviation}
+                  </Badge>
                 )}
-                {profile.responsibilities &&
-                  profile.responsibilities.length > 0 && (
-                    <div className="leadership-profile-detail">
-                      <Text as="h4" variant="heading">
-                        Phạm vi phụ trách
-                      </Text>
-                      <ul>
-                        {profile.responsibilities.map((responsibility) => (
-                          <li key={responsibility}>{responsibility}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                {profile.expertise && profile.expertise.length > 0 && (
-                  <div className="leadership-profile-detail">
-                    <Text as="h4" variant="heading">
-                      Lĩnh vực chuyên môn
-                    </Text>
-                    <div className="leadership-expertise">
-                      {profile.expertise.map((expertise) => (
-                        <Badge key={expertise} variant="outline">
-                          {expertise}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                )}
-                {profile.links && profile.links.length > 0 && (
-                  <nav
-                    className="leadership-profile-links"
-                    aria-label={`Hồ sơ công khai của ${profile.name}`}
+                {profile.titleVietnamese && (
+                  <Text
+                    variant="secondary"
+                    DANGEROUS_className="leadership-vietnamese-title"
                   >
-                    {profile.links.map((link) => (
-                      <Link
-                        key={link.href}
-                        href={link.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        variant="plain"
-                      >
-                        {link.label}
-                        <ArrowUpRightIcon size={18} aria-hidden="true" />
-                      </Link>
-                    ))}
-                  </nav>
+                    {profile.titleVietnamese}
+                  </Text>
                 )}
-                <Link
-                  href="/contact/"
-                  variant="plain"
-                  className="leadership-contact-link"
+                <nav
+                  className="leadership-profile-links"
+                  aria-label={`Hồ sơ công khai của ${profile.name}`}
                 >
-                  Liên hệ với VEX
-                  <ArrowUpRightIcon size={18} aria-hidden="true" />
-                </Link>
+                  <Link
+                    href={`/leadership/#${profile.slug}`}
+                    variant="plain"
+                    className="leadership-profile-link"
+                    aria-label={`Xem hồ sơ ${profile.name}`}
+                  >
+                    Xem hồ sơ
+                    <ArrowUpRightIcon size={18} aria-hidden="true" />
+                  </Link>
+                  {profile.linkedinUrl && (
+                    <Link
+                      href={profile.linkedinUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      variant="plain"
+                      className="leadership-social-link"
+                      aria-label={`LinkedIn của ${profile.name}`}
+                    >
+                      <LinkedinLogoIcon size={22} aria-hidden="true" />
+                    </Link>
+                  )}
+                </nav>
               </div>
             </article>
           ))}

@@ -2,6 +2,7 @@ import { build } from "vite";
 import assert from "node:assert/strict";
 import { Buffer } from "node:buffer";
 import { resolve } from "node:path";
+import { webpDimensions } from "./leadership-images.mjs";
 
 // Test the same build-only validator as publication, without writing fixtures,
 // temporary content, or browser assets. Synthetic records never enter website.ts.
@@ -148,6 +149,154 @@ for (const field of [
   equal(Object.hasOwn(accepted.projects[0], field), false);
 okay(!JSON.stringify(accepted).includes("PRIVATE SENTINEL"));
 okay(!JSON.stringify(accepted).includes("wrong-secret"));
+for (const field of [
+  "photo",
+  "shortBiography",
+  "education",
+  "careerHighlights",
+  "linkedinUrl",
+  "personalWebsite",
+])
+  equal(Object.hasOwn(accepted.leadership[0], field), false);
+const extendedLeader = validatePublication(
+  {
+    ...empty(),
+    leadership: [
+      {
+        ...leader,
+        id: "fixture-leader",
+        titleVietnamese: "FIXTURE TITLE",
+        abbreviation: "FIX",
+        initials: "FL",
+        shortBiography: "FIXTURE SHORT BIOGRAPHY",
+        biography: ["FIXTURE BIOGRAPHY"],
+        responsibilities: ["FIXTURE RESPONSIBILITY"],
+        expertise: [],
+        education: [],
+        careerHighlights: [],
+        linkedinUrl:
+          "https://www.linkedin.com/in/c%E1%BA%A9m-t%C3%BA-94786b42a/",
+        personalWebsite: "https://example.com/profile",
+        photoFocalPoint: { x: 0, y: 100, privateNote: "PRIVATE SENTINEL" },
+        displayOrder: 3,
+        photo: {
+          src: "/images/leadership/fixture-leader.webp",
+          alt: "FIXTURE IMAGE",
+          width: 1200,
+          height: 1500,
+        },
+      },
+      { ...leader, slug: "second-fixture", displayOrder: 1 },
+      { ...leader, slug: "third-fixture", displayOrder: 1 },
+      { ...leader, slug: "unordered-fixture" },
+    ],
+  },
+  asOfDate,
+);
+equal(
+  extendedLeader.leadership.map((profile) => profile.slug).join(","),
+  "second-fixture,third-fixture,fixture-leader,unordered-fixture",
+  "Display order is stable; missing order follows ordered records",
+);
+const completeLeader = extendedLeader.leadership[2];
+equal(completeLeader.role, leader.role, "Full title is not abbreviated");
+equal(completeLeader.titleVietnamese, "FIXTURE TITLE");
+equal(completeLeader.abbreviation, "FIX");
+equal(completeLeader.initials, "FL");
+equal(completeLeader.shortBiography, "FIXTURE SHORT BIOGRAPHY");
+equal(completeLeader.photo.width, 1200);
+equal(completeLeader.photo.height, 1500);
+equal(completeLeader.photoFocalPoint.x, 0);
+equal(completeLeader.photoFocalPoint.y, 100);
+equal(
+  completeLeader.linkedinUrl,
+  "https://www.linkedin.com/in/c%E1%BA%A9m-t%C3%BA-94786b42a/",
+  "Supplied encoded LinkedIn URLs stay byte-for-byte unchanged",
+);
+equal(completeLeader.personalWebsite, "https://example.com/profile");
+for (const field of ["expertise", "education", "careerHighlights"])
+  equal(
+    Object.hasOwn(completeLeader, field),
+    false,
+    "Empty optional lists are omitted from public output",
+  );
+okay(!JSON.stringify(extendedLeader).includes("PRIVATE SENTINEL"));
+equal(extendedLeader.images.length, 1);
+for (const linkedinUrl of [
+  "https://example.com/in/fixture/",
+  "https://www.linkedin.com/company/fixture/",
+  "https://www.linkedin.com/in/fixture/?tracking=1",
+  "https://www.linkedin.com/in/fixture/#secret",
+  "https://www.linkedin.com.evil.test/in/fixture/",
+  "http://www.linkedin.com/in/fixture/",
+])
+  rejected(() =>
+    validatePublication(
+      { ...empty(), leadership: [{ ...leader, linkedinUrl }] },
+      asOfDate,
+    ),
+  );
+for (const personalWebsite of [
+  "javascript:alert(1)",
+  "http://example.com",
+  "https://user:secret@example.com",
+])
+  rejected(() =>
+    validatePublication(
+      { ...empty(), leadership: [{ ...leader, personalWebsite }] },
+      asOfDate,
+    ),
+  );
+for (const photoFocalPoint of [
+  { x: -1, y: 50 },
+  { x: 50, y: 101 },
+  { x: 50 },
+  { x: "50", y: 50 },
+])
+  rejected(() =>
+    validatePublication(
+      { ...empty(), leadership: [{ ...leader, photoFocalPoint }] },
+      asOfDate,
+    ),
+  );
+for (const displayOrder of [0, -1, 1.5, "1"])
+  rejected(() =>
+    validatePublication(
+      { ...empty(), leadership: [{ ...leader, displayOrder }] },
+      asOfDate,
+    ),
+  );
+for (const src of [
+  "/images/leadership/other-person.webp",
+  "/images/leadership/fixture-leader.png",
+  "/images/leadership/../fixture-leader.webp",
+])
+  rejected(() =>
+    validatePublication(
+      {
+        ...empty(),
+        leadership: [
+          {
+            ...leader,
+            photo: { src, alt: "FIXTURE", width: 1200, height: 1500 },
+          },
+        ],
+      },
+      asOfDate,
+    ),
+  );
+rejected(() =>
+  validatePublication(
+    {
+      ...empty(),
+      leadership: [
+        { ...leader, id: "duplicate-id" },
+        { ...leader, slug: "other-fixture", id: "duplicate-id" },
+      ],
+    },
+    asOfDate,
+  ),
+);
 
 for (const contentState of [
   "DRAFT",
@@ -441,6 +590,72 @@ for (const source of [
   '<svg><animate attributeName="href"/></svg>',
 ])
   rejected(() => validateSvgMarkup(source));
+
+// Synthetic WebP headers exercise metadata parsing only. These are not portraits
+// or image fixtures, and are never written to public/ or publication records.
+function webpContainer(chunks) {
+  const bodies = chunks.map(([type, payload]) => {
+    const header = Buffer.alloc(8);
+    header.write(type, 0, 4, "ascii");
+    header.writeUInt32LE(payload.length, 4);
+    return Buffer.concat([header, payload, Buffer.alloc(payload.length % 2)]);
+  });
+  const body = Buffer.concat(bodies);
+  const header = Buffer.alloc(12);
+  header.write("RIFF", 0, 4, "ascii");
+  header.writeUInt32LE(body.length + 4, 4);
+  header.write("WEBP", 8, 4, "ascii");
+  return Buffer.concat([header, body]);
+}
+const lossy = Buffer.alloc(10);
+lossy.set([0x9d, 0x01, 0x2a], 3);
+lossy.writeUInt16LE(1200, 6);
+lossy.writeUInt16LE(1500, 8);
+const lossless = Buffer.alloc(5);
+lossless[0] = 0x2f;
+lossless.writeUInt32LE(1199 + (1499 << 14), 1);
+const extended = Buffer.alloc(10);
+extended.writeUIntLE(1199, 4, 3);
+extended.writeUIntLE(1499, 7, 3);
+for (const chunks of [
+  [["VP8 ", lossy]],
+  [["VP8L", lossless]],
+  [
+    ["VP8X", extended],
+    ["VP8 ", lossy],
+  ],
+]) {
+  const dimensions = webpDimensions(webpContainer(chunks));
+  equal(dimensions.width, 1200);
+  equal(dimensions.height, 1500);
+}
+const animated = Buffer.from(extended);
+animated[0] = 0x02;
+const mismatched = Buffer.from(extended);
+mismatched.writeUIntLE(999, 4, 3);
+for (const data of [
+  Buffer.from("<html>not a portrait</html>"),
+  webpContainer([["VP8 ", lossy]]).subarray(0, 20),
+  webpContainer([
+    ["VP8X", animated],
+    ["VP8 ", lossy],
+  ]),
+  webpContainer([
+    ["ANIM", Buffer.alloc(6)],
+    ["VP8 ", lossy],
+  ]),
+  webpContainer([
+    ["VP8X", mismatched],
+    ["VP8 ", lossy],
+  ]),
+  webpContainer([["VP8X", extended]]),
+  webpContainer([
+    ["VP8 ", lossy],
+    ["VP8L", lossless],
+  ]),
+  webpContainer([["VP8L", Buffer.alloc(5)]]),
+])
+  rejected(() => webpDimensions(data));
 console.log(
   `Content publication verification passed: ${checks} checks; synthetic fixtures stayed in memory.`,
 );

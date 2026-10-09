@@ -25,6 +25,7 @@ import TechnologyVisual from "../components/TechnologyVisual";
 import TechnologyIllustration from "../components/visuals/TechnologyIllustration";
 import ResearchVisual from "../components/visuals/ResearchVisual";
 import { VexDivider } from "../components/visuals/VexPrimitives";
+import LeadershipPreview from "../components/LeadershipPreview";
 import "../styles-strategy-home.css";
 import "../styles-home-redesign.css";
 export default function Home() {
@@ -168,6 +169,7 @@ export default function Home() {
           ))}
         </div>
       </section>
+      <LeadershipPreview />
       <section className="section home-technology-section">
         <div className="container">
           <Heading

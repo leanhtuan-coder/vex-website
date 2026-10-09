@@ -11,6 +11,7 @@ import {
   CaretDownIcon,
 } from "@phosphor-icons/react";
 import { company, navigation, exploreNavigation } from "../content/company";
+import { publicLeadership } from "../content/leadership";
 import { CTA, Logo } from "./shared";
 function active(href: string, path: string) {
   return href === "/" ? path === "/" : path.startsWith(href);
@@ -116,6 +117,9 @@ export function Footer() {
     ...navigation.filter((item) =>
       ["/about/", "/projects/"].includes(item.href),
     ),
+    ...(publicLeadership.length
+      ? [{ href: "/leadership/", label: "Đội ngũ lãnh đạo" }]
+      : []),
     ...exploreNavigation.filter((item) =>
       ["/insights/", "/careers/", "/media/"].includes(item.href),
     ),

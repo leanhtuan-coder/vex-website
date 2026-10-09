@@ -1,4 +1,14 @@
-# Báo cáo QA — 09/10/2026
+# Báo cáo QA — 10/10/2026
+
+## Leadership Team
+
+Bốn hồ sơ đã được duyệt nguyên văn dùng chung nguồn dữ liệu trên Home, About và `/leadership/`. `npm run check` đạt TypeScript, ESLint, 164 kiểm tra publication và build 18 trang/404. `npm run verify:ui` đạt 198 lượt layout (18 route × 11 chiều rộng), không có lỗi JavaScript/console hoặc violation axe được ghi nhận. `npm audit` ghi nhận 0 vulnerability.
+
+QA riêng Leadership đạt 30 lượt layout trên ba trang ở 320/360/390/430/768/1024/1280/1440/1920/2560px: đúng tên, chức danh đầy đủ, thứ tự, nguyên văn bốn tiểu sử/18 trách nhiệm, ba LinkedIn; CFO không có link thay thế. Kiểm tra fallback 4:5, grid 4/2/1 cột, no-JS, canonical/OG, bốn Person liên kết Organization, focus/bàn phím/vùng bấm và reduced motion đạt. Ba lượt axe riêng không có violation; không có request ảnh chưa tồn tại hoặc bên thứ ba.
+
+Lighthouse 13.5.0 trên build cuối tại localhost:4173, mô phỏng mobile mặc định: Home và Leadership đều Performance 94, Accessibility/Best Practices/SEO 100, TBT 0ms; CLS lần lượt 0 và 0.019. Đây là số liệu lab local, chưa có RUM. Main JS 594.27KB (gzip 185.12KB), CSS 229.45KB (gzip 37.79KB), chunk Leadership 4.22KB; không thêm dependency, Vite vẫn ghi cảnh báo main chunk hơn 500KB. Báo cáo đo ở `artifacts/leadership/performance.json` và các report Lighthouse HTML/JSON.
+
+Đã kiểm thử pipeline upload với WebP hình học trung tính 1200 × 1500px tại sáu bố cục About/Leadership: source được giữ qua hai lần staging, byte source/staging/dist/HTTP khớp, browser decode thành công, lazy/async/focal point đúng. Kiểm tra ảnh lỗi phát hiện và đã sửa trường hợp lỗi từ cache trước hydration; ảnh lỗi trở về monogram trên cả hai trang. Fixture đã xóa trước build cuối, không vào bản phát hành. Chưa có ảnh chân dung thật, nên crop khuôn mặt cần được rà soát khi upload. [Hướng dẫn và bằng chứng Leadership](LEADERSHIP.md) ghi chi tiết; báo cáo/screenshot nội bộ ở `artifacts/leadership/`.
 
 ## VEX Visual Elements pilot
 

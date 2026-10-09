@@ -8,6 +8,7 @@ import {
   CareerDetail,
 } from "./pages/ContentGrowth";
 import Media from "./pages/MediaPage";
+import Leadership from "./pages/LeadershipPage";
 const extendedComponents = {
   Research,
   Academy,
@@ -16,6 +17,7 @@ const extendedComponents = {
   Careers,
   CareerDetail,
   Media,
+  Leadership,
 };
 // Static builds eagerly resolve the form while the browser retains route splitting.
 export default function Prerender({ path }: { path: string }) {

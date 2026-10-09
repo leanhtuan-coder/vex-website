@@ -13,7 +13,18 @@ dist/
 src/content/published.json
 playwright-report/
 test-results/
-public/
+.public-build/
+# User-maintained executive portrait source; other public resources are generated.
+public/*
+!public/images/
+public/images/*
+!public/images/leadership/
+public/images/leadership/*
+!public/images/leadership/README.md
+!public/images/leadership/le-anh-tuan.webp
+!public/images/leadership/hoang-mai.webp
+!public/images/leadership/do-mai-trang.webp
+!public/images/leadership/huynh-ngo-cam-tu.webp
 artifacts/
 .env
 .env.*

@@ -3,6 +3,7 @@ import { services } from "./services";
 import { publicProjects } from "./projects";
 import { publicArticles } from "./articles";
 import { publicJobs } from "./careers";
+import { publicLeadership } from "./leadership";
 export interface PageMeta {
   path: string;
   title: string;
@@ -26,6 +27,16 @@ export const pages: PageMeta[] = [
     description:
       "Tìm hiểu doanh nghiệp công nghệ VEX, câu chuyện thương hiệu Vertex và định hướng kết nối phần mềm, AI, robotics và tự động hóa.",
   },
+  ...(publicLeadership.length
+    ? [
+        {
+          path: "/leadership/",
+          title: "Đội ngũ lãnh đạo | VEX Technology Solutions",
+          description:
+            "Những thành viên phụ trách định hướng chiến lược, công nghệ, thương hiệu, tài chính và phát triển kinh doanh của VEX Technology Solutions.",
+        },
+      ]
+    : []),
   {
     path: "/solutions/",
     title: "Giải pháp & Dịch vụ | VEX Technology Solutions",
@@ -61,17 +72,15 @@ export const pages: PageMeta[] = [
       "Bài viết công nghệ, thông tin công ty và hoạt động được VEX phê duyệt công bố." +
       (publicArticles.length ? "" : " Hiện chưa có bài viết được công bố."),
   },
-  ...publicArticles.map(
-    (article): PageMeta => ({
-      path: `/insights/${article.slug}/`,
-      title: `${article.title} | VEX Technology Solutions`,
-      description: article.summary,
-      type: "article",
-      image: article.cover?.src,
-      publishedAt: article.publishedAt,
-      updatedAt: article.updatedAt,
-    }),
-  ),
+  ...publicArticles.map((article): PageMeta => ({
+    path: `/insights/${article.slug}/`,
+    title: `${article.title} | VEX Technology Solutions`,
+    description: article.summary,
+    type: "article",
+    image: article.cover?.src,
+    publishedAt: article.publishedAt,
+    updatedAt: article.updatedAt,
+  })),
   {
     path: "/careers/",
     title: "Cơ hội nghề nghiệp | VEX Technology Solutions",
@@ -81,13 +90,11 @@ export const pages: PageMeta[] = [
         ? ""
         : " Hiện chưa có vị trí tuyển dụng được công bố."),
   },
-  ...publicJobs.map(
-    (job): PageMeta => ({
-      path: `/careers/${job.slug}/`,
-      title: `${job.title} | Tuyển dụng VEX`,
-      description: job.summary,
-    }),
-  ),
+  ...publicJobs.map((job): PageMeta => ({
+    path: `/careers/${job.slug}/`,
+    title: `${job.title} | Tuyển dụng VEX`,
+    description: job.summary,
+  })),
   {
     path: "/media/",
     title: "Tài nguyên thương hiệu | VEX Technology Solutions",
@@ -180,6 +187,44 @@ export function structuredData(meta: PageMeta) {
         inLanguage: "vi",
         publisher: { "@id": organization["@id"] },
       },
+      ...(meta.path === "/leadership/"
+        ? [
+            {
+              "@type": "CollectionPage",
+              "@id": `${company.url}${meta.path}#page`,
+              url: company.url + meta.path,
+              name: meta.title.split(" | ")[0],
+              description: meta.description,
+              inLanguage: "vi",
+              isPartOf: { "@id": `${company.url}/#website` },
+              mainEntity: publicLeadership.map((profile) => ({
+                "@id": `${company.url}/leadership/#${profile.slug}`,
+              })),
+            },
+            ...publicLeadership.map((profile) => ({
+              "@type": "Person",
+              "@id": `${company.url}/leadership/#${profile.slug}`,
+              name: profile.name,
+              jobTitle: profile.role,
+              url: `${company.url}/leadership/#${profile.slug}`,
+              worksFor: { "@id": organization["@id"] },
+              ...(profile.biography?.length
+                ? { description: profile.biography.join(" ") }
+                : {}),
+              ...(profile.photo
+                ? { image: company.url + profile.photo.src }
+                : {}),
+              ...(profile.linkedinUrl || profile.personalWebsite
+                ? {
+                    sameAs: [
+                      profile.linkedinUrl,
+                      profile.personalWebsite,
+                    ].filter(Boolean),
+                  }
+                : {}),
+            })),
+          ]
+        : []),
       ...(article
         ? [
             {

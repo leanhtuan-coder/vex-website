@@ -11,6 +11,7 @@ import {
 } from "node:fs/promises";
 import { dirname, isAbsolute, relative, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
+import { readLeadershipPortrait } from "./leadership-images.mjs";
 
 const workspace = await realpath(resolve(import.meta.dirname, ".."));
 const temporaryDirectory = resolve(workspace, ".content-build");
@@ -83,8 +84,37 @@ try {
     pathToFileURL(resolve(temporaryDirectory, "website.mjs")).href
   );
   const publication = validatePublication(websiteContent, asOfDate);
+  for (const leader of publication.leadership) {
+    const src = `/images/leadership/${leader.slug}.webp`;
+    const portrait = await readLeadershipPortrait(workspace, src);
+    if (portrait) {
+      leader.photo = {
+        src,
+        alt: `Chân dung ${leader.name}`,
+        width: portrait.width,
+        height: portrait.height,
+      };
+    } else if (leader.photo?.src === src) {
+      // Removing an upload restores the monogram even if a legacy record named it.
+      delete leader.photo;
+    }
+  }
+  const portraitPaths = new Set(
+    publication.leadership
+      .map((leader) => leader.photo?.src)
+      .filter((src) => src?.startsWith("/images/leadership/")),
+  );
+  publication.images = [
+    ...new Set([
+      ...publication.images.filter(
+        (src) => !src.startsWith("/images/leadership/"),
+      ),
+      ...portraitPaths,
+    ]),
+  ].sort();
   const assetsDirectory = await realpath(resolve(workspace, "assets"));
   for (const image of publication.images) {
+    if (portraitPaths.has(image)) continue;
     const expectedPath = resolve(workspace, image.slice(1));
     const resolvedPath = await realpath(expectedPath);
     if (!staysInside(assetsDirectory, resolvedPath))

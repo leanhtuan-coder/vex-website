@@ -1,0 +1,54 @@
+/* VEX Brand Guidelines: pp. 7 (palette) and 9 (SVN-Aguda). */
+@font-face {
+  font-family: "SVN-Aguda";
+  src: url("../assets/fonts/svn-aguda-regular.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "SVN-Aguda";
+  src: url("../assets/fonts/svn-aguda-black.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+}
+:root {
+  --vex-cyan: #00707e;
+  /* The mint swatch's printed HEX duplicates cyan; this is its vector fill. */
+  --vex-mint: #67c08b;
+  --vex-white: #ffffff;
+  --vex-gray: #e6e7e8;
+  --vex-ink: #252729;
+  --vex-muted: #5b6064;
+  --vex-cyan-soft: color-mix(in srgb, var(--vex-cyan) 6%, var(--vex-white));
+  --vex-mint-soft: color-mix(in srgb, var(--vex-mint) 10%, var(--vex-white));
+  --vex-cyan-line: color-mix(in srgb, var(--vex-cyan) 18%, var(--vex-white));
+  --vex-mint-line: color-mix(in srgb, var(--vex-mint) 40%, var(--vex-white));
+  --vex-cyan-hover: color-mix(in srgb, var(--vex-cyan) 86%, black);
+  --vex-shadow: color-mix(in srgb, var(--vex-cyan) 15%, transparent);
+  --vex-font: "SVN-Aguda", system-ui, sans-serif;
+
+  --font-sans: var(--vex-font);
+  --default-font-family: var(--vex-font);
+  --font-weight-medium: 400;
+  --font-weight-semibold: 900;
+  --font-weight-bold: 900;
+  --color-kumo-brand: var(--vex-cyan);
+  --color-kumo-brand-hover: var(--vex-cyan-hover);
+  --color-kumo-focus: var(--vex-cyan);
+  --color-kumo-base: var(--vex-white);
+  --color-kumo-control: var(--vex-white);
+  --color-kumo-elevated: var(--vex-mint-soft);
+  --color-kumo-tint: var(--vex-cyan-soft);
+  --color-kumo-fill: var(--vex-gray);
+  --color-kumo-fill-hover: var(--vex-cyan-soft);
+  --color-kumo-line: var(--vex-gray);
+  --color-kumo-hairline: var(--vex-gray);
+  --text-color-kumo-default: var(--vex-ink);
+  --text-color-kumo-strong: var(--vex-ink);
+  --text-color-kumo-subtle: var(--vex-muted);
+  --text-color-kumo-placeholder: var(--vex-muted);
+  --text-color-kumo-brand: var(--vex-cyan);
+  --text-color-kumo-link: var(--vex-cyan);
+}

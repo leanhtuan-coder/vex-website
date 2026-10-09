@@ -1,13 +1,22 @@
-import { cp, mkdir } from "node:fs/promises";
-await mkdir("public", { recursive: true });
+import { cp, mkdir, rm } from "node:fs/promises";
+import { resolve, dirname } from "node:path";
+const workspace = resolve(import.meta.dirname, "..");
+const publicDirectory = resolve(workspace, "public");
+if (dirname(publicDirectory) !== workspace)
+  throw new Error("Invalid generated public directory");
+await rm(publicDirectory, { recursive: true, force: true });
+await mkdir(resolve(publicDirectory, "assets"), { recursive: true });
 // Copy only public website resources; internal PDFs never enter the build.
 for (const file of [
-  "assets",
+  "assets/logo-color-tight.png",
+  "assets/logo-white-tight.png",
+  "assets/og-image.jpg",
+  "assets/favicon.png",
   "CNAME",
   "robots.txt",
   "sitemap.xml",
   "logo.png",
   "favicon.png",
 ]) {
-  await cp(file, `public/${file}`, { recursive: true });
+  await cp(resolve(workspace, file), resolve(publicDirectory, file));
 }

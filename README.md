@@ -1,61 +1,63 @@
 # VEX Technology Solutions
 
-Website tiếng Việt sử dụng React và component thật từ Cloudflare Kumo 2.14.0: LinkButton, Button, Link, Input, InputArea, Select, Badge, Banner, Text và LayerCard. CSS standalone của Kumo được nhập trước CSS thương hiệu VEX.
+Website corporate tiếng Việt dùng React 19, TypeScript strict, Vite 6 và Cloudflare Kumo 2.14.0. Giữ kiến trúc static: mỗi URL public có HTML hoàn chỉnh để đọc và thu thập nội dung khi tắt JavaScript. Layout riêng và các component Kumo sử dụng nhận diện VEX.
 
-## Phát triển
+## Chạy local và build
 
-Yêu cầu Node.js 22 và npm.
+Khuyến nghị Node.js 24; tối thiểu 22.19 để chạy đầy đủ bộ công cụ.
 
 ```sh
 npm ci
 npm run dev
 ```
 
-## Build và xem trước
-
 ```sh
-npm run build
-npm run preview
-```
-
-Build tạo `dist/` với HTML render sẵn, metadata SEO, JSON-LD, tài nguyên thương hiệu, CNAME, robots.txt và sitemap.xml. Chỉ đưa các file trong `dist/` lên hosting. Không phục vụ trực tiếp thư mục mã nguồn hoặc index.html nguồn. Với GitHub Pages, dùng quy trình build và upload artifact `dist/` thay cho phục vụ nhánh gốc. Chưa có thao tác publish tự động.
-
-`public/` được tạo từ danh sách tài nguyên công khai trong `scripts/prepare-public.mjs`; các tài liệu nội bộ không được đưa vào build.
-
-## Kiểm tra giao diện
-
-```sh
+npm run check
 npx playwright install chromium
 npm run preview
-# Trong terminal khác:
-npm run verify:ui
 ```
 
-Kiểm tra các chiều rộng 1440, 768, 390 và 320px, tải hình ảnh, lỗi JavaScript/hydration, menu di động và biểu mẫu. Ảnh kiểm tra lưu ở `artifacts/`.
+Trong terminal khác, khi preview đang chạy tại `http://127.0.0.1:4173`:
 
-## Biểu mẫu liên hệ
+```sh
+npm run verify:ui
+npm run measure:performance
+npm audit
+```
 
-Website chưa có API nhận yêu cầu. Biểu mẫu kiểm tra các trường bắt buộc rồi tạo email `mailto:contact@vex.biz.vn` chứa thông tin đã nhập. Người dùng cần ứng dụng email được cấu hình và phải tự nhấn gửi. Giao diện không báo VEX đã nhận yêu cầu khi chưa có xác nhận từ máy chủ.
+`check` chạy TypeScript, ESLint và build. UI checks kiểm tra 12 trang × 11 chiều rộng 320–2560px, link/ảnh/anchor, HTML không JS, metadata/404, axe, menu/focus và form. Security headers được mô phỏng từ file build để kiểm tra tương thích; hosting chưa tự áp dụng chúng. Lighthouse đo Home mobile/desktop, Contact mobile và Solutions mobile. Báo cáo và ảnh nằm trong `artifacts/` (không commit).
 
-## Nhận diện VEX
+## Các trang
 
-`src/brand.css` quản lý font và token thương hiệu, ánh xạ vào token Kumo. Font SVN-Aguda Regular (400) và Black (900) được chuyển từ các file OTF có sẵn sang WOFF2 trong `assets/fonts/`; không phụ thuộc Google Fonts. Tiêu đề dùng Black, nội dung dùng Regular.
+- Home `/`, About `/about/`, Solutions `/solutions/` cùng 5 chi tiết giải pháp.
+- Projects `/projects/`: chưa có dự án được duyệt công bố.
+- Contact `/contact/`: kênh liên hệ và biểu mẫu soạn email.
+- Privacy `/privacy-policy/`, Terms `/terms/` và `404.html`.
 
-Màu chính `#00707E` theo trang 7 của Brand Guidelines. Màu bạc hà `#67C08B` lấy từ màu tô vector của ô mẫu trong PDF vì phần chú thích của ô bạc hà bị lặp mã màu cyan. Trắng và xám `#E6E7E8` là màu nền; các nền nhạt và trạng thái hover được pha từ màu thương hiệu. Màu bạc hà dành cho điểm nhấn đồ họa, cyan dành cho chữ và nút để giữ độ tương phản.
+R&D chi tiết, tin tức, tuyển dụng, analytics và tiếng Anh thuộc Phase 2. Academy, CRM/API tiếp nhận thuộc Phase 3; Academy hiện chỉ là định hướng tương lai.
 
-## Rà soát Kumo
+## Source
 
-| Thành phần             | Triển khai                                         |
-| ---------------------- | -------------------------------------------------- |
-| Nút và CTA             | Button / LinkButton; menu dùng shape="square"      |
-| Liên kết, kể cả logo   | Link                                               |
-| Các trường liên hệ     | Input / InputArea với label tích hợp               |
-| Chọn dịch vụ           | Select, popup do Kumo/Base UI quản lý              |
-| Thông báo sau thao tác | Banner                                             |
-| Tiêu đề, đoạn văn      | Text với as="h1", "h2", "h3", "p" để giữ ngữ nghĩa |
-| Badge và card          | Badge / LayerCard, dùng surface mặc định           |
-| Màu và font            | Token Kumo được ánh xạ sang nhận diện VEX          |
+| Nơi                                          | Trách nhiệm                                           |
+| -------------------------------------------- | ----------------------------------------------------- |
+| `src/brand.css`                              | Font SVN-Aguda 400/900, palette và ánh xạ token Kumo  |
+| `src/styles.css`                             | Bố cục corporate, responsive, focus và reduced motion |
+| `src/content/`                               | Công ty, giải pháp, dự án và SEO                      |
+| `src/components/`                            | Header/footer, CTA, card, empty state, sơ đồ và form  |
+| `src/pages/`                                 | Các trang và template chi tiết                        |
+| `src/App.tsx`, `src/main.tsx`                | Điều hướng URL và hydration                           |
+| `src/Prerender.tsx`, `scripts/prerender.mjs` | Form eager ở build tĩnh, lazy trên trình duyệt        |
+| `scripts/prepare-public.mjs`                 | Tạo lại public từ allowlist tài nguyên                |
+| `.github/workflows/ci.yml`                   | Kiểm tra source; không publish                        |
 
-Không còn control HTML tự dựng hoặc CSS ghi đè border, nền, padding và radius của input. Card giữ surface Kumo; CSS trang chỉ bố trí và tạo khoảng cách cho card. Các phần cấu trúc trang (header, nav, main, section, footer), bố cục responsive và sơ đồ năng lực VEX là HTML/CSS riêng. Đây là giao diện dùng component Kumo với nhận diện VEX, không phải sao chép toàn bộ bố cục trang tài liệu Kumo.
+Import Kumo theo từng component: Button/LinkButton, Link, Text, LayerCard, Badge, Empty, Dialog, Input/InputArea, Select, Checkbox và Banner. Control giữ cơ chế focus/validation/popup của Kumo; HTML/CSS riêng phục vụ cấu trúc và nhận diện website.
 
-Kiểm tra bổ sung: logo không có chữ bên cạnh, dropdown chọn dịch vụ mở/chọn/đóng bằng bàn phím, Escape trả focus về trigger, popup không gây tràn ngang ở 320px và giá trị dịch vụ được đưa đúng vào FormData.
+Font WOFF2 local. Cyan `#00707E`, mint `#67C08B`, trắng và xám `#E6E7E8` theo Brand Guidelines. Chú thích HEX của mint trong PDF bị lặp cyan nên mint lấy từ màu tô vector. Các nền/hover được pha từ màu thương hiệu; màu lỗi/cảnh báo dùng cho ngữ nghĩa UI.
+
+## Form và phát hành
+
+Theo xác nhận của chủ website, chưa có backend; form chỉ tạo `mailto:contact@vex.biz.vn`. Người dùng kiểm tra và tự nhấn gửi trong ứng dụng email. Không báo VEX đã nhận; không ghi dữ liệu vào localStorage/log. Có validation, consent, giới hạn độ dài, honeypot và chặn thao tác lặp; đây không thay thế chống spam server khi thêm API.
+
+Chỉ upload **nội dung dist/** lên hosting. Build có HTML riêng, SEO/JSON-LD, sitemap/robots, CNAME, 404, `.nojekyll` và mẫu `_headers`; không có PDF nội bộ hay source map. Không phục vụ repo hoặc index.html nguồn.
+
+Xem [audit](docs/AUDIT.md), [nội dung và lộ trình](docs/CONTENT.md), [kết quả QA](docs/QA.md) và [hướng dẫn vận hành/deploy](docs/OPERATIONS.md). Mẫu GitHub Pages ở `docs/github-pages.workflow.example.yml` chưa kích hoạt. DNS, nameserver, SSL và production chưa được thay đổi ở đợt này.
